@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgroPILOT — Планирование сбора урожая</title>
+<style>
+:root {
+  --surface-bg: #F7F6F1;
+  --surface-card: #FFFFFF;
+  --ink-900: #1E231F;
+  --ink-500: #5A6160;
+  --ink-300: #9CA3AF;
+  --vine-700: #4F6F3A;
+  --vine-500: #7CA064;
+  --berry-700: #5C1E33;
+  --sun-500: #D79A2B;
+  --alert-600: #B23A2A;
+  --neutral-200: #E6E3DB;
+  --neutral-100: #F0EDE8;
+  --risk-high: #B23A2A;
+  --risk-medium: #D79A2B;
+  --risk-low: #4F6F3A;
+  --draft-bg: #FDF6E3;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; background:var(--surface-bg); color:var(--ink-900); font-size:14px; line-height:1.5; }
+a { color:var(--vine-700); text-decoration:none; }
+a:hover { text-decoration:underline; }
+
+/* Layout */
+.app { display:flex; min-height:100vh; }
+.sidebar { width:240px; background:var(--surface-card); border-right:1px solid var(--neutral-200); padding:16px 0; position:fixed; height:100vh; overflow-y:auto; z-index:10; }
+.sidebar.collapsed { width:64px; }
+.sidebar.collapsed .sidebar-label { display:none; }
+.sidebar.collapsed .sidebar-section-title { display:none; }
+.logo { padding:0 24px 16px; font-size:18px; font-weight:700; color:var(--vine-700); border-bottom:1px solid var(--neutral-200); margin-bottom:8px; }
+.sidebar-section-title { padding:16px 24px 4px; font-size:11px; font-weight:600; text-transform:uppercase; color:var(--ink-500); letter-spacing:0.5px; }
+.sidebar-item { display:flex; align-items:center; gap:12px; padding:10px 24px; cursor:pointer; color:var(--ink-500); transition:background 0.15s; font-size:13px; }
+.sidebar-item:hover { background:var(--neutral-100); }
+.sidebar-item.active { background:var(--neutral-200); color:var(--vine-700); font-weight:600; }
+.sidebar-icon { width:20px; text-align:center; font-size:16px; flex-shrink:0; }
+.sidebar-footer { padding:16px 24px; font-size:11px; color:var(--ink-500); border-top:1px solid var(--neutral-200); margin-top:8px; }
+.main { margin-left:240px; flex:1; }
+.sidebar.collapsed + .main { margin-left:64px; }
+
+/* Header */
+.header { background:var(--surface-card); border-bottom:1px solid var(--neutral-200); padding:12px 24px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:5; height:56px; }
+.header-left { display:flex; align-items:center; gap:16px; font-weight:600; font-size:16px; }
+.header-right { display:flex; align-items:center; gap:16px; }
+.header-search { padding:6px 12px; border:1px solid var(--neutral-200); border-radius:4px; font-size:13px; width:200px; background:var(--surface-bg); }
+.header-search:focus { outline:none; border-color:var(--vine-500); }
+.btn { padding:6px 14px; border-radius:4px; font-size:13px; font-weight:500; cursor:pointer; border:none; transition:all 0.15s; display:inline-flex; align-items:center; gap:6px; }
+.btn-primary { background:var(--vine-700); color:#fff; }
+.btn-primary:hover { background:var(--vine-700); opacity:0.9; }
+.btn-secondary { background:var(--neutral-200); color:var(--ink-900); }
+.btn-secondary:hover { background:var(--neutral-200); opacity:0.8; }
+.btn-sm { padding:4px 10px; font-size:12px; }
+.badge-count { background:var(--alert-600); color:#fff; border-radius:10px; padding:1px 6px; font-size:10px; font-weight:700; margin-left:4px; }
+.icon-btn { background:none; border:none; cursor:pointer; font-size:18px; padding:4px; border-radius:4px; }
+.icon-btn:hover { background:var(--neutral-200); }
+
+/* Season banner */
+.season-banner { background:linear-gradient(135deg, var(--vine-700), var(--vine-500)); color:#fff; padding:8px 16px; border-radius:6px; font-size:12px; font-weight:500; display:inline-flex; align-items:center; gap:8px; }
+
+/* Content */
+.content { padding:24px; max-width:1440px; }
+.page-header { margin-bottom:24px; }
+.page-header h1 { font-size:22px; font-weight:700; margin-bottom:4px; }
+.page-header .subtitle { color:var(--ink-500); font-size:13px; }
+
+/* KPI Grid */
+.kpi-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:24px; }
+.kpi-card { background:var(--surface-card); border:1px solid var(--neutral-200); border-radius:8px; padding:16px; }
+.kpi-card .label { font-size:11px; font-weight:600; color:var(--ink-500); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px; }
+.kpi-card .value { font-size:28px; font-weight:700; color:var(--ink-900); }
+.kpi-card .delta { font-size:12px; margin-top:4px; }
+.kpi-card .delta.up { color:var(--vine-700); }
+.kpi-card .delta.down { color:var(--alert-600); }
+
+/* Insight cards */
+.insight-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:24px; }
+.insight-card { background:var(--surface-card); border:1px solid var(--neutral-200); border-radius:8px; padding:16px; }
+.insight-card .icon { font-size:28px; margin-bottom:8px; }
+.insight-card .title { font-weight:600; font-size:14px; margin-bottom:4px; }
+.insight-card .text { font-size:12px; color:var(--ink-500); margin-bottom:12px; line-height:1.5; }
+
+/* Cards */
+.card { background:var(--surface-card); border:1px solid var(--neutral-200); border-radius:8px; margin-bottom:24px; }
+.card-header { padding:16px 20px; border-bottom:1px solid var(--neutral-200); display:flex; justify-content:space-between; align-items:center; }
+.card-header h2 { font-size:16px; font-weight:600; }
+.card-body { padding:20px; }
+
+/* Table */
+.table { width:100%; border-collapse:collapse; font-size:13px; }
+.table th { background:var(--surface-bg); padding:10px 12px; text-align:left; font-weight:600; font-size:12px; color:var(--ink-500); border-bottom:2px solid var(--neutral-200); position:sticky; top:0; }
+.table td { padding:10px 12px; border-bottom:1px solid var(--neutral-200); }
+.table tr:hover { background:var(--surface-bg); }
+.table .pinned { position:sticky; left:0; background:var(--surface-card); z-index:1; }
+.table tr:hover .pinned { background:var(--surface-bg); }
+
+/* Status badges */
+.status { display:inline-flex; align-items:center; gap:4px; padding:3px 8px; border-radius:4px; font-size:11px; font-weight:600; }
+.status-approved { background:#E6F4E6; color:var(--vine-700); }
+.status-pending { background:#FFF8E1; color:var(--sun-500); }
+.status-warning { background:#FFEBEE; color:var(--alert-600); }
+.status-info { background:#E3F2FD; color:#1565C0; }
+
+/* Maturity capsule */
+.capsule-cell { display:flex; align-items:center; gap:8px; }
+.capsule-bar { flex:1; height:14px; background:var(--neutral-200); border-radius:7px; position:relative; overflow:hidden; min-width:100px; }
+.capsule-fill { height:100%; border-radius:7px; position:absolute; }
+.capsule-fill.optim { background:var(--vine-700); }
+.capsule-fill.range { background:var(--vine-500); opacity:0.4; }
+.capsule-today { position:absolute; top:-2px; bottom:-2px; width:2px; background:var(--ink-900); z-index:2; }
+.capsule-labels { display:flex; justify-content:space-between; font-size:10px; color:var(--ink-500); margin-top:2px; }
+
+/* Histogram */
+.histogram { display:flex; align-items:flex-end; gap:2px; height:60px; padding:4px 0; }
+.histogram .bar { flex:1; background:var(--vine-500); border-radius:2px 2px 0 0; min-height:4px; transition:height 0.3s; }
+.histogram .bar.peak { background:var(--alert-600); }
+.histogram-limit { border-top:2px dashed var(--alert-600); width:100%; margin-top:-2px; position:relative; }
+
+/* Map */
+.map-container { background:var(--neutral-200); border-radius:8px; height:350px; position:relative; overflow:hidden; }
+.map-container .map-tiles { width:100%; height:100%; background:linear-gradient(135deg, #C8D6B9 0%, #B5C9A8 30%, #D4C9A0 60%, #C8D6B9 100%); position:relative; }
+.map-block { position:absolute; border-radius:6px; padding:6px 10px; font-size:11px; font-weight:600; color:#fff; cursor:pointer; transition:transform 0.15s; box-shadow:0 2px 4px rgba(0,0,0,0.15); }
+.map-block:hover { transform:scale(1.05); z-index:2; }
+.map-legend { position:absolute; bottom:12px; right:12px; background:var(--surface-card); border-radius:6px; padding:12px; font-size:11px; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
+.map-legend-item { display:flex; align-items:center; gap:6px; margin:3px 0; }
+.map-legend-color { width:12px; height:12px; border-radius:3px; }
+
+/* Tabs */
+.tabs { display:flex; gap:0; border-bottom:1px solid var(--neutral-200); margin-bottom:16px; }
+.tab { padding:10px 16px; cursor:pointer; font-size:13px; font-weight:500; color:var(--ink-500); border-bottom:2px solid transparent; transition:all 0.15s; }
+.tab:hover { color:var(--ink-900); }
+.tab.active { color:var(--vine-700); border-bottom-color:var(--vine-700); }
+
+/* Filters */
+.filters { display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap; align-items:center; }
+.filter { padding:5px 10px; border:1px solid var(--neutral-200); border-radius:4px; font-size:12px; background:var(--surface-card); cursor:pointer; }
+.filter:hover { border-color:var(--vine-500); }
+.filter.active { background:var(--vine-700); color:#fff; border-color:var(--vine-700); }
+
+/* Block card layout */
+.block-card { display:grid; grid-template-columns:1fr 1fr 1fr; gap:20px; }
+.block-card-section { background:var(--surface-bg); border-radius:8px; padding:16px; }
+.block-card-section h3 { font-size:13px; font-weight:600; color:var(--ink-500); margin-bottom:12px; text-transform:uppercase; letter-spacing:0.5px; }
+.kpi-row { display:flex; justify-content:space-between; align-items:center; padding:6px 0; border-bottom:1px solid var(--neutral-200); font-size:13px; }
+.kpi-row:last-child { border-bottom:none; }
+.kpi-row .label { color:var(--ink-500); }
+.kpi-row .value { font-weight:600; }
+
+/* Explainability */
+.explain-panel { background:var(--surface-bg); border-radius:8px; padding:20px; }
+.explain-summary { font-size:14px; line-height:1.6; padding:12px; background:var(--surface-card); border-radius:6px; margin-bottom:16px; border-left:3px solid var(--vine-700); }
+.factor { display:flex; align-items:center; gap:12px; margin:8px 0; }
+.factor-name { width:200px; font-size:12px; flex-shrink:0; }
+.factor-bar-bg { flex:1; height:12px; background:var(--neutral-200); border-radius:6px; overflow:hidden; position:relative; }
+.factor-bar-fill { height:100%; border-radius:6px; }
+.factor-bar-fill.pos { background:var(--vine-700); }
+.factor-bar-fill.neg { background:var(--alert-600); }
+.factor-value { width:60px; text-align:right; font-size:11px; font-weight:600; flex-shrink:0; }
+.source-list { display:flex; gap:12px; flex-wrap:wrap; margin:8px 0; }
+.source-item { font-size:11px; padding:4px 8px; background:var(--surface-card); border-radius:4px; border:1px solid var(--neutral-200); }
+.source-item.ok { border-left:3px solid var(--vine-700); }
+.source-item.warn { border-left:3px solid var(--sun-500); }
+.rag-quote { background:var(--surface-card); border-left:3px solid var(--vine-500); padding:10px 14px; border-radius:0 6px 6px 0; font-size:12px; line-height:1.6; margin:8px 0; font-style:italic; }
+
+/* Chat */
+.chat-container { display:flex; gap:20px; }
+.chat-main { flex:1; }
+.chat-sidebar { width:260px; }
+.chat-messages { background:var(--surface-bg); border-radius:8px; padding:16px; height:400px; overflow-y:auto; margin-bottom:12px; }
+.chat-msg { margin:10px 0; padding:12px; border-radius:8px; max-width:85%; font-size:13px; line-height:1.5; }
+.chat-msg.user { background:var(--neutral-200); margin-left:auto; }
+.chat-msg.bot { background:var(--surface-card); border:1px solid var(--neutral-200); }
+.chat-msg .sources { margin-top:8px; padding-top:8px; border-top:1px solid var(--neutral-200); font-size:11px; color:var(--ink-500); }
+.chat-input-row { display:flex; gap:8px; }
+.chat-input-row input { flex:1; padding:10px 14px; border:1px solid var(--neutral-200); border-radius:6px; font-size:14px; }
+.chat-input-row input:focus { outline:none; border-color:var(--vine-500); }
+.context-chips { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px; }
+.context-chip { padding:4px 10px; background:var(--vine-700); color:#fff; border-radius:12px; font-size:11px; cursor:pointer; }
+.context-chip.inactive { background:var(--neutral-200); color:var(--ink-500); }
+.quick-q { padding:8px 12px; background:var(--surface-card); border:1px solid var(--neutral-200); border-radius:6px; margin:4px 0; cursor:pointer; font-size:12px; }
+.quick-q:hover { border-color:var(--vine-500); }
+
+/* Scenario page */
+.scenario-banner { background:var(--draft-bg); border:1px dashed var(--sun-500); border-radius:6px; padding:10px 16px; font-size:12px; color:var(--ink-500); margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+.compare-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+.compare-panel { background:var(--surface-card); border:1px solid var(--neutral-200); border-radius:8px; padding:16px; }
+.compare-panel h3 { font-size:14px; font-weight:600; margin-bottom:12px; }
+.compare-panel.scenario { background:var(--draft-bg); border-color:var(--sun-500); }
+
+/* Data quality dots */
+.quality-dots { display:flex; gap:4px; }
+.quality-dot { width:8px; height:8px; border-radius:50%; }
+.quality-dot.ok { background:var(--vine-700); }
+.quality-dot.warn { background:var(--sun-500); }
+.quality-dot.err { background:var(--alert-600); }
+
+/* Form */
+.form-group { margin-bottom:16px; }
+.form-group label { display:block; font-size:12px; font-weight:600; color:var(--ink-500); margin-bottom:4px; }
+.form-group input, .form-group select, .form-group textarea { width:100%; padding:8px 12px; border:1px solid var(--neutral-200); border-radius:4px; font-size:13px; }
+.form-group input:focus, .form-group select:focus { outline:none; border-color:var(--vine-500); }
+
+/* Modal */
+.modal-overlay { position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.4); z-index:100; display:flex; align-items:center; justify-content:center; }
+.modal { background:var(--surface-card); border-radius:12px; width:600px; max-height:80vh; overflow-y:auto; box-shadow:0 8px 32px rgba(0,0,0,0.15); }
+.modal-header { padding:16px 20px; border-bottom:1px solid var(--neutral-200); display:flex; justify-content:space-between; align-items:center; }
+.modal-header h2 { font-size:16px; font-weight:600; }
+.modal-body { padding:20px; }
+.modal-footer { padding:16px 20px; border-top:1px solid var(--neutral-200); display:flex; justify-content:flex-end; gap:8px; }
+
+/* Toast */
+.toast { position:fixed; bottom:24px; right:24px; background:var(--ink-900); color:#fff; padding:12px 20px; border-radius:6px; font-size:13px; z-index:200; animation: slideIn 0.3s; }
+@keyframes slideIn { from { transform:translateY(20px); opacity:0; } to { transform:translateY(0); opacity:1; } }
+
+/* Responsive */
+@media(max-width:1200px) { .kpi-grid { grid-template-columns:repeat(2,1fr); } .insight-grid { grid-template-columns:repeat(2,1fr); } .block-card { grid-template-columns:1fr; } }
+@media(max-width:768px) { .sidebar { display:none; } .main { margin-left:0; } .kpi-grid { grid-template-columns:1fr; } .insight-grid { grid-template-columns:1fr; } }
+
+/* Print */
+@media print { .sidebar, .header, .btn, .filters { display:none!important; } .main { margin-left:0; } .card { break-inside:avoid; } }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- Sidebar -->
+  <nav class="sidebar" id="sidebar">
+    <div class="logo">🌿 AgroPILOT</div>
+    <div style="padding:0 24px 8px; font-size:11px; color:var(--ink-500);">Золотая Балка</div>
+    
+    <div class="sidebar-section-title">Основное</div>
+    <div class="sidebar-item active" onclick="navigate('today')"><span class="sidebar-icon">📊</span><span class="sidebar-label">Сегодня</span></div>
+    <div class="sidebar-item" onclick="navigate('plots')"><span class="sidebar-icon">🗺️</span><span class="sidebar-label">Участки</span></div>
+    <div class="sidebar-item" onclick="navigate('planner')"><span class="sidebar-icon">📅</span><span class="sidebar-label">Планировщик сбора</span></div>
+    <div class="sidebar-item" onclick="navigate('observations')"><span class="sidebar-icon">🔬</span><span class="sidebar-label">Наблюдения и пробы</span></div>
+    <div class="sidebar-item" onclick="navigate('ai')"><span class="sidebar-icon">🤖</span><span class="sidebar-label">AI-ассистент</span></div>
+    <div class="sidebar-item" onclick="navigate('reports')"><span class="sidebar-icon">📄</span><span class="sidebar-label">Отчёты</span></div>
+    
+    <div class="sidebar-section-title">Администрирование</div>
+    <div class="sidebar-item" onclick="navigate('system')"><span class="sidebar-icon">⚙️</span><span class="sidebar-label">Система</span></div>
+    <div class="sidebar-item" onclick="navigate('profile')"><span class="sidebar-icon">👤</span><span class="sidebar-label">Профиль</span></div>
+    
+    <div class="sidebar-footer">
+      <div>Данные актуальны: <span id="data-age">12 мин</span> назад</div>
+      <div style="margin-top:4px; display:flex; align-items:center; gap:4px;">
+        <span class="quality-dot ok"></span> Сервер онлайн
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main content -->
+  <div class="main">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-left">
+        <button class="icon-btn" onclick="toggleSidebar()">☰</button>
+        <span id="page-title">Сегодня</span>
+      </div>
+      <div class="header-right">
+        <input type="text" class="header-search" placeholder="⌘K Поиск участков, сортов...">
+        <div class="season-banner">🌿 Сезон 2026 · BBCH 81 · ±7–12 дней</div>
+        <button class="icon-btn">🔔<span class="badge-count">3</span></button>
+        <button class="icon-btn">👤</button>
+      </div>
+    </header>
+
+    <!-- Page content -->
+    <div class="content" id="page-content">
+      <!-- Content loaded dynamically -->
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== DATA =====
+const blocks = [
+  { id:'А-7', sort:'Шардоне', area:4.2, bbch:81, gdd:1420, brix:22.8, ta:6.1, ph:3.32, optDate:'14 сен', start:'8 сен', end:'25 сен', conf:60, status:'approved', lastProbe:'2 дня', iotAge:'3 ч', meteoAge:'8 мин' },
+  { id:'А-9', sort:'Шардоне', area:3.8, bbch:81, gdd:1380, brix:22.1, ta:6.4, ph:3.28, optDate:'16 сен', start:'10 сен', end:'27 сен', conf:55, status:'pending', lastProbe:'4 дня', iotAge:'12 мин', meteoAge:'8 мин' },
+  { id:'Б-2', sort:'Каберне Совиньон', area:6.4, bbch:81, gdd:1350, brix:21.5, ta:5.8, ph:3.35, optDate:'18 сен', start:'12 сен', end:'30 сен', conf:72, status:'approved', lastProbe:'1 день', iotAge:'5 мин', meteoAge:'4 мин' },
+  { id:'Б-3', sort:'Каберне Совиньон', area:5.1, bbch:79, gdd:1290, brix:20.8, ta:6.2, ph:3.40, optDate:'22 сен', start:'15 сен', end:'3 окт', conf:68, status:'pending', lastProbe:'3 дня', iotAge:'8 мин', meteoAge:'4 мин' },
+  { id:'В-1', sort:'Мерло', area:7.2, bbch:77, gdd:1210, brix:19.2, ta:7.1, ph:3.45, optDate:'28 сен', start:'20 сен', end:'8 окт', conf:35, status:'warning', lastProbe:'6 дня', iotAge:'3 ч', meteoAge:'15 мин' },
+  { id:'Г-1', sort:'Пино Нуар', area:3.5, bbch:75, gdd:1150, brix:18.5, ta:7.5, ph:3.50, optDate:'2 окт', start:'25 сен', end:'12 окт', conf:42, status:'pending', lastProbe:'5 дня', iotAge:'1 ч', meteoAge:'15 мин' },
+];
+
+const insights = [
+  { icon:'🌡️', title:'Волна жары сдвинула окна', text:'Блоки А-7, А-9: окно зрелости сдвинулось на 2 дня раньше из-за жары 18–20 апреля.', action:'Открыть планировщик', link:'planner' },
+  { icon:'⚠️', title:'IoT-почва B2-03 не отвечает', text:'Нет данных более 3 часов. Проверьте подключение датчика.', action:'Открыть 7.1', link:'system' },
+  { icon:'🔬', title:'Проба по Шардоне просрочена', text:'Последняя лабораторная проба — 6 дней назад (норма 3 дня) по блоку В-1.', action:'Создать задачу', link:'observations' },
+];
+
+// ===== NAVIGATION =====
+let currentPage = 'today';
+let currentRole = 'chief'; // 'agronomist', 'chief', 'admin'
+
+function navigate(page) {
+  currentPage = page;
+  document.querySelectorAll('.sidebar-item').forEach(el => el.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  
+  const titles = { today:'Сегодня', plots:'Участки', planner:'Планировщик сбора', observations:'Наблюдения', ai:'AI-ассистент', reports:'Отчёты', system:'Система', profile:'Профиль' };
+  document.getElementById('page-title').textContent = titles[page] || page;
+  
+  const content = document.getElementById('page-content');
+  
+  switch(page) {
+    case 'today': renderToday(content); break;
+    case 'plots': renderPlots(content); break;
+    case 'planner': renderPlanner(content); break;
+    case 'observations': renderObservations(content); break;
+    case 'ai': renderAI(content); break;
+    case 'reports': renderReports(content); break;
+    case 'system': renderSystem(content); break;
+    case 'profile': renderProfile(content); break;
+    default: content.innerHTML = '<div class="card"><div class="card-body"><h2>Раздел в разработке</h2><p>Страница будет добавлена в следующей версии.</p></div></div>';
+  }
+}
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('collapsed');
+}
+
+// ===== RENDER: TODAY =====
+function renderToday(container) {
+  let html = '';
+  
+  // Season banner
+  html += `<div style="margin-bottom:24px;"><span class="season-banner">🌿 Сезон 2026 · Фаза BBCH 81 · Режим калибровки (сезон 1) · Точность ±7–12 дней</span></div>`;
+  
+  // Insights
+  html += `<h2 style="font-size:16px; font-weight:600; margin-bottom:12px;">Инсайты</h2>`;
+  html += `<div class="insight-grid">`;
+  insights.forEach(i => {
+    html += `<div class="insight-card">
+      <div class="icon">${i.icon}</div>
+      <div class="title">${i.title}</div>
+      <div class="text">${i.text}</div>
+      <button class="btn btn-primary btn-sm" onclick="navigate('${i.link}')">${i.action}</button>
+    </div>`;
+  });
+  html += `</div>`;
+  
+  // KPI
+  html += `<div class="kpi-grid">
+    <div class="kpi-card"><div class="label">Блоков в зоне сбора (14 дней)</div><div class="value">12</div><div class="delta up">+3 за неделю</div></div>
+    <div class="kpi-card"><div class="label">Утверждено плана</div><div class="value">8/15</div><div class="delta">53% готовности</div></div>
+    <div class="kpi-card"><div class="label">Средний Brix (прогноз)</div><div class="value">22.8°</div><div class="delta up">+0.3° к прошлой неделе</div></div>
+    <div class="kpi-card"><div class="label">Качество данных</div><div class="value">87%</div><div class="delta down">-5% (IoT B2-03)</div></div>
+  </div>`;
+  
+  // Harvest windows table
+  html += `<div class="card">
+    <div class="card-header"><h2>Окна сбора на 14 дней</h2><button class="btn btn-secondary btn-sm" onclick="navigate('planner')">Открыть планировщик</button></div>
+    <div class="card-body" style="padding:0; overflow-x:auto;">
+    <table class="table">
+      <thead><tr><th>Блок</th><th>Сорт</th><th>Окно зрелости</th><th>Оптимум</th><th>Уверенность</th><th>Статус</th></tr></thead>
+      <tbody>`;
+  
+  blocks.filter(b => b.conf >= 35).sort((a,b) => a.conf > b.conf ? -1 : 1).forEach(b => {
+    const rangePct = 60;
+    const optPct = 40;
+    html += `<tr>
+      <td><a href="#" onclick="showBlockCard('${b.id}'); return false;"><strong>${b.id}</strong></a></td>
+      <td>${b.sort}</td>
+      <td><div class="capsule-cell"><div class="capsule-bar"><div class="capsule-fill range" style="width:${rangePct}%"></div><div class="capsule-fill optim" style="width:${optPct}%; left:20%"></div><div class="capsule-today" style="left:15%"></div></div></div></td>
+      <td>${b.optDate}</td>
+      <td><span class="status ${b.conf>=60?'status-approved':b.conf>=50?'status-pending':'status-warning'}">P${b.conf}%</span></td>
+      <td><span class="status ${b.status==='approved'?'status-approved':b.status==='warning'?'status-warning':'status-pending'}">${b.status==='approved'?'✓ Утверждён':b.status==='warning'?'⚠ Мало данных':'○ Ожидает'}</span></td>
+    </tr>`;
+  });
+  
+  html += `</tbody></table></div></div>`;
+  
+  // Winery load histogram
+  html += `<div class="card">
+    <div class="card-header"><h2>Загрузка винодельни (тонн/день)</h2></div>
+    <div class="card-body">
+      <div class="histogram">`;
+  [20,25,30,45,60,80,100,70,50,30,20,15].forEach((h,i) => {
+    html += `<div class="bar ${h>80?'peak':''}" style="height:${h}%"></div>`;
+  });
+  html += `</div>
+      <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--ink-500); margin-top:4px;">
+        <span>10 сен</span><span>14 сен</span><span>18 сен</span><span>22 сен</span><span>26 сен</span><span>30 сен</span>
+      </div>
+      <div style="margin-top:8px; font-size:12px; color:var(--alert-600);">⚠ Пик 14 сентября: 120 т (лимит 100 т)</div>
+    </div>
+  </div>`;
+  
+  container.innerHTML = html;
+}
+
+// ===== RENDER: PLOTS =====
+function renderPlots(container) {
+  let html = `<div class="page-header"><h1>Участки</h1><div class="subtitle">Карта зрелости и список блоков хозяйства</div></div>`;
+  
+  // Tabs
+  html += `<div class="tabs"><div class="tab active" onclick="switchPlotTab('map')">Карта зрелости</div><div class="tab" onclick="switchPlotTab('list')">Список участков</div></div>`;
+  
+  // Map
+  html += `<div id="plot-map-view"><div class="map-container">
+    <div class="map-tiles">
+      <div class="map-block" style="top:30px; left:60px; background:var(--vine-700);" onclick="showBlockCard('А-7')">А-7<br>Шардоне<br>P60%</div>
+      <div class="map-block" style="top:30px; left:200px; background:var(--vine-700);" onclick="showBlockCard('А-9')">А-9<br>Шардоне<br>P55%</div>
+      <div class="map-block" style="top:140px; left:80px; background:var(--vine-500);" onclick="showBlockCard('Б-2')">Б-2<br>Каберне<br>P72%</div>
+      <div class="map-block" style="top:140px; left:220px; background:var(--vine-500);" onclick="showBlockCard('Б-3')">Б-3<br>Каберне<br>P68%</div>
+      <div class="map-block" style="top:250px; left:130px; background:var(--sun-500);" onclick="showBlockCard('В-1')">В-1<br>Мерло<br>P35% ⚠</div>
+      <div class="map-block" style="top:250px; left:260px; background:var(--ink-300);" onclick="showBlockCard('Г-1')">Г-1<br>Пино<br>P42%</div>
+    </div>
+    <div class="map-legend">
+      <div style="font-weight:600; margin-bottom:6px;">Зрелость (GDD%)</div>
+      <div class="map-legend-item"><div class="map-legend-color" style="background:var(--vine-700)"></div> &gt;70%</div>
+      <div class="map-legend-item"><div class="map-legend-color" style="background:var(--vine-500)"></div> 50–70%</div>
+      <div class="map-legend-item"><div class="map-legend-color" style="background:var(--sun-500)"></div> 30–50%</div>
+      <div class="map-legend-item"><div class="map-legend-color" style="background:var(--ink-300)"></div> &lt;30%</div>
+    </div>
+  </div></div>`;
+  
+  // List
+  html += `<div id="plot-list-view" style="display:none;">
+    <div class="filters">
+      <div class="filter active">Сорт: Все ▾</div>
+      <div class="filter">Статус: Все ▾</div>
+      <div class="filter">Уверенность: ≥ 50% ▾</div>
+      <div class="filter">Фенофаза: Все ▾</div>
+      <button class="btn btn-secondary btn-sm" style="margin-left:auto;">📥 Экспорт XLSX</button>
+    </div>
+    <div class="card"><div class="card-body" style="padding:0; overflow-x:auto;">
+    <table class="table">
+      <thead><tr><th>Блок</th><th>Сорт</th><th>Площадь</th><th>BBCH</th><th>GDD</th><th>Brix</th><th>Оптимум</th><th>Уверенность</th><th>Статус</th></tr></thead>
+      <tbody>`;
+  blocks.forEach(b => {
+    html += `<tr>
+      <td><a href="#" onclick="showBlockCard('${b.id}'); return false;"><strong>${b.id}</strong></a></td>
+      <td>${b.sort}</td>
+      <td>${b.area} га</td>
+      <td>${b.bbch}</td>
+      <td>${b.gdd}</td>
+      <td>${b.brix}±1.1</td>
+      <td>${b.optDate}</td>
+      <td><span class="status ${b.conf>=60?'status-approved':b.conf>=50?'status-pending':'status-warning'}">P${b.conf}%</span></td>
+      <td><span class="status ${b.status==='approved'?'status-approved':b.status==='warning'?'status-warning':'status-pending'}">${b.status==='approved'?'✓':b.status==='warning'?'⚠':'○'}</span></td>
+    </tr>`;
+  });
+  html += `</tbody></table></div></div></div>`;
+  
+  container.innerHTML = html;
+}
+
+function switchPlotTab(tab) {
+  document.querySelectorAll('.tabs .tab').forEach((t,i) => t.classList.toggle('active', i===(tab==='map'?0:1)));
+  document.getElementById('plot-map-view').style.display = tab==='map'?'block':'none';
+  document.getElementById('plot-list-view').style.display = tab==='list'?'block':'none';
+}
+
+// ===== RENDER: PLANNER =====
+function renderPlanner(container) {
+  let html = `<div class="page-header"><h1>Планировщик сбора</h1><div class="subtitle">Календарь окон сбора и управление планом уборки</div></div>`;
+  
+  html += `<div class="tabs">
+    <div class="tab active" onclick="switchPlannerTab('calendar')">Календарь окон</div>
+    <div class="tab" onclick="switchPlannerTab('scenarios')">Сценарии «что если»</div>
+    <div class="tab" onclick="switchPlannerTab('approved')">Утверждённый план</div>
+  </div>`;
+  
+  // Calendar tab
+  html += `<div id="planner-calendar">`;
+  html += `<div class="filters">
+    <div class="filter">Сорт: Каберне Совиньон ▾</div>
+    <div class="filter">Блок: Все ▾</div>
+    <div class="filter">Окно: ±14 дней ▾</div>
+    <div class="filter">Уверенность: ≥ 60% ▾</div>
+    <div class="filter">Статус: Все ▾</div>
+    <div class="filter" style="background:var(--surface-bg);">Сбросить</div>
+    <div style="margin-left:auto; display:flex; gap:8px;">
+      <button class="btn btn-primary btn-sm">+ Сценарий «что если»</button>
+      <button class="btn btn-secondary btn-sm">📥 Выгрузить план</button>
+    </div>
+  </div>`;
+  
+  // Timeline table
+  html += `<div class="card"><div class="card-body" style="padding:0; overflow-x:auto;">
+  <table class="table">
+    <thead><tr><th>Блок</th><th>Сорт</th>
+      <th>10авг</th><th>15</th><th>20</th><th>25</th><th>30</th>
+      <th>5сен</th><th>10</th><th>15</th><th>20</th><th>25</th><th>30</th>
+      <th>5окт</th>
+      <th>P%</th><th>Статус</th>
+    </tr></thead><tbody>`;
+  
+  blocks.forEach(b => {
+    const left = 10 + Math.random() * 20;
+    const width = 30 + Math.random() * 20;
+    html += `<tr>
+      <td><strong>${b.id}</strong></td><td>${b.sort}</td>
+      <td colspan="13" style="position:relative; padding:0; height:32px;">
+        <div style="position:absolute; left:${left}%; width:${width}%; top:8px; bottom:8px; background:var(--vine-500); border-radius:6px; opacity:0.3;"></div>
+        <div style="position:absolute; left:${left+width*0.3}%; width:${width*0.4}%; top:8px; bottom:8px; background:var(--vine-700); border-radius:6px;"></div>
+        <div style="position:absolute; left:15%; top:0; bottom:0; width:2px; background:var(--ink-900);"></div>
+      </td>
+      <td><span class="status ${b.conf>=60?'status-approved':b.conf>=50?'status-pending':'status-warning'}">P${b.conf}</span></td>
+      <td><input type="checkbox" ${b.status==='approved'?'checked':''}></td>
+    </tr>`;
+  });
+  
+  html += `</tbody></table></div></div>`;
+  
+  // Histogram
+  html += `<div class="card" style="margin-top:16px;"><div class="card-header"><h2>Загрузка винодельни</h2></div><div class="card-body">
+    <div class="histogram">`;
+  [15,20,28,35,50,65,85,100,75,55,35,25,18,12].forEach((h,i) => {
+    html += `<div class="bar ${h>80?'peak':''}" style="height:${h}%"></div>`;
+  });
+  html += `</div>
+    <div style="display:flex; justify-content:space-between; font-size:10px; color:var(--ink-500); margin-top:4px;">
+      <span>8сен</span><span>10</span><span>12</span><span>14</span><span>16</span><span>18</span><span>20</span><span>22</span><span>24</span><span>26</span><span>28</span><span>30</span><span>2окт</span><span>4</span><span>6</span>
+    </div>
+    <div style="margin-top:8px; font-size:12px; color:var(--alert-600);">⚠ Пик 14 сентября: 120 т (лимит 100 т) — превышение 20 т</div>
+  </div></div>`;
+  
+  html += `</div>`; // end calendar
+  
+  // Scenarios tab
+  html += `<div id="planner-scenarios" style="display:none;">
+    <div class="scenario-banner">🏖️ Черновик · не влияет на план · Песочница для моделирования</div>
+    <div class="card"><div class="card-body">
+      <h3 style="margin-bottom:16px;">Параметры сценария</h3>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+        <div><h4 style="font-size:13px; font-weight:600; margin-bottom:8px;">Погода</h4>
+          <div class="form-group"><label>Сдвиг температуры</label><input type="range" min="-5" max="5" step="0.5" value="0" style="width:100%;"><div style="display:flex; justify-content:space-between; font-size:11px; color:var(--ink-500);"><span>-5°C</span><span>0</span><span>+5°C</span></div></div>
+          <div class="form-group"><label>Осадки</label><select><option>Как сейчас</option><option>+10 мм</option><option>+20 мм</option><option>Засуха</option><option>Ливень</option></select></div>
+          <div class="form-group"><label><input type="checkbox"> Волна жары</label></div>
+        </div>
+        <div><h4 style="font-size:13px; font-weight:600; margin-bottom:8px;">Операции</h4>
+          <div class="form-group"><label>Сдвиг сбора (дней)</label><input type="number" value="0" min="-14" max="14"></div>
+          <div class="form-group"><label>Применить к</label><select><option>Всем блокам</option><option>Выбранным</option></select></div>
+          <div class="form-group"><label>Лимит приёмки (т/день)</label><input type="number" value="100"></div>
+        </div>
+      </div>
+      <div style="margin-top:16px;"><button class="btn btn-primary">🧮 Рассчитать сценарий</button></div>
+    </div></div>
+    
+    <div class="compare-grid" style="margin-top:16px;">
+      <div class="compare-panel"><h3>📊 Базовый план</h3>
+        <div class="histogram">`;
+  [15,20,28,35,50,65,85,100,75,55,35,25].forEach(h => {
+    html += `<div class="bar ${h>80?'peak':''}" style="height:${h}%"></div>`;
+  });
+  html += `</div><div style="font-size:11px; color:var(--ink-500); margin-top:4px;">Пик: 120 т (14 сен)</div></div>
+      
+      <div class="compare-panel scenario"><h3>🏖️ Сценарий (черновик)</h3>
+        <div class="histogram">`;
+  [18,25,35,45,55,70,80,75,60,45,30,20].forEach(h => {
+    html += `<div class="bar ${h>80?'peak':''}" style="height:${h}%"></div>`;
+  });
+  html += `</div><div style="font-size:11px; color:var(--ink-500); margin-top:4px;">Пик: 95 т (16 сен) <span style="color:var(--vine-700); font-weight:600;">Δ −25 т ↓</span></div>
+        <div style="margin-top:8px; font-size:12px;"><span style="color:var(--vine-700);">Δ дата: +2 дня →</span> · <span style="color:var(--vine-700);">Δ Brix: +0.4° ↑</span></div>
+        <button class="btn btn-primary" style="margin-top:12px; width:100%;">✓ Применить как новый план</button>
+      </div>
+    </div>
+  </div>`;
+  
+  // Approved plan tab
+  html += `<div id="planner-approved" style="display:none;">
+    <div class="card"><div class="card-header"><h2>Утверждённый план сбора 2026</h2><div style="display:flex; gap:8px;"><button class="btn btn-secondary btn-sm">📥 PDF</button><button class="btn btn-secondary btn-sm">📥 XLSX</button></div></div>
+    <div class="card-body" style="padding:0; overflow-x:auto;">
+    <table class="table"><thead><tr><th>Блок</th><th>Сорт</th><th>Дата сбора</th><th>Тоннаж</th><th>Бригада</th><th>Статус</th></tr></thead><tbody>
+      <tr><td>А-7</td><td>Шардоне</td><td>14 сентября</td><td>35 т</td><td>Бригада 1</td><td><span class="status approved">✓ Утверждён</span></td></tr>
+      <tr><td>Б-2</td><td>Каберне Совиньон</td><td>18 сентября</td><td>52 т</td><td>Бригада 2</td><td><span class="status approved">✓ Утверждён</span></td></tr>
+      <tr><td>А-9</td><td>Шардоне</td><td>16 сентября</td><td>31 т</td><td>Бригада 1</td><td><span class="status pending">○ Ожидает</span></td></tr>
+    </tbody></table></div></div>
+  </div>`;
+  
+  container.innerHTML = html;
+}
+
+function switchPlannerTab(tab) {
+  document.querySelectorAll('#page-content .tabs .tab').forEach((t,i) => t.classList.toggle('active', i==={calendar:0,scenarios:1,approved:2}[tab]));
+  document.getElementById('planner-calendar').style.display = tab==='calendar'?'block':'none';
+  document.getElementById('planner-scenarios').style.display = tab==='scenarios'?'block':'none';
+  document.getElementById('planner-approved').style.display = tab==='approved'?'block':'none';
+}
+
+// ===== RENDER: OBSERVATIONS =====
+function renderObservations(container) {
+  container.innerHTML = `<div class="page-header"><h1>Наблюдения и пробы</h1><div class="subtitle">Ввод полевых наблюдений BBCH и лабораторных проб</div></div>
+  <div class="tabs"><div class="tab active">Ввод BBCH</div><div class="tab">Ввод проб</div><div class="tab">Журнал</div></div>
+  <div class="card"><div class="card-body">
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;">
+      <div class="form-group"><label>Блок</label><select><option>Блок Б-2 · Каберне Совиньон · 6,4 га</option><option>Блок А-7 · Шардоне · 4,2 га</option></select></div>
+      <div class="form-group"><label>Дата/время</label><input type="datetime-local" value="2026-05-04T14:30"></div>
+    </div>
+    <div class="form-group"><label>Фенофаза BBCH</label>
+      <div style="display:grid; grid-template-columns:repeat(6,1fr); gap:8px; margin-top:8px;">
+        ${[81,83,85,87,89,91].map(n => `<div style="padding:12px; border:2px solid ${n===81?'var(--vine-700)':'var(--neutral-200)'}; border-radius:8px; text-align:center; cursor:pointer; background:${n===81?'#E6F4E6':'white'};"><div style="font-size:22px; font-weight:bold; color:${n===81?'var(--vine-700)':'var(--ink-900)'}">${n}</div><div style="font-size:10px; color:var(--ink-500);">${{81:'Созревание',83:'Ягоды зреют',85:'Размягчение',87:'Зрелость',89:'Сбор',91:'После сбора'}[n]}</div></div>`).join('')}
+      </div>
+    </div>
+    <div class="form-group"><label>Отклонения</label>
+      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;">
+        ${['🍇 Болезни','🐛 Вредители','💨 Мех. повреждения','🏜️ Засуха','🌧️ Переувлажнение','❄️ Заморозок'].map(d => `<div class="filter">${d}</div>`).join('')}
+      </div>
+    </div>
+    <div class="form-group"><label>Комментарий</label><textarea placeholder="Опишите наблюдения..." rows="3"></textarea></div>
+    <div class="form-group"><label>Фото (до 5 файлов)</label>
+      <div style="border:2px dashed var(--neutral-200); border-radius:8px; padding:24px; text-align:center; color:var(--ink-500);">📷 Перетащите файлы или нажмите для выбора</div>
+    </div>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:16px;">
+      <span style="font-size:12px; color:var(--ink-500);">Наблюдатель: Петров С.А. (авто)</span>
+      <div style="display:flex; gap:8px;"><button class="btn btn-secondary">💾 Черновик</button><button class="btn btn-primary">✓ Зафиксировать</button></div>
+    </div>
+  </div></div>`;
+}
+
+// ===== RENDER: AI =====
+function renderAI(container) {
+  container.innerHTML = `<div class="page-header"><h1>AI-ассистент AgroPILOT</h1><div class="subtitle">RAG-чат с объяснимостью прогнозов · Модель: Qwen 2.5 32B · Локально</div></div>
+  <div class="chat-container">
+    <div class="chat-main">
+      <div class="chat-messages">
+        <div class="chat-msg user">Почему Б-2 зреет раньше Б-3, они рядом?</div>
+        <div class="chat-msg bot">
+          <div style="font-weight:600; margin-bottom:8px;">Разница составляет ~4 дня. Основные причины:</div>
+          <div style="font-size:13px; line-height:1.6;">
+            1. <strong>Экспозиция склона Б-2 южная</strong>, +8% прихода солнечной радиации → ускорение GDD.<br>
+            2. <strong>Возраст насаждений:</strong> Б-2 — 15 лет, Б-3 — 8 лет.<br>
+            3. <strong>По метеостанции MS-02</strong> в зоне Б-2 зафиксировано на +2.3°C больше за август.
+          </div>
+          <div class="sources"><strong>Источники:</strong> Метеостанция MS-02 · Карточка Б-2 · Регламент 2024-1 ЗБ, п. 2.1</div>
+          <div style="margin-top:8px; display:flex; gap:8px;"><button class="btn btn-secondary btn-sm">📊 Показать график</button><button class="btn btn-secondary btn-sm">📌 В отчёт</button></div>
+        </div>
+      </div>
+      <div class="chat-input-row"><input type="text" placeholder="Ваш вопрос..."><button class="btn btn-primary">➤</button></div>
+      <div class="note" style="margin-top:8px;">ⓘ Ответ строится только на ваших данных. Локальная модель, данные не покидают контур предприятия.</div>
+    </div>
+    <div class="chat-sidebar">
+      <div style="font-weight:600; font-size:14px; margin-bottom:12px;">Контекст</div>
+      <div style="background:var(--surface-bg); border-radius:8px; padding:12px; margin-bottom:16px;">
+        <div style="font-size:12px; margin:4px 0; color:var(--vine-700); font-weight:600;">● Блок Б-2</div>
+        <div style="font-size:12px; margin:4px 0; color:var(--vine-700); font-weight:600;">● Блок Б-3</div>
+        <div style="font-size:12px; margin:4px 0; color:var(--ink-500);">○ + Добавить блок</div>
+        <div style="font-size:12px; margin:8px 0 4px; color:var(--ink-500);">Период: 01.08 — 30.09 ▾</div>
+      </div>
+      <div style="font-weight:600; font-size:14px; margin-bottom:12px;">Быстрые вопросы</div>
+      <div class="quick-q">📈 Динамика Brix по блокам</div>
+      <div class="quick-q">💧 Водный стресс — где критично?</div>
+      <div class="quick-q">⚖️ Сравнить блоки Б-2 и Б-3</div>
+      <div class="quick-q">❄️ Риск заморозков на неделю</div>
+    </div>
+  </div>`;
+}
+
+// ===== RENDER: REPORTS =====
+function renderReports(container) {
+  container.innerHTML = `<div class="page-header"><h1>Отчёты</h1><div class="subtitle">Шаблоны отчётов и выгрузки данных</div></div>
+  <div class="card"><div class="card-body">
+    <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:16px;">
+      ${['📊 Сводка по сезону для руководства','📅 Готовность к сбору на 7/14/21 день','📈 Точность прогноза vs. факт','📋 Состояние данных по блокам'].map(t => `<div style="padding:16px; border:1px solid var(--neutral-200); border-radius:8px; cursor:pointer;" onmouseover="this.style.borderColor='var(--vine-500)'" onmouseout="this.style.borderColor='var(--neutral-200)'"><div style="font-weight:600; margin-bottom:4px;">${t}</div><div style="font-size:12px; color:var(--ink-500);">Последний раз: 2 дня назад</div><div style="margin-top:8px; display:flex; gap:8px;"><button class="btn btn-secondary btn-sm">📄 PDF</button><button class="btn btn-secondary btn-sm">📊 XLSX</button><button class="btn btn-secondary btn-sm">📋 CSV</button></div></div>`).join('')}
+    </div>
+  </div></div>`;
+}
+
+// ===== RENDER: SYSTEM =====
+function renderSystem(container) {
+  container.innerHTML = `<div class="page-header"><h1>Система</h1><div class="subtitle">Мониторинг инфраструктуры и управление</div></div>
+  <div class="kpi-grid" style="grid-template-columns:repeat(5,1fr);">
+    <div class="kpi-card"><div class="label">Метеостанции</div><div class="value" style="color:var(--vine-700);">14/15</div><div class="delta down">1 оффлайн</div></div>
+    <div class="kpi-card"><div class="label">IoT-датчики</div><div class="value" style="color:var(--sun-500);">47/52</div><div class="delta down">5 оффлайн</div></div>
+    <div class="kpi-card"><div class="label">n8n пайплайны</div><div class="value" style="color:var(--vine-700);">8/8</div><div class="delta up">Все OK</div></div>
+    <div class="kpi-card"><div class="label">LLM (Ollama)</div><div class="value" style="color:var(--vine-700);">✅</div><div class="delta">Qwen 2.5 32B</div></div>
+    <div class="kpi-card"><div class="label">БД</div><div class="value" style="color:var(--vine-700);">✅</div><div class="delta">Latency 2ms</div></div>
+  </div>
+  <div class="card" style="margin-top:16px;"><div class="card-header"><h2>Метеостанции и IoT</h2><button class="btn btn-secondary btn-sm">🔄 Обновить все</button></div>
+  <div class="card-body" style="padding:0; overflow-x:auto;"><table class="table"><thead><tr><th>ID</th><th>Тип</th><th>Локация</th><th>Последний пакет</th><th>Батарея</th><th>Статус</th></tr></thead><tbody>
+    <tr><td>MS-01</td><td>Метео</td><td>Центр</td><td>3 мин</td><td>—</td><td><span class="status approved">✅</span></td></tr>
+    <tr><td>MS-02</td><td>Метео</td><td>Север</td><td>8 мин</td><td>—</td><td><span class="status approved">✅</span></td></tr>
+    <tr><td>MS-03</td><td>Метео</td><td>Юг</td><td>2 ч</td><td>—</td><td><span class="status warning">⚠ Устарело</span></td></tr>
+    <tr><td>B2-03</td><td>IoT-почва</td><td>Блок Б-2</td><td>3 ч</td><td>23%</td><td><span class="status warning">⚠ Устарело</span></td></tr>
+    <tr><td>B2-04</td><td>IoT-почва</td><td>Блок Б-2</td><td>5 мин</td><td>67%</td><td><span class="status approved">✅</span></td></tr>
+  </tbody></table></div></div>`;
+}
+
+// ===== RENDER: PROFILE =====
+function renderProfile(container) {
+  container.innerHTML = `<div class="page-header"><h1>Профиль и настройки</h1></div>
+  <div class="card"><div class="card-body">
+    <div class="form-group"><label>Имя</label><input value="Иванов Иван Петрович"></div>
+    <div class="form-group"><label>Роль</label><select><option selected>Главный агроном</option><option>Агроном-полевик</option><option>ИТ-администратор</option></select></div>
+    <div class="form-group"><label>Email</label><input value="ivanov@zolotayabalka.ru"></div>
+    <div class="form-group"><label>Язык интерфейса</label><select><option selected>Русский</option><option>English</option></select></div>
+    <button class="btn btn-primary">Сохранить</button>
+  </div></div>`;
+}
+
+// ===== BLOCK CARD MODAL =====
+function showBlockCard(blockId) {
+  const b = blocks.find(x => x.id === blockId);
+  if (!b) return;
+  
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.id = 'block-modal';
+  overlay.innerHTML = `
+    <div class="modal" style="width:900px; max-width:95vw;">
+      <div class="modal-header">
+        <h2>Блок ${b.id} · ${b.sort} · ${b.area} га</h2>
+        <button class="icon-btn" onclick="closeBlockModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="block-card">
+          <div class="block-card-section">
+            <h3>Окно зрелости</h3>
+            <div style="font-size:20px; font-weight:700; margin:8px 0;">${b.start} — ${b.end}</div>
+            <div style="font-size:14px;">Оптимум: <strong>${b.optDate}</strong> · P${b.conf}%</div>
+            <div class="capsule" style="margin-top:12px;">
+              <div class="capsule-bar"><div class="capsule-fill range" style="width:70%"></div><div class="capsule-fill optim" style="width:35%; left:20%"></div><div class="capsule-today" style="left:15%"></div></div>
+              <div class="capsule-labels"><span>${b.start}</span><span>${b.optDate}</span><span>${b.end}</span></div>
+            </div>
+            ${b.conf < 50 ? '<div style="margin-top:8px; font-size:12px; color:var(--alert-600);">⚠ Недостаточно данных сорта. Рекомендуем опираться на лабораторные пробы.</div>' : ''}
+          </div>
+          <div class="block-card-section">
+            <h3>Ключевые прогнозы</h3>
+            <div class="kpi-row"><span class="label">Brix</span><span class="value">${b.brix} ± 1.1°</span></div>
+            <div class="kpi-row"><span class="label">TA</span><span class="value">${b.ta} ± 0.6 г/л</span></div>
+            <div class="kpi-row"><span class="label">pH</span><span class="value">${b.ph} ± 0.08</span></div>
+            <div class="kpi-row"><span class="label">Дата сбора</span><span class="value">${b.optDate}</span></div>
+            <div class="kpi-row"><span class="label">P10 / P90</span><span class="value">${b.start} / ${b.end}</span></div>
+            <button class="btn btn-primary" style="margin-top:12px; width:100%;" onclick="showExplainability('${b.id}')">🔍 Почему такой прогноз?</button>
+          </div>
+          <div class="block-card-section">
+            <h3>Статус данных</h3>
+            <div class="kpi-row"><span class="label">Метео</span><span style="display:flex;align-items:center;gap:4px;"><span class="quality-dot ok"></span> ${b.meteoAge}</span></div>
+            <div class="kpi-row"><span class="label">IoT-почва</span><span style="display:flex;align-items:center;gap:4px;"><span class="quality-dot ${b.iotAge.includes('ч')?'warn':'ok'}"></span> ${b.iotAge}</span></div>
+            <div class="kpi-row"><span class="label">Проба</span><span style="display:flex;align-items:center;gap:4px;"><span class="quality-dot ${b.lastProbe.includes('день')||b.lastProbe.includes('дня')?'ok':'warn'}"></span> ${b.lastProbe}</span></div>
+            <div class="kpi-row"><span class="label">BBCH</span><span style="display:flex;align-items:center;gap:4px;"><span class="quality-dot ok"></span> Сегодня</span></div>
+          </div>
+        </div>
+        
+        <div style="margin-top:20px;">
+          <div class="tabs"><div class="tab active">Кинетика Brix</div><div class="tab">Тепловая сумма GDD</div><div class="tab">Водный баланс</div></div>
+          <div style="background:var(--surface-bg); border-radius:8px; padding:20px; height:160px; display:flex; align-items:flex-end; gap:4px;">
+            ${[18,18.5,19,19.8,20.5,21,21.5,22,22.3,22.8].map((v,i) => `<div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px;">
+              <div style="width:100%; height:${(v-17)*20}px; background:${i<7?'var(--vine-500)':'var(--sun-500)'}; border-radius:4px 4px 0 0; opacity:${i<7?1:0.5};"></div>
+              <span style="font-size:9px; color:var(--ink-500);">${['авг 1','авг 8','авг 15','авг 22','авг 29','сен 5','сен 12','сен 19','сен 26','окт 3'][i]}</span>
+            </div>`).join('')}
+          </div>
+          <div class="note" style="margin-top:4px;">Фактические точки (зелёный) + прогнозный веер P10–P90 (жёлтый)</div>
+        </div>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+}
+
+function closeBlockModal() {
+  const m = document.getElementById('block-modal');
+  if (m) m.remove();
+}
+
+function showExplainability(blockId) {
+  closeBlockModal();
+  const b = blocks.find(x => x.id === blockId);
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.id = 'explain-modal';
+  overlay.innerHTML = `
+    <div class="modal" style="width:700px;">
+      <div class="modal-header"><h2>🔍 Почему оптимум — ${b.optDate}?</h2><button class="icon-btn" onclick="document.getElementById('explain-modal').remove()">✕</button></div>
+      <div class="modal-body">
+        <div class="explain-panel">
+          <div class="explain-summary">Дата оптимума — <strong>${b.optDate}</strong>. Главные причины: тёплый август (+62 GDD к норме) и умеренный водный стресс на фазе BBCH 81.</div>
+          <div style="font-weight:600; font-size:13px; margin:16px 0 8px;">Ключевые факторы (SHAP)</div>
+          <div class="factor"><div class="factor-name">Накопленные GDD</div><div class="factor-bar-bg"><div class="factor-bar-fill neg" style="width:40%"></div></div><div class="factor-value" style="color:var(--alert-600);">−3.2 дня ←</div></div>
+          <div class="factor"><div class="factor-name">Водный стресс (SWD)</div><div class="factor-bar-bg"><div class="factor-bar-fill pos" style="width:20%"></div></div><div class="factor-value" style="color:var(--vine-700);">+1.4 дня →</div></div>
+          <div class="factor"><div class="factor-name">Сорт/подвой (база)</div><div class="factor-bar-bg"><div class="factor-bar-fill pos" style="width:12%"></div></div><div class="factor-value" style="color:var(--vine-700);">+0.8 дня →</div></div>
+          <div class="factor"><div class="factor-name">Крайние темп. >35°C</div><div class="factor-bar-bg"><div class="factor-bar-fill pos" style="width:10%"></div></div><div class="factor-value" style="color:var(--vine-700);">+0.6 дня →</div></div>
+          <div class="factor"><div class="factor-name">Прошлогодний сдвиг</div><div class="factor-bar-bg"><div class="factor-bar-fill pos" style="width:6%"></div></div><div class="factor-value" style="color:var(--vine-700);">+0.4 дня →</div></div>
+          <div class="note">Все значения — оценка XGBoost на данных сезонов 2024–2026</div>
+          <div style="margin-top:16px; padding-top:16px; border-top:1px solid var(--neutral-200);">
+            <div style="font-weight:600; font-size:13px; margin-bottom:8px;">Источники данных</div>
+            <div class="source-list">
+              <div class="source-item ok">📡 Метеостанция MS-02 (${b.meteoAge})</div>
+              <div class="source-item ${b.iotAge.includes('ч')?'warn':'ok'}">🌱 IoT-почва (${b.iotAge})</div>
+              <div class="source-item ok">🔬 Проба #417 (${b.lastProbe})</div>
+              <div class="source-item ok">📝 BBCH Иванов И.И. (21 апр)</div>
+            </div>
+          </div>
+          <div style="margin-top:12px; padding-top:12px; border-top:1px solid var(--neutral-200);">
+            <div style="font-weight:600; font-size:13px; margin-bottom:8px;">База знаний (RAG)</div>
+            <div class="rag-quote"><em>Регламент 2024-1 ЗБ, п. 3.2:</em> «Для Каберне Совиньон целевой Brix 23–24° при TA 5.8–6.4 г/л. При недоборе TA >0.3 г/л рекомендовано сместить сбор на 2 дня раньше оптимума.»</div>
+          </div>
+          <div style="margin-top:16px; display:flex; gap:12px; align-items:center;">
+            <button class="btn btn-primary">💬 Продолжить в чате</button>
+            <button class="btn btn-secondary">📌 Сохранить объяснение</button>
+            <div style="margin-left:auto; display:flex; gap:8px; font-size:16px; cursor:pointer;"><span>👍</span><span>👎</span></div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+}
+
+// ===== INIT =====
+document.addEventListener('DOMContentLoaded', () => {
+  renderToday(document.getElementById('page-content'));
+});
+
+// Close modals on overlay click
+document.addEventListener('click', (e) => {
+  if (e.target.classList.contains('modal-overlay')) e.target.remove();
+});
+</script>
+</body>
+</html>

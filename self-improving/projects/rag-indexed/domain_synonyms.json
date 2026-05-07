@@ -1,0 +1,16 @@
+{
+  "мильдью": ["Plasmopara viticola", "ложная мучнистая роса", "downy mildew", "пероноспороз"],
+  "оидиум": ["Erysiphe necator", "настоящая мучнистая роса", "powdery mildew", "пепелица"],
+  "серая гниль": ["Botrytis cinerea", "gray mold", "botrytis"],
+  "хлороз": ["iron deficiency", "железное голодание", "yellowing"],
+  "верезон": ["окрашивание ягоды", "onset of ripening", "размягчение ягоды"],
+  "шардоне": ["Chardonnay", "Chardonnay B", "белый бургундский"],
+  "каберне совиньон": ["Cabernet Sauvignon", "Cabernet"],
+  "мерло": ["Merlot", "Merlot N"],
+  "гмс": ["гидрометеорологическая станция", "метеостанция", "weather station"],
+  "rag": ["retrieval-augmented generation", "поиск по базе", "knowledge base"],
+  "gdd": ["сумма активных температур", "САТ", "градусо-дни", "degree days"],
+  "brix": ["сахаристость", "sugar content", "refractometer"],
+  "ph": ["кислотность", "pH сока", "acid content"],
+  "золотая балка": ["winery", "винодельня", "хозяйство"]
+}

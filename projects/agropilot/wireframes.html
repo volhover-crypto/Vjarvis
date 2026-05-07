@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>AgroPILOT — Эскизы интерфейсов</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', 'Segoe UI', sans-serif; background: #F7F6F1; color: #1E231F; padding: 40px; }
+h1 { font-size: 28px; margin-bottom: 8px; color: #1E231F; }
+h2 { font-size: 22px; margin: 40px 0 16px; color: #4F6F3A; border-bottom: 2px solid #4F6F3A; padding-bottom: 8px; }
+h3 { font-size: 18px; margin: 24px 0 12px; color: #1E231F; }
+.subtitle { color: #5A6160; font-size: 14px; margin-bottom: 32px; }
+
+/* Wireframe styles */
+.wireframe { background: #FFFFFF; border: 1px solid #E6E3DB; border-radius: 8px; margin: 16px 0; overflow: hidden; }
+.header { background: #1E231F; color: #FFFFFF; padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; font-size: 14px; }
+.header .logo { font-weight: bold; font-size: 16px; }
+.header .right { display: flex; gap: 16px; align-items: center; }
+.badge { background: #D79A2B; color: #1E231F; border-radius: 12px; padding: 2px 8px; font-size: 11px; font-weight: bold; }
+
+.layout { display: flex; }
+.sidebar { width: 240px; background: #F7F6F1; border-right: 1px solid #E6E3DB; padding: 16px 0; min-height: 600px; }
+.sidebar.collapsed { width: 64px; }
+.sidebar-item { padding: 10px 24px; font-size: 14px; color: #5A6160; cursor: pointer; display: flex; align-items: center; gap: 12px; }
+.sidebar-item:hover { background: #E6E3DB; }
+.sidebar-item.active { background: #E6E3DB; color: #4F6F3A; font-weight: 600; }
+.sidebar-item .icon { width: 20px; text-align: center; }
+.sidebar-footer { position: absolute; bottom: 16px; left: 0; right: 0; padding: 0 24px; font-size: 11px; color: #5A6160; }
+
+.content { flex: 1; padding: 24px; }
+
+/* KPI cards */
+.kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin: 16px 0; }
+.kpi-card { background: #FFFFFF; border: 1px solid #E6E3DB; border-radius: 8px; padding: 16px; }
+.kpi-card .label { font-size: 12px; color: #5A6160; }
+.kpi-card .value { font-size: 32px; font-weight: bold; color: #1E231F; margin: 4px 0; }
+.kpi-card .delta { font-size: 12px; }
+.kpi-card .delta.up { color: #4F6F3A; }
+.kpi-card .delta.down { color: #B23A2A; }
+.kpi-card .sparkline { height: 24px; background: linear-gradient(90deg, #E6E3DB 0%, #7CA064 100%); border-radius: 4px; margin-top: 8px; opacity: 0.3; }
+
+/* Table */
+.table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.table th { background: #F7F6F1; padding: 10px 12px; text-align: left; font-weight: 600; border-bottom: 2px solid #E6E3DB; }
+.table td { padding: 10px 12px; border-bottom: 1px solid #E6E3DB; }
+.table tr:hover { background: #F7F6F1; }
+
+/* Maturity capsule */
+.capsule { display: flex; align-items: center; gap: 8px; }
+.capsule-bar { flex: 1; height: 20px; background: #E6E3DB; border-radius: 10px; position: relative; overflow: hidden; }
+.capsule-fill { height: 100%; background: linear-gradient(90deg, #7CA064, #4F6F3A, #7CA064); border-radius: 10px; }
+.capsule-marker { position: absolute; top: 0; bottom: 0; width: 2px; background: #1E231F; }
+.capsule-labels { display: flex; justify-content: space-between; font-size: 10px; color: #5A6160; margin-top: 2px; }
+
+/* Status badges */
+.status { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+.status.approved { background: #E6F4E6; color: #4F6F3A; }
+.status.pending { background: #FFF3E0; color: #D79A2B; }
+.status.warning { background: #FFEBEE; color: #B23A2A; }
+.status.info { background: #E3F2FD; color: #1565C0; }
+
+/* Insight cards */
+.insight-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 16px 0; }
+.insight-card { background: #FFFFFF; border: 1px solid #E6E3DB; border-radius: 8px; padding: 16px; }
+.insight-card .icon { font-size: 24px; margin-bottom: 8px; }
+.insight-card .title { font-weight: 600; font-size: 14px; margin-bottom: 4px; }
+.insight-card .text { font-size: 12px; color: #5A6160; margin-bottom: 12px; }
+.insight-card .actions { display: flex; gap: 8px; }
+.btn { padding: 6px 12px; border-radius: 4px; font-size: 12px; cursor: pointer; border: none; }
+.btn-primary { background: #4F6F3A; color: #FFFFFF; }
+.btn-secondary { background: #E6E3DB; color: #1E231F; }
+
+/* Chat */
+.chat { background: #F7F6F1; border-radius: 8px; padding: 16px; }
+.chat-message { margin: 8px 0; padding: 12px; border-radius: 8px; max-width: 80%; }
+.chat-message.user { background: #E6E3DB; margin-left: auto; }
+.chat-message.bot { background: #FFFFFF; border: 1px solid #E6E3DB; }
+.chat-input { display: flex; gap: 8px; margin-top: 16px; }
+.chat-input input { flex: 1; padding: 10px; border: 1px solid #E6E3DB; border-radius: 4px; font-size: 14px; }
+
+/* Explainability panel */
+.explain { background: #FFFFFF; border: 1px solid #E6E3DB; border-radius: 8px; padding: 16px; }
+.explain .factor { display: flex; align-items: center; gap: 12px; margin: 8px 0; }
+.explain .factor-name { width: 200px; font-size: 13px; }
+.explain .factor-bar { flex: 1; height: 16px; background: #E6E3DB; border-radius: 8px; overflow: hidden; }
+.explain .factor-fill { height: 100%; border-radius: 8px; }
+.explain .factor-fill.positive { background: #4F6F3A; }
+.explain .factor-fill.negative { background: #B23A2A; }
+.explain .factor-value { width: 60px; text-align: right; font-size: 12px; font-weight: 600; }
+
+/* Map placeholder */
+.map { background: #E6E3DB; border-radius: 8px; height: 300px; display: flex; align-items: center; justify-content: center; color: #5A6160; font-size: 14px; position: relative; }
+.map .block { position: absolute; border-radius: 4px; padding: 4px 8px; font-size: 11px; font-weight: 600; cursor: pointer; }
+.map .block:hover { transform: scale(1.05); }
+
+/* Filter bar */
+.filters { display: flex; gap: 12px; margin: 16px 0; flex-wrap: wrap; }
+.filter { padding: 6px 12px; border: 1px solid #E6E3DB; border-radius: 4px; font-size: 13px; background: #FFFFFF; cursor: pointer; }
+.filter:hover { border-color: #4F6F3A; }
+
+/* Histogram */
+.histogram { display: flex; align-items: flex-end; gap: 2px; height: 80px; padding: 8px 0; }
+.histogram .bar { flex: 1; background: #7CA064; border-radius: 2px 2px 0 0; min-height: 4px; }
+.histogram .bar.peak { background: #B23A2A; }
+
+/* Season indicator */
+.season-banner { background: linear-gradient(90deg, #4F6F3A, #7CA064); color: #FFFFFF; padding: 8px 16px; border-radius: 4px; font-size: 12px; display: inline-block; margin: 8px 0; }
+
+/* Data quality indicator */
+.quality { display: flex; gap: 4px; }
+.quality .dot { width: 8px; height: 8px; border-radius: 50%; }
+.quality .dot.ok { background: #4F6F3A; }
+.quality .dot.warn { background: #D79A2B; }
+.quality .dot.error { background: #B23A2A; }
+
+.section { margin: 40px 0; }
+.note { font-size: 11px; color: #5A6160; font-style: italic; margin: 8px 0; }
+</style>
+</head>
+<body>
+
+<h1>🌿 AgroPILOT — Эскизы интерфейсов</h1>
+<p class="subtitle">UX-спецификация v1.0 · Апрель 2026 · Золотая Балка</p>
+
+<!-- ==================== ЭКРАН 1: СЕГОДНЯ (ГЛАВНЫЙ) ==================== -->
+<h2>Экран 1: Сегодня (Главный экран)</h2>
+<p class="note">Роль: Главный агроном. Стартовая страница с роль-зависимым содержимым.</p>
+
+<div class="wireframe">
+<div class="header">
+  <div class="logo">🌿 AgroPILOT · Золотая Балка</div>
+  <div class="right">
+    <span>⌘K Поиск</span>
+    <span class="badge">Сезон 2026 · BBCH 81</span>
+    <span>🔔 3</span>
+    <span>👤 Иванов И.И.</span>
+  </div>
+</div>
+
+<div class="layout">
+<div class="sidebar">
+  <div class="sidebar-item active"><span class="icon">📊</span> Сегодня</div>
+  <div class="sidebar-item"><span class="icon">🗺️</span> Участки</div>
+  <div class="sidebar-item"><span class="icon">📅</span> Планировщик сбора</div>
+  <div class="sidebar-item"><span class="icon">🔬</span> Наблюдения и пробы</div>
+  <div class="sidebar-item"><span class="icon">🤖</span> AI-ассистент</div>
+  <div class="sidebar-item"><span class="icon">📄</span> Отчёты</div>
+  <div class="sidebar-item"><span class="icon">⚙️</span> Система</div>
+  <div class="sidebar-item"><span class="icon">👤</span> Профиль</div>
+</div>
+
+<div class="content">
+<div class="season-banner">🌿 Сезон 2026 · Фаза BBCH 81 · Режим калибровки (сезон 1) · Точность ±7–12 дней</div>
+
+<h3>Инсайты</h3>
+<div class="insight-grid">
+  <div class="insight-card">
+    <div class="icon">🌡️</div>
+    <div class="title">Волна жары сдвинула окна</div>
+    <div class="text">Блоки А-7, А-9: окно зрелости сдвинулось на 2 дня раньше из-за жары 18–20 апреля.</div>
+    <div class="actions"><button class="btn btn-primary">Открыть планировщик</button></div>
+  </div>
+  <div class="insight-card">
+    <div class="icon">⚠️</div>
+    <div class="title">IoT-почва B2-03 не отвечает</div>
+    <div class="text">Нет данных более 3 часов. Проверьте подключение датчика.</div>
+    <div class="actions"><button class="btn btn-primary">Открыть 7.1</button></div>
+  </div>
+  <div class="insight-card">
+    <div class="icon">🔬</div>
+    <div class="title">Проба по Шардоне просрочена</div>
+    <div class="text">Последняя лабораторная проба — 6 дней назад (норма 3 дня).</div>
+    <div class="actions"><button class="btn btn-secondary">Создать задачу</button></div>
+  </div>
+</div>
+
+<h3>Ключевые показатели</h3>
+<div class="kpi-grid">
+  <div class="kpi-card">
+    <div class="label">Блоков в зоне сбора (14 дней)</div>
+    <div class="value">12</div>
+    <div class="delta up">+3 за неделю</div>
+  </div>
+  <div class="kpi-card">
+    <div class="label">Утверждено плана</div>
+    <div class="value">8/15</div>
+    <div class="delta">53% готовности</div>
+  </div>
+  <div class="kpi-card">
+    <div class="label">Средний Brix (прогноз)</div>
+    <div class="value">22.8°</div>
+    <div class="delta up">+0.3° к прошлой неделе</div>
+  </div>
+  <div class="kpi-card">
+    <div class="label">Качество данных</div>
+    <div class="value">87%</div>
+    <div class="delta down">-5% (IoT B2-03)</div>
+  </div>
+</div>
+
+<h3>Окна сбора на 14 дней</h3>
+<div class="table">
+  <table>
+    <tr><th>Блок</th><th>Сорт</th><th>Окно зрелости</th><th>Оптимум</th><th>Уверенность</th><th>Статус</th></tr>
+    <tr><td>А-7</td><td>Шардоне</td><td><div class="capsule"><div class="capsule-bar"><div class="capsule-fill" style="width:60%"></div></div></div></td><td>14 сен</td><td><span class="status approved">P60%</span></td><td><span class="status approved">✓ Утверждён</span></td></tr>
+    <tr><td>А-9</td><td>Шардоне</td><td><div class="capsule"><div class="capsule-bar"><div class="capsule-fill" style="width:55%"></div></div></div></td><td>16 сен</td><td><span class="status pending">P55%</span></td><td><span class="status pending">Ожидает</span></td></tr>
+    <tr><td>Б-2</td><td>Каберне</td><td><div class="capsule"><div class="capsule-bar"><div class="capsule-fill" style="width:40%"></div></div></div></td><td>18 сен</td><td><span class="status approved">P72%</span></td><td><span class="status approved">✓ Утверждён</span></td></tr>
+    <tr><td>Б-3</td><td>Каберне</td><td><div class="capsule"><div class="capsule-bar"><div class="capsule-fill" style="width:35%"></div></div></div></td><td>22 сен</td><td><span class="status pending">P68%</span></td><td><span class="status pending">Ожидает</span></td></tr>
+    <tr><td>В-1</td><td>Мерло</td><td><div class="capsule"><div class="capsule-bar"><div class="capsule-fill" style="width:20%"></div></div></div></td><td>28 сен</td><td><span class="status warning">P35%</span></td><td><span class="status warning">⚠ Мало данных</span></td></tr>
+  </table>
+</div>
+
+<h3>Загрузка винодельни</h3>
+<div class="histogram">
+  <div class="bar" style="height:20%"></div><div class="bar" style="height:25%"></div><div class="bar" style="height:30%"></div>
+  <div class="bar" style="height:45%"></div><div class="bar" style="height:60%"></div><div class="bar" style="height:80%"></div>
+  <div class="bar peak" style="height:100%"></div><div class="bar" style="height:70%"></div><div class="bar" style="height:50%"></div>
+  <div class="bar" style="height:30%"></div><div class="bar" style="height:20%"></div><div class="bar" style="height:15%"></div>
+</div>
+<div class="note">Пик 14 сентября: 120 т (лимит 100 т) ⚠ Превышение</div>
+</div>
+</div>
+</div>
+
+<!-- ==================== ЭКРАН 2: ПЛАНИРОВЩИК СБОРА ==================== -->
+<h2>Экран 2: Планировщик сбора — Календарь окон</h2>
+<p class="note">Ключевой экран для главного агронома. Ганта-подобный вид с окнами зрелости.</p>
+
+<div class="wireframe">
+<div class="header">
+  <div class="logo">🌿 AgroPILOT · Золотая Балка</div>
+  <div class="right"><span>🔔 3</span><span>👤 Иванов И.И.</span></div>
+</div>
+<div class="layout">
+<div class="sidebar collapsed">
+  <div class="sidebar-item"><span class="icon">📊</span></div>
+  <div class="sidebar-item"><span class="icon">🗺️</span></div>
+  <div class="sidebar-item active"><span class="icon">📅</span></div>
+  <div class="sidebar-item"><span class="icon">🔬</span></div>
+  <div class="sidebar-item"><span class="icon">🤖</span></div>
+  <div class="sidebar-item"><span class="icon">📄</span></div>
+</div>
+<div class="content">
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+  <div><strong>Планировщик сбора</strong> > Календарь окон</div>
+  <div style="display:flex; gap:8px;">
+    <button class="btn btn-primary">+ Сценарий «что если»</button>
+    <button class="btn btn-secondary">📥 Выгрузить план</button>
+  </div>
+</div>
+
+<div class="filters">
+  <div class="filter">Сорт: Каберне Совиньон ▾</div>
+  <div class="filter">Блок: Все ▾</div>
+  <div class="filter">Окно: ±14 дней ▾</div>
+  <div class="filter">Уверенность: ≥ 60% ▾</div>
+  <div class="filter">Статус: Все ▾</div>
+  <div class="filter" style="background:#F7F6F1;">Сбросить</div>
+</div>
+
+<div style="display:flex; gap:24px;">
+  <div style="flex:2;">
+    <div style="font-size:12px; color:#5A6160; margin-bottom:8px;">Август &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Сентябрь &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Октябрь</div>
+    <div style="font-size:10px; color:#5A6160; display:flex; justify-content:space-between;"><span>10</span><span>20</span><span>30</span><span>10</span><span>20</span><span>30</span><span>10</span></div>
+    
+    <div style="margin:8px 0; display:flex; align-items:center; gap:12px;">
+      <div style="width:120px; font-size:12px;">Блок А-7</div>
+      <div style="flex:1; position:relative; height:24px;">
+        <div style="position:absolute; left:10%; right:60%; height:16px; top:4px; background:#E6E3DB; border-radius:8px;"></div>
+        <div style="position:absolute; left:25%; right:40%; height:16px; top:4px; background:#4F6F3A; border-radius:8px;"></div>
+        <div style="position:absolute; left:35%; width:2px; height:24px; top:0; background:#1E231F;"></div>
+      </div>
+      <div style="width:80px; font-size:11px;">Шардоне</div>
+      <div style="width:40px;"><span class="status approved">P60</span></div>
+      <div style="width:60px;"><span class="status approved">✓</span></div>
+    </div>
+    
+    <div style="margin:8px 0; display:flex; align-items:center; gap:12px;">
+      <div style="width:120px; font-size:12px;">Блок А-9</div>
+      <div style="flex:1; position:relative; height:24px;">
+        <div style="position:absolute; left:15%; right:55%; height:16px; top:4px; background:#E6E3DB; border-radius:8px;"></div>
+        <div style="position:absolute; left:30%; right:35%; height:16px; top:4px; background:#7CA064; border-radius:8px;"></div>
+      </div>
+      <div style="width:80px; font-size:11px;">Шардоне</div>
+      <div style="width:40px;"><span class="status pending">P55</span></div>
+      <div style="width:60px;"><span class="status pending">○</span></div>
+    </div>
+    
+    <div style="margin:8px 0; display:flex; align-items:center; gap:12px;">
+      <div style="width:120px; font-size:12px;">Блок Б-2</div>
+      <div style="flex:1; position:relative; height:24px;">
+        <div style="position:absolute; left:30%; right:40%; height:16px; top:4px; background:#E6E3DB; border-radius:8px;"></div>
+        <div style="position:absolute; left:40%; right:25%; height:16px; top:4px; background:#4F6F3A; border-radius:8px;"></div>
+      </div>
+      <div style="width:80px; font-size:11px;">Каберне</div>
+      <div style="width:40px;"><span class="status approved">P72</span></div>
+      <div style="width:60px;"><span class="status approved">✓</span></div>
+    </div>
+    
+    <div style="margin:8px 0; display:flex; align-items:center; gap:12px;">
+      <div style="width:120px; font-size:12px;">Блок В-1 ⚠</div>
+      <div style="flex:1; position:relative; height:24px;">
+        <div style="position:absolute; left:50%; right:20%; height:16px; top:4px; background:repeating-linear-gradient(45deg,#E6E3DB,#E6E3DB 4px,#D79A2B 4px,#D79A2B 8px); border-radius:8px; opacity:0.5;"></div>
+      </div>
+      <div style="width:80px; font-size:11px;">Мерло</div>
+      <div style="width:40px;"><span class="status warning">P35</span></div>
+      <div style="width:60px;"><span class="status warning">⚠</span></div>
+    </div>
+  </div>
+  
+  <div style="width:280px; background:#F7F6F1; border-radius:8px; padding:16px;">
+    <div style="font-weight:600; font-size:14px; margin-bottom:12px;">Блок А-7 · Шардоне</div>
+    <div style="font-size:12px; margin:4px 0;"><span style="color:#5A6160;">Оптимум:</span> <strong>14 сентября</strong></div>
+    <div style="font-size:12px; margin:4px 0;"><span style="color:#5A6160;">Окно:</span> 8–25 сентября</div>
+    <div style="font-size:12px; margin:4px 0;"><span style="color:#5A6160;">Уверенность:</span> P60%</div>
+    <div style="font-size:12px; margin:4px 0;"><span style="color:#5A6160;">Brix (прогноз):</span> 22.8 ± 1.1°</div>
+    <div style="font-size:12px; margin:4px 0;"><span style="color:#5A6160;">Площадь:</span> 4.2 га</div>
+    <div style="margin-top:12px; padding-top:12px; border-top:1px solid #E6E3DB;">
+      <div class="quality"><div class="dot ok"></div><div class="dot ok"></div><div class="dot warn"></div><div class="dot ok"></div></div>
+      <div class="note">Метео ✅ IoT ⚠ Лаб ✅ BBCH ✅</div>
+    </div>
+    <div style="margin-top:12px;">
+      <button class="btn btn-primary" style="width:100%;">Объяснить прогноз</button>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ==================== ЭКРАН 3: КАРТА ЗРЕЛОСТИ ==================== -->
+<h2>Экран 3: Карта зрелости</h2>
+<p class="note">Интерактивная карта хозяйства с окраской блоков по рейтингу зрелости.</p>
+
+<div class="wireframe">
+<div class="header">
+  <div class="logo">🌿 AgroPILOT · Золотая Балка</div>
+  <div class="right"><span>🔔</span><span>👤</span></div>
+</div>
+<div class="layout">
+<div class="sidebar">
+  <div class="sidebar-item"><span class="icon">📊</span> Сегодня</div>
+  <div class="sidebar-item active"><span class="icon">🗺️</span> Участки</div>
+  <div class="sidebar-item"><span class="icon">📅</span> Планировщик</div>
+  <div class="sidebar-item"><span class="icon">🔬</span> Наблюдения</div>
+</div>
+<div class="content">
+<div style="display:flex; justify-content:space-between; margin-bottom:16px;">
+  <div><strong>Участки</strong> > Карта зрелости</div>
+  <div class="filters">
+    <div class="filter">Слой: Зрелость ▾</div>
+    <div class="filter">Сорт: Все ▾</div>
+  </div>
+</div>
+
+<div class="map" style="height:400px; position:relative;">
+  <!-- Simulated farm blocks -->
+  <div style="position:absolute; top:20px; left:40px; background:#4F6F3A; color:white; padding:8px 12px; border-radius:6px; font-size:11px; font-weight:600;">А-7<br>Шардоне<br>P60%</div>
+  <div style="position:absolute; top:20px; left:160px; background:#4F6F3A; color:white; padding:8px 12px; border-radius:6px; font-size:11px; font-weight:600;">А-9<br>Шардоне<br>P55%</div>
+  <div style="position:absolute; top:120px; left:60px; background:#7CA064; color:white; padding:8px 12px; border-radius:6px; font-size:11px; font-weight:600;">Б-2<br>Каберне<br>P72%</div>
+  <div style="position:absolute; top:120px; left:180px; background:#7CA064; color:white; padding:8px 12px; border-radius:6px; font-size:11px; font-weight:600;">Б-3<br>Каберне<br>P68%</div>
+  <div style="position:absolute; top:220px; left:100px; background:#D79A2B; color:white; padding:8px 12px; border-radius:6px; font-size:11px; font-weight:600;">В-1<br>Мерло<br>P35% ⚠</div>
+  <div style="position:absolute; top:220px; left:220px; background:#E6E3DB; color:#5A6160; padding:8px 12px; border-radius:6px; font-size:11px; font-weight:600;">Г-1<br>Пино<br>—</div>
+  
+  <!-- Legend -->
+  <div style="position:absolute; bottom:16px; right:16px; background:white; border:1px solid #E6E3DB; border-radius:8px; padding:12px; font-size:11px;">
+    <div style="font-weight:600; margin-bottom:8px;">Зрелость (GDD%)</div>
+    <div style="display:flex; align-items:center; gap:8px; margin:4px 0;"><div style="width:16px; height:16px; background:#4F6F3A; border-radius:4px;"></div> &gt;70% (готов)</div>
+    <div style="display:flex; align-items:center; gap:8px; margin:4px 0;"><div style="width:16px; height:16px; background:#7CA064; border-radius:4px;"></div> 50–70%</div>
+    <div style="display:flex; align-items:center; gap:8px; margin:4px 0;"><div style="width:16px; height:16px; background:#D79A2B; border-radius:4px;"></div> 30–50%</div>
+    <div style="display:flex; align-items:center; gap:8px; margin:4px 0;"><div style="width:16px; height:16px; background:#E6E3DB; border-radius:4px;"></div> &lt;30%</div>
+  </div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ==================== ЭКРАН 4: AI-АССИСТЕНТ ==================== -->
+<h2>Экран 4: AI-ассистент (чат + explainability)</h2>
+<p class="note">RAG-чат с объяснимостью прогнозов. Контекст: до 5 блоков, период, сценарий.</p>
+
+<div class="wireframe">
+<div class="header">
+  <div class="logo">🌿 AgroPILOT · Золотая Балка</div>
+  <div class="right"><span>🔔</span><span>👤</span></div>
+</div>
+<div class="layout">
+<div class="sidebar">
+  <div class="sidebar-item"><span class="icon">📊</span> Сегодня</div>
+  <div class="sidebar-item"><span class="icon">🗺️</span> Участки</div>
+  <div class="sidebar-item"><span class="icon">📅</span> Планировщик</div>
+  <div class="sidebar-item"><span class="icon">🔬</span> Наблюдения</div>
+  <div class="sidebar-item active"><span class="icon">🤖</span> AI-ассистент</div>
+</div>
+<div class="content" style="display:flex; gap:24px;">
+  <div style="flex:1;">
+    <div style="font-size:12px; color:#5A6160; margin-bottom:16px;">Модель: Qwen 2.5 32B · локально (Ollama)</div>
+    
+    <div class="chat">
+      <div class="chat-message user">Почему Б-2 зреет раньше Б-3, они рядом?</div>
+      <div class="chat-message bot">
+        <div style="font-weight:600; margin-bottom:8px;">Разница составляет ~4 дня. Основные причины:</div>
+        <div style="font-size:13px; line-height:1.6;">
+          1. <strong>Экспозиция склона Б-2 южная</strong>, +8% прихода солнечной радиации → ускорение накопления GDD.<br>
+          2. <strong>Возраст насаждений:</strong> Б-2 — 15 лет, Б-3 — 8 лет. Зрелые кусты входят в фазу созревания раньше.<br>
+          3. <strong>По метеостанции MS-02</strong> в зоне Б-2 зафиксировано на +2.3°C больше за август.
+        </div>
+        <div style="margin-top:12px; padding-top:12px; border-top:1px solid #E6E3DB; font-size:11px; color:#5A6160;">
+          <strong>Источники:</strong> Метеостанция MS-02 · Карточка блока Б-2 · Регламент 2024-1 ЗБ, п. 2.1
+        </div>
+        <div style="margin-top:8px; display:flex; gap:8px;">
+          <button class="btn btn-secondary">📊 Показать график</button>
+          <button class="btn btn-secondary">📌 Добавить в отчёт</button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="chat-input">
+      <input type="text" placeholder="Ваш вопрос...">
+      <button class="btn btn-primary">➤</button>
+    </div>
+    <div class="note">ⓘ Ответ строится только на ваших данных. Локальная модель, данные не покидают контур предприятия.</div>
+  </div>
+  
+  <div style="width:320px;">
+    <div style="font-weight:600; font-size:14px; margin-bottom:12px;">Контекст</div>
+    <div style="background:#F7F6F1; border-radius:8px; padding:12px; margin-bottom:16px;">
+      <div style="font-size:12px; margin:4px 0;"><span style="color:#5A6160;">● Блок Б-2</span> (активен)</div>
+      <div style="font-size:12px; margin:4px 0;"><span style="color:#5A6160;">● Блок Б-3</span></div>
+      <div style="font-size:12px; margin:4px 0;"><span style="color:#5A6160;">○ + Добавить блок</span></div>
+      <div style="font-size:12px; margin:8px 0 4px; color:#5A6160;">Период: 01.08 — 30.09 ▾</div>
+    </div>
+    
+    <div style="font-weight:600; font-size:14px; margin-bottom:12px;">Быстрые вопросы</div>
+    <div style="display:flex; flex-direction:column; gap:8px;">
+      <div class="filter" style="text-align:left;">📈 Динамика Brix по блокам</div>
+      <div class="filter" style="text-align:left;">💧 Водный стресс — где критично?</div>
+      <div class="filter" style="text-align:left;">⚖️ Сравнить блоки Б-2 и Б-3</div>
+      <div class="filter" style="text-align:left;">❄️ Риск заморозков на неделю</div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- ==================== ЭКРАН 5: EXPLAINABILITY ==================== -->
+<h2>Экран 5: Объяснимость прогноза (Explainability)</h2>
+<p class="note">Панель «Почему такой прогноз?» — SHAP-факторы, источники, RAG-цитаты.</p>
+
+<div class="wireframe">
+<div class="header">
+  <div class="logo">🌿 AgroPILOT · Золотая Балка</div>
+  <div class="right"><span>🔔</span><span>👤</span></div>
+</div>
+<div class="layout">
+<div class="sidebar">
+  <div class="sidebar-item"><span class="icon">📊</span> Сегодня</div>
+  <div class="sidebar-item active"><span class="icon">🗺️</span> Участки</div>
+  <div class="sidebar-item"><span class="icon">📅</span> Планировщик</div>
+</div>
+<div class="content">
+<div style="display:flex; justify-content:space-between; margin-bottom:16px;">
+  <div><strong>Участки</strong> > Карточка блока Б-2</div>
+  <button class="btn btn-secondary">⋯ Действия</button>
+</div>
+
+<div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; margin-bottom:24px;">
+  <div style="background:white; border:1px solid #E6E3DB; border-radius:8px; padding:16px;">
+    <div style="font-size:12px; color:#5A6160;">ОКНО ЗРЕЛОСТИ</div>
+    <div style="font-size:24px; font-weight:bold; margin:8px 0;">8 — 18 сентября</div>
+    <div style="font-size:14px;">Оптимум: <strong>14 сен</strong> · P72%</div>
+    <div class="capsule" style="margin-top:12px;">
+      <div class="capsule-bar"><div class="capsule-fill" style="width:65%"></div><div class="capsule-marker" style="left:45%"></div></div>
+      <div class="capsule-labels"><span>8 сен</span><span>14 сен</span><span>18 сен</span></div>
+    </div>
+  </div>
+  <div style="background:white; border:1px solid #E6E3DB; border-radius:8px; padding:16px;">
+    <div style="font-size:12px; color:#5A6160;">КЛЮЧЕВЫЕ ПРОГНОЗЫ</div>
+    <div style="font-size:13px; margin:4px 0;">Brix: <strong>22.8 ± 1.1°</strong></div>
+    <div style="font-size:13px; margin:4px 0;">TA: <strong>6.1 ± 0.6 г/л</strong></div>
+    <div style="font-size:13px; margin:4px 0;">pH: <strong>3.32 ± 0.08</strong></div>
+    <div style="font-size:13px; margin:4px 0;">P10: 11 сен · P90: 19 сен</div>
+  </div>
+  <div style="background:white; border:1px solid #E6E3DB; border-radius:8px; padding:16px;">
+    <div style="font-size:12px; color:#5A6160;">СТАТУС ДАННЫХ</div>
+    <div style="font-size:13px; margin:4px 0;">Метео: <span style="color:#4F6F3A;">✅ 8 мин</span></div>
+    <div style="font-size:13px; margin:4px 0;">IoT-почва: <span style="color:#D79A2B;">⚠ 3 ч</span></div>
+    <div style="font-size:13px; margin:4px 0;">Проба: <span style="color:#4F6F3A;">✅ 2 дня</span></div>
+    <div style="font-size:13px; margin:4px 0;">BBCH: <span style="color:#4F6F3A;">✅ сегодня</span></div>
+  </div>
+</div>
+
+<div class="explain">
+  <div style="font-weight:600; font-size:16px; margin-bottom:16px;">🔍 Почему оптимум — 14 сентября?</div>
+  
+  <div style="background:#F7F6F1; border-radius:8px; padding:16px; margin-bottom:16px;">
+    <div style="font-size:14px; line-height:1.6;">Дата оптимума — <strong>14 сентября</strong>. Главные причины: тёплый август (+62 GDD к норме) и умеренный водный стресс на фазе BBCH 81.</div>
+  </div>
+  
+  <div style="font-weight:600; font-size:14px; margin-bottom:12px;">Ключевые факторы (SHAP)</div>
+  
+  <div class="factor">
+    <div class="factor-name">Накопленные GDD</div>
+    <div class="factor-bar"><div class="factor-fill negative" style="width:40%"></div></div>
+    <div class="factor-value" style="color:#B23A2A;">−3.2 дня ←</div>
+  </div>
+  <div class="factor">
+    <div class="factor-name">Водный стресс (SWD)</div>
+    <div class="factor-bar"><div class="factor-fill positive" style="width:20%"></div></div>
+    <div class="factor-value" style="color:#4F6F3A;">+1.4 дня →</div>
+  </div>
+  <div class="factor">
+    <div class="factor-name">Сорт/подвой (база)</div>
+    <div class="factor-bar"><div class="factor-fill positive" style="width:12%"></div></div>
+    <div class="factor-value" style="color:#4F6F3A;">+0.8 дня →</div>
+  </div>
+  <div class="factor">
+    <div class="factor-name">Крайние темп. &gt;35°C</div>
+    <div class="factor-bar"><div class="factor-fill positive" style="width:10%"></div></div>
+    <div class="factor-value" style="color:#4F6F3A;">+0.6 дня →</div>
+  </div>
+  <div class="factor">
+    <div class="factor-name">Прошлогодний сдвиг</div>
+    <div class="factor-bar"><div class="factor-fill positive" style="width:6%"></div></div>
+    <div class="factor-value" style="color:#4F6F3A;">+0.4 дня →</div>
+  </div>
+  
+  <div class="note" style="margin-top:12px;">Все значения — оценка XGBoost на данных сезонов 2024–2026</div>
+  
+  <div style="margin-top:16px; padding-top:16px; border-top:1px solid #E6E3DB;">
+    <div style="font-weight:600; font-size:14px; margin-bottom:12px;">Источники данных</div>
+    <div style="display:flex; gap:16px; flex-wrap:wrap;">
+      <div style="font-size:12px;">📡 Метеостанция MS-02 <span style="color:#4F6F3A;">(4 мин назад)</span></div>
+      <div style="font-size:12px;">🌱 IoT-почва B2-03 <span style="color:#D79A2B;">(3 ч назад) ⚠</span></div>
+      <div style="font-size:12px;">🔬 Проба #417 <span style="color:#4F6F3A;">(2026-09-19)</span></div>
+      <div style="font-size:12px;">📝 BBCH Иванов И.И. <span style="color:#4F6F3A;">(21 апреля)</span></div>
+    </div>
+  </div>
+  
+  <div style="margin-top:16px; padding-top:16px; border-top:1px solid #E6E3DB;">
+    <div style="font-weight:600; font-size:14px; margin-bottom:12px;">База знаний (RAG)</div>
+    <div style="background:#F7F6F1; border-radius:8px; padding:12px; font-size:12px; line-height:1.6;">
+      <em>Регламент 2024-1 ЗБ, п. 3.2:</em> «Для Каберне Совиньон целевой Brix 23–24° при TA 5.8–6.4 г/л. При недоборе TA >0.3 г/л рекомендовано сместить сбор на 2 дня раньше оптимума.»
+    </div>
+  </div>
+  
+  <div style="margin-top:16px; display:flex; gap:12px; align-items:center;">
+    <button class="btn btn-primary">💬 Продолжить в чате</button>
+    <button class="btn btn-secondary">📌 Сохранить объяснение</button>
+    <div style="margin-left:auto; display:flex; gap:8px; font-size:12px; color:#5A6160;">
+      <span>Объяснение полезно?</span>
+      <span>👍</span>
+      <span>👎</span>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ==================== ЭКРАН 6: ВВОД НАБЛЮДЕНИЙ BBCH ==================== -->
+<h2>Экран 6: Ввод наблюдений BBCH</h2>
+<p class="note">Форма для агронома-полевика. Быстрый ввод, визуальный селектор фенофаз.</p>
+
+<div class="wireframe">
+<div class="header">
+  <div class="logo">🌿 AgroPILOT · Золотая Балка</div>
+  <div class="right"><span>🔔</span><span>👤 Петров С.А.</span></div>
+</div>
+<div class="layout">
+<div class="sidebar">
+  <div class="sidebar-item"><span class="icon">📊</span> Сегодня</div>
+  <div class="sidebar-item"><span class="icon">🗺️</span> Участки</div>
+  <div class="sidebar-item active"><span class="icon">🔬</span> Наблюдения</div>
+  <div class="sidebar-item"><span class="icon">🤖</span> AI-ассистент</div>
+</div>
+<div class="content" style="max-width:700px;">
+<div style="display:flex; justify-content:space-between; margin-bottom:16px;">
+  <div><strong>Наблюдения и пробы</strong> > Ввод BBCH</div>
+</div>
+
+<div style="background:white; border:1px solid #E6E3DB; border-radius:8px; padding:24px;">
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;">
+    <div>
+      <div style="font-size:12px; color:#5A6160; margin-bottom:4px;">Блок</div>
+      <div style="padding:10px; border:1px solid #E6E3DB; border-radius:4px; font-size:14px;">Блок Б-2 · Каберне Совиньон · 6,4 га</div>
+    </div>
+    <div>
+      <div style="font-size:12px; color:#5A6160; margin-bottom:4px;">Дата/время</div>
+      <div style="padding:10px; border:1px solid #E6E3DB; border-radius:4px; font-size:14px;">04.05.2026, 14:30 ✏️</div>
+    </div>
+  </div>
+  
+  <div style="margin-bottom:16px;">
+    <div style="font-size:12px; color:#5A6160; margin-bottom:8px;">Фенофаза BBCH</div>
+    <div style="display:grid; grid-template-columns:repeat(6,1fr); gap:8px;">
+      <div style="padding:8px; border:2px solid #4F6F3A; border-radius:8px; text-align:center; cursor:pointer; background:#E6F4E6;">
+        <div style="font-size:20px; font-weight:bold; color:#4F6F3A;">81</div>
+        <div style="font-size:10px; color:#5A6160;">Созревание</div>
+      </div>
+      <div style="padding:8px; border:1px solid #E6E3DB; border-radius:8px; text-align:center; cursor:pointer;">
+        <div style="font-size:20px; font-weight:bold;">83</div>
+        <div style="font-size:10px; color:#5A6160;">Ягоды зреют</div>
+      </div>
+      <div style="padding:8px; border:1px solid #E6E3DB; border-radius:8px; text-align:center; cursor:pointer;">
+        <div style="font-size:20px; font-weight:bold;">85</div>
+        <div style="font-size:10px; color:#5A6160;">Размягчение</div>
+      </div>
+      <div style="padding:8px; border:1px solid #E6E3DB; border-radius:8px; text-align:center; cursor:pointer;">
+        <div style="font-size:20px; font-weight:bold;">87</div>
+        <div style="font-size:10px; color:#5A6160;">Зрелость</div>
+      </div>
+      <div style="padding:8px; border:1px solid #E6E3DB; border-radius:8px; text-align:center; cursor:pointer;">
+        <div style="font-size:20px; font-weight:bold;">89</div>
+        <div style="font-size:10px; color:#5A6160;">Сбор</div>
+      </div>
+      <div style="padding:8px; border:1px solid #E6E3DB; border-radius:8px; text-align:center; cursor:pointer;">
+        <div style="font-size:20px; font-weight:bold;">91</div>
+        <div style="font-size:10px; color:#5A6160;">После сбора</div>
+      </div>
+    </div>
+  </div>
+  
+  <div style="margin-bottom:16px;">
+    <div style="font-size:12px; color:#5A6160; margin-bottom:8px;">Отклонения</div>
+    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+      <div class="filter">🍇 Болезни</div>
+      <div class="filter">🐛 Вредители</div>
+      <div class="filter">💨 Мех. повреждения</div>
+      <div class="filter">🏜️ Засуха</div>
+      <div class="filter">🌧️ Переувлажнение</div>
+      <div class="filter">❄️ Заморозок</div>
+    </div>
+  </div>
+  
+  <div style="margin-bottom:16px;">
+    <div style="font-size:12px; color:#5A6160; margin-bottom:4px;">Комментарий</div>
+    <textarea style="width:100%; height:80px; border:1px solid #E6E3DB; border-radius:4px; padding:10px; font-size:14px; resize:vertical;" placeholder="Опишите наблюдения..."></textarea>
+  </div>
+  
+  <div style="margin-bottom:16px;">
+    <div style="font-size:12px; color:#5A6160; margin-bottom:4px;">Фото (до 5 файлов)</div>
+    <div style="border:2px dashed #E6E3DB; border-radius:8px; padding:24px; text-align:center; color:#5A6160; font-size:13px;">
+      📷 Перетащите файлы сюда или нажмите для выбора
+    </div>
+  </div>
+  
+  <div style="display:flex; justify-content:space-between; align-items:center;">
+    <div style="font-size:11px; color:#5A6160;">Наблюдатель: Петров С.А. (авто)</div>
+    <div style="display:flex; gap:8px;">
+      <button class="btn btn-secondary">💾 Сохранить черновик</button>
+      <button class="btn btn-primary">✓ Зафиксировать</button>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ==================== ЭКРАН 7: МОНИТОРИНГ ИНФРАСТРУКТУРЫ ==================== -->
+<h2>Экран 7: Мониторинг инфраструктуры (ИТ-админ)</h2>
+<p class="note">Технический статус: метеостанции, IoT, n8n, LLM, БД.</p>
+
+<div class="wireframe">
+<div class="header">
+  <div class="logo">🌿 AgroPILOT · Золотая Балка</div>
+  <div class="right"><span>🔔 1</span><span>👤 Сидоров К.В.</span></div>
+</div>
+<div class="layout">
+<div class="sidebar">
+  <div class="sidebar-item"><span class="icon">📊</span> Сегодня</div>
+  <div class="sidebar-item"><span class="icon">⚙️</span> Система</div>
+  <div class="sidebar-item active"><span class="icon">📡</span> Метео и IoT</div>
+  <div class="sidebar-item"><span class="icon">🔄</span> n8n</div>
+  <div class="sidebar-item"><span class="icon">🧠</span> Модели</div>
+  <div class="sidebar-item"><span class="icon">👥</span> Пользователи</div>
+  <div class="sidebar-item"><span class="icon">📋</span> Аудит</div>
+</div>
+<div class="content">
+<div style="display:flex; justify-content:space-between; margin-bottom:16px;">
+  <div><strong>Система</strong> > Метеостанции и IoT</div>
+  <button class="btn btn-secondary">🔄 Обновить все</button>
+</div>
+
+<div class="kpi-grid" style="grid-template-columns:repeat(5,1fr);">
+  <div class="kpi-card">
+    <div class="label">Метеостанции</div>
+    <div class="value" style="color:#4F6F3A;">14/15</div>
+    <div class="delta down">1 оффлайн</div>
+  </div>
+  <div class="kpi-card">
+    <div class="label">IoT-датчики</div>
+    <div class="value" style="color:#D79A2B;">47/52</div>
+    <div class="delta down">5 оффлайн</div>
+  </div>
+  <div class="kpi-card">
+    <div class="label">n8n пайплайны</div>
+    <div class="value" style="color:#4F6F3A;">8/8</div>
+    <div class="delta up">Все OK</div>
+  </div>
+  <div class="kpi-card">
+    <div class="label">LLM (Ollama)</div>
+    <div class="value" style="color:#4F6F3A;">✅</div>
+    <div class="delta">Qwen 2.5 32B</div>
+  </div>
+  <div class="kpi-card">
+    <div class="label">БД (PostgreSQL)</div>
+    <div class="value" style="color:#4F6F3A;">✅</div>
+    <div class="delta">Latency 2ms</div>
+  </div>
+</div>
+
+<div class="table" style="margin-top:24px;">
+  <table>
+    <tr><th>ID</th><th>Тип</th><th>Локация</th><th>Последний пакет</th><th>Батарея</th><th>Статус</th><th>Действия</th></tr>
+    <tr><td>MS-01</td><td>Метео</td><td>Центр</td><td>3 мин назад</td><td>—</td><td><span class="status approved">✅ Онлайн</span></td><td>Перезапуск</td></tr>
+    <tr><td>MS-02</td><td>Метео</td><td>Север</td><td>8 мин назад</td><td>—</td><td><span class="status approved">✅ Онлайн</span></td><td>Перезапуск</td></tr>
+    <tr><td>MS-03</td><td>Метео</td><td>Юг</td><td>2 ч назад</td><td>—</td><td><span class="status warning">⚠ Устарело</span></td><td>Перезапуск</td></tr>
+    <tr><td>B2-03</td><td>IoT-почва</td><td>Блок Б-2</td><td>3 ч назад</td><td>23%</td><td><span class="status warning">⚠ Устарело</span></td><td>В ремонт</td></tr>
+    <tr><td>B2-04</td><td>IoT-почва</td><td>Блок Б-2</td><td>5 мин назад</td><td>67%</td><td><span class="status approved">✅ Онлайн</span></td><td>Перезапуск</td></tr>
+    <tr><td>C1-01</td><td>IoT-влажность</td><td>Блок В-1</td><td>—</td><td>—</td><td><span class="status warning">❌ Оффлайн</span></td><td>В ремонт</td></tr>
+  </table>
+</div>
+</div>
+</div>
+</div>
+
+<div style="margin-top:40px; padding-top:24px; border-top:2px solid #E6E3DB; font-size:12px; color:#5A6160;">
+  <strong>AgroPILOT UX-спецификация v1.0</strong> · 7 экранов · Апрель 2026 · Золотая Балка<br>
+  Палитра: землистая (vine-700 #4F6F3A, berry-700 #5C1E33, sun-500 #D79A2B, alert-600 #B23A2A)<br>
+  Шрифт: Inter / System UI · Сетка: 12 колонок, gutter 16px · Макс. ширина: 1440px
+</div>
+
+</body>
+</html>

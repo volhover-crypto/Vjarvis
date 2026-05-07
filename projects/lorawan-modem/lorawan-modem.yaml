@@ -1,0 +1,1122 @@
+# LoRaWAN Modem LVM-485-SOLAR-01
+# Design specification for circuit-weaver
+# Using only 'component' template for full control
+
+project: lorawan-modem
+
+metadata:
+  company: AgroELEMENT
+  revision: "0.1"
+  date: "2026-05-07"
+  description: "LoRaWAN modem with RS-485, solar power, LiFePO4 battery"
+  board_size: "100x150mm"
+  layers: 4
+
+blocks:
+  # ============================================================
+  # SOLAR INPUT CONNECTOR
+  # ============================================================
+  - id: solar_connector
+    section: power_input
+    kind: component
+    ref: J1
+    template_type: component
+    mpn: "JST_PH_B2B-PH-K"
+    description: "Solar panel input, 6-18V, 5-20W, JST-PH 2-pin"
+    interfaces:
+      - name: SOLAR_VIN
+        direction: input
+      - name: GND
+        direction: passive
+
+  # ============================================================
+  # INPUT PROTECTION - TVS DIODE
+  # ============================================================
+  - id: tvs_protection
+    section: power_input
+    kind: component
+    ref: D1
+    template_type: component
+    mpn: "SMBJ18A"
+    description: "TVS diode for solar input protection, 18V standoff"
+    interfaces:
+      - name: SOLAR_VIN
+        direction: bidirectional
+      - name: GND
+        direction: passive
+
+  # ============================================================
+  # INPUT PROTECTION - SCHOTTKY DIODE
+  # ============================================================
+  - id: reverse_protection
+    section: power_input
+    kind: component
+    ref: D2
+    template_type: component
+    mpn: "SS34"
+    description: "Schottky diode for reverse polarity protection, 40V/3A"
+    interfaces:
+      - name: SOLAR_VIN
+        direction: input
+      - name: VSYS
+        direction: output
+
+  # ============================================================
+  # INPUT CAPACITORS
+  # ============================================================
+  - id: input_cap_bulk
+    section: power_input
+    kind: component
+    ref: C1
+    template_type: component
+    mpn: "GRM32ER71E107KA12L"
+    description: "Bulk input capacitor, 100uF/25V, X7R, 1210"
+    interfaces:
+      - name: VSYS
+        direction: bidirectional
+      - name: GND
+        direction: passive
+
+  - id: input_cap_bypass
+    section: power_input
+    kind: component
+    ref: C2
+    template_type: component
+    mpn: "GRM188R71H104KA93D"
+    description: "Input bypass capacitor, 100nF/50V, X7R, 0603"
+    interfaces:
+      - name: VSYS
+        direction: bidirectional
+      - name: GND
+        direction: passive
+
+  # ============================================================
+  # BATTERY CHARGE CONTROLLER - BQ24650 (MPPT)
+  # ============================================================
+  - id: charge_controller
+    section: power_management
+    kind: component
+    ref: U1
+    template_type: component
+    mpn: "BQ24650RGER"
+    description: "MPPT battery charge controller for LiFePO4 2S"
+    interfaces:
+      - name: VSYS
+        direction: input
+      - name: VBAT
+        direction: output
+      - name: GND
+        direction: passive
+      - name: CHG_STAT
+        direction: output
+      - name: I2C1_SCL
+        direction: bidirectional
+      - name: I2C1_SDA
+        direction: bidirectional
+
+  # Charge controller sense resistor
+  - id: charge_sense
+    section: power_management
+    kind: component
+    ref: R8
+    template_type: component
+    mpn: "RL2512FK-070R05L"
+    description: "Charge current sense resistor, 50mOhm, 1%, 1W"
+    interfaces:
+      - name: VSYS
+        direction: bidirectional
+      - name: VBAT_SENSE
+        direction: bidirectional
+
+  # Charge controller feedback divider
+  - id: charge_fb_upper
+    section: power_management
+    kind: component
+    ref: R1
+    template_type: component
+    mpn: "RC0603FR-07100KL"
+    description: "Charge voltage feedback upper resistor"
+    interfaces:
+      - name: VBAT
+        direction: bidirectional
+      - name: FB
+        direction: bidirectional
+
+  - id: charge_fb_lower
+    section: power_management
+    kind: component
+    ref: R2
+    template_type: component
+    mpn: "RC0603FR-0749K9L"
+    description: "Charge voltage feedback lower resistor"
+    interfaces:
+      - name: FB
+        direction: bidirectional
+      - name: GND
+        direction: passive
+
+  # Charge controller compensation
+  - id: charge_comp
+    section: power_management
+    kind: component
+    ref: R3
+    template_type: component
+    mpn: "RC0603FR-0710KL"
+    description: "Charge controller compensation resistor"
+    interfaces:
+      - name: COMP
+        direction: bidirectional
+      - name: GND
+        direction: passive
+
+  - id: charge_comp_cap
+    section: power_management
+    kind: component
+    ref: C7
+    template_type: component
+    mpn: "GRM188R71H103KA01D"
+    description: "Charge controller compensation capacitor"
+    interfaces:
+      - name: COMP
+        direction: bidirectional
+      - name: GND
+        direction: passive
+
+  # Charge controller input/output caps
+  - id: charge_vin_cap
+    section: power_management
+    kind: component
+    ref: C8
+    template_type: component
+    mpn: "GRM188R71H105KA12D"
+    description: "Charge controller input bypass, 1uF/50V"
+    interfaces:
+      - name: VSYS
+        direction: bidirectional
+      - name: GND
+        direction: passive
+
+  - id: charge_vbat_cap
+    section: power_management
+    kind: component
+    ref: C9
+    template_type: component
+    mpn: "GRM21BR71A106KA73L"
+    description: "Charge controller output cap, 10uF/10V"
+    interfaces:
+      - name: VBAT
+        direction: bidirectional
+      - name: GND
+        direction: passive
+
+  # Charge controller inductor
+  - id: charge_inductor
+    section: power_management
+    kind: component
+    ref: L1
+    template_type: component
+    mpn: "SRP7028A-100M"
+    description: "Charge controller inductor, 10uH, 3A, shielded"
+    interfaces:
+      - name: SW
+        direction: bidirectional
+      - name: VBAT
+        direction: bidirectional
+
+  # ============================================================
+  # BATTERY CONNECTOR
+  # ============================================================
+  - id: battery_connector
+    section: power_management
+    kind: component
+    ref: J2
+    template_type: component
+    mpn: "JST_PH_B2B-PH-K"
+    description: "LiFePO4 2S battery connection, JST-PH 2-pin"
+    interfaces:
+      - name: VBAT
+        direction: bidirectional
+      - name: GND
+        direction: passive
+
+  # Battery voltage divider for ADC monitoring
+  - id: batt_sense_upper
+    section: power_management
+    kind: component
+    ref: R4
+    template_type: component
+    mpn: "RC0603FR-07100KL"
+    description: "Battery voltage sense upper resistor"
+    interfaces:
+      - name: VBAT
+        direction: bidirectional
+      - name: VBAT_ADC
+        direction: bidirectional
+
+  - id: batt_sense_lower
+    section: power_management
+    kind: component
+    ref: R5
+    template_type: component
+    mpn: "RC0603FR-0749K9L"
+    description: "Battery voltage sense lower resistor"
+    interfaces:
+      - name: VBAT_ADC
+        direction: bidirectional
+      - name: GND
+        direction: passive
+
+  - id: batt_sense_filter
+    section: power_management
+    kind: component
+    ref: C10
+    template_type: component
+    mpn: "GRM188R71H104KA93D"
+    description: "Battery voltage sense filter capacitor"
+    interfaces:
+      - name: VBAT_ADC
+        direction: bidirectional
+      - name: GND
+        direction: passive
+
+  # ============================================================
+  # DC-DC CONVERTER - TPS62840 (3.3V main rail)
+  # ============================================================
+  - id: main_dcdc
+    section: power_rails
+    kind: component
+    ref: U2
+    template_type: component
+    mpn: "TPS62840DLAR"
+    description: "Ultra-low Iq buck converter, 3.3V/300mA, Iq=700nA"
+    interfaces:
+      - name: VSYS
+        direction: input
+      - name: VCC_3V3
+        direction: output
+      - name: GND
+        direction: passive
+      - name: FB
+        direction: input
+      - name: EN
+        direction: input
+
+  # DC-DC inductor
+  - id: dcdc_inductor
+    section: power_rails
+    kind: component
+    ref: L2
+    template_type: component
+    mpn: "LQM21PN2R2MC0D"
+    description: "DC-DC inductor, 2.2uH, 0806"
+    interfaces:
+      - name: SW
+        direction: bidirectional
+      - name: VCC_3V3
+        direction: bidirectional
+
+  # DC-DC output capacitors
+  - id: dcdc_out_cap1
+    section: power_rails
+    kind: component
+    ref: C3
+    template_type: component
+    mpn: "GRM21BR71A226ME44L"
+    description: "DC-DC output capacitor, 22uF/10V, X7R"
+    interfaces:
+      - name: VCC_3V3
+        direction: bidirectional
+      - name: GND
+        direction: passive
+
+  - id: dcdc_out_cap2
+    section: power_rails
+    kind: component
+    ref: C4
+    template_type: component
+    mpn: "GRM188R71H104KA93D"
+    description: "DC-DC output bypass, 100nF"
+    interfaces:
+      - name: VCC_3V3
+        direction: bidirectional
+      - name: GND
+        direction: passive
+
+  # DC-DC feedback divider for 3.3V
+  - id: dcdc_fb_upper
+    section: power_rails
+    kind: component
+    ref: R6
+    template_type: component
+    mpn: "RC0603FR-071ML"
+    description: "DC-DC feedback upper resistor"
+    interfaces:
+      - name: VCC_3V3
+        direction: bidirectional
+      - name: FB
+        direction: bidirectional
+
+  - id: dcdc_fb_lower
+    section: power_rails
+    kind: component
+    ref: R7
+    template_type: component
+    mpn: "RC0603FR-07332KL"
+    description: "DC-DC feedback lower resistor"
+    interfaces:
+      - name: FB
+        direction: bidirectional
+      - name: GND
+        direction: passive
+
+  # ============================================================
+  # LDO FOR RF - TPS7A02 (ultra-low noise)
+  # ============================================================
+  - id: rf_ldo
+    section: power_rails
+    kind: component
+    ref: U3
+    template_type: component
+    mpn: "TPS7A0233PDBVR"
+    description: "Ultra-low Iq LDO for RF, 3.3V/200mA, Iq=25nA"
+    interfaces:
+      - name: VCC_3V3
+        direction: input
+      - name: VCC_RF
+        direction: output
+      - name: GND
+        direction: passive
+
+  # LDO capacitors
+  - id: ldo_in_cap
+    section: power_rails
+    kind: component
+    ref: C5
+    template_type: component
+    mpn: "GRM188R71H105KA12D"
+    description: "LDO input capacitor, 1uF"
+    interfaces:
+      - name: VCC_3V3
+        direction: bidirectional
+      - name: GND
+        direction: passive
+
+  - id: ldo_out_cap
+    section: power_rails
+    kind: component
+    ref: C6
+    template_type: component
+    mpn: "GRM188R71H104KA93D"
+    description: "LDO output capacitor, 100nF"
+    interfaces:
+      - name: VCC_RF
+        direction: bidirectional
+      - name: GND
+        direction: passive
+
+  # ============================================================
+  # MCU - STM32WL55JC (MCU + LoRa in one package)
+  # ============================================================
+  - id: mcu
+    section: mcu
+    kind: component
+    ref: U4
+    template_type: component
+    mpn: "STM32WL55JCI6"
+    description: "MCU + LoRa transceiver, QFN48, 868MHz, Class A/C"
+    interfaces:
+      - name: VCC_3V3
+        direction: input
+      - name: VCC_RF
+        direction: input
+      - name: GND
+        direction: passive
+      - name: SPI1_SCK
+        direction: bidirectional
+      - name: SPI1_MOSI
+        direction: bidirectional
+      - name: SPI1_MISO
+        direction: bidirectional
+      - name: SPI1_CS_FLASH
+        direction: output
+      - name: UART1_TX
+        direction: output
+      - name: UART1_RX
+        direction: input
+      - name: RS485_DE
+        direction: output
+      - name: I2C1_SCL
+        direction: bidirectional
+      - name: I2C1_SDA
+        direction: bidirectional
+      - name: LED_PWR
+        direction: output
+      - name: LED_LORA
+        direction: output
+      - name: LED_RS485
+        direction: output
+      - name: LED_ERR
+        direction: output
+      - name: VBAT_ADC
+        direction: input
+      - name: CHG_STAT
+        direction: input
+      - name: SWDIO
+        direction: bidirectional
+      - name: SWCLK
+        direction: input
+      - name: NRST
+        direction: input
+      - name: OSC_IN
+        direction: input
+      - name: OSC_OUT
+        direction: output
+      - name: OSC32_IN
+        direction: input
+      - name: OSC32_OUT
+        direction: output
+      - name: RF_ANT
+        direction: bidirectional
+
+  # MCU decoupling capacitors
+  - id: mcu_vdd_cap1
+    section: mcu
+    kind: component
+    ref: C11
+    template_type: component
+    mpn: "GRM188R71H104KA93D"
+    description: "MCU VDD decoupling #1"
+    interfaces:
+      - name: VCC_3V3
+        direction: bidirectional
+      - name: GND
+        direction: passive
+
+  - id: mcu_vdd_cap2
+    section: mcu
+    kind: component
+    ref: C12
+    template_type: component
+    mpn: "GRM188R71H104KA93D"
+    description: "MCU VDD decoupling #2"
+    interfaces:
+      - name: VCC_3V3
+        direction: bidirectional
+      - name: GND
+        direction: passive
+
+  - id: mcu_vdd_cap3
+    section: mcu
+    kind: component
+    ref: C13
+    template_type: component
+    mpn: "GRM188R71H104KA93D"
+    description: "MCU VDD decoupling #3"
+    interfaces:
+      - name: VCC_3V3
+        direction: bidirectional
+      - name: GND
+        direction: passive
+
+  - id: mcu_vcap1
+    section: mcu
+    kind: component
+    ref: C14
+    template_type: component
+    mpn: "GRM188R71H105KA12D"
+    description: "MCU VCAP1 regulator output"
+    interfaces:
+      - name: VCAP1
+        direction: bidirectional
+      - name: GND
+        direction: passive
+
+  - id: mcu_vcap2
+    section: mcu
+    kind: component
+    ref: C15
+    template_type: component
+    mpn: "GRM188R71H105KA12D"
+    description: "MCU VCAP2 regulator output"
+    interfaces:
+      - name: VCAP2
+        direction: bidirectional
+      - name: GND
+        direction: passive
+
+  # MCU RF matching network
+  - id: rf_match_c1
+    section: mcu
+    kind: component
+    ref: C16
+    template_type: component
+    mpn: "GRM1555C1H1R0BA01D"
+    description: "RF matching capacitor #1"
+    interfaces:
+      - name: RF_ANT
+        direction: bidirectional
+      - name: RF_OUT
+        direction: bidirectional
+
+  - id: rf_match_l1
+    section: mcu
+    kind: component
+    ref: L3
+    template_type: component
+    mpn: "LQP03TN3N9B02D"
+    description: "RF matching inductor"
+    interfaces:
+      - name: RF_OUT
+        direction: bidirectional
+      - name: GND
+        direction: passive
+
+  - id: rf_match_c2
+    section: mcu
+    kind: component
+    ref: C17
+    template_type: component
+    mpn: "GRM1555C1H1R5BA01D"
+    description: "RF matching capacitor #2"
+    interfaces:
+      - name: RF_ANT
+        direction: bidirectional
+      - name: GND
+        direction: passive
+
+  # RF antenna connector
+  - id: antenna_connector
+    section: mcu
+    kind: component
+    ref: J4
+    template_type: component
+    mpn: "SMA_Edge_50Ohm"
+    description: "SMA edge-mount antenna connector, 50 Ohm"
+    interfaces:
+      - name: RF_ANT
+        direction: bidirectional
+      - name: GND
+        direction: passive
+
+  # ESD protection for antenna
+  - id: rf_esd
+    section: mcu
+    kind: component
+    ref: D3
+    template_type: component
+    mpn: "PESD5V0S1BA"
+    description: "ESD protection for RF antenna port"
+    interfaces:
+      - name: RF_ANT
+        direction: bidirectional
+      - name: GND
+        direction: passive
+
+  # MCU crystal (HSE)
+  - id: mcu_hse_xtal
+    section: mcu
+    kind: component
+    ref: Y1
+    template_type: component
+    mpn: "ABM8-32.000MHZ-B2-T"
+    description: "HSE crystal, 32MHz, 10pF load"
+    interfaces:
+      - name: OSC_IN
+        direction: bidirectional
+      - name: OSC_OUT
+        direction: bidirectional
+
+  - id: hse_load_c1
+    section: mcu
+    kind: component
+    ref: C18
+    template_type: component
+    mpn: "GRM1555C1H100JA01D"
+    description: "HSE crystal load capacitor #1"
+    interfaces:
+      - name: OSC_IN
+        direction: bidirectional
+      - name: GND
+        direction: passive
+
+  - id: hse_load_c2
+    section: mcu
+    kind: component
+    ref: C19
+    template_type: component
+    mpn: "GRM1555C1H100JA01D"
+    description: "HSE crystal load capacitor #2"
+    interfaces:
+      - name: OSC_OUT
+        direction: bidirectional
+      - name: GND
+        direction: passive
+
+  # MCU crystal (LSE) for RTC
+  - id: mcu_lse_xtal
+    section: mcu
+    kind: component
+    ref: Y2
+    template_type: component
+    mpn: "ABS07-32.768KHZ-T"
+    description: "LSE crystal, 32.768kHz, for RTC"
+    interfaces:
+      - name: OSC32_IN
+        direction: bidirectional
+      - name: OSC32_OUT
+        direction: bidirectional
+
+  - id: lse_load_c1
+    section: mcu
+    kind: component
+    ref: C20
+    template_type: component
+    mpn: "GRM1555C1H6R0DA01D"
+    description: "LSE crystal load capacitor #1"
+    interfaces:
+      - name: OSC32_IN
+        direction: bidirectional
+      - name: GND
+        direction: passive
+
+  - id: lse_load_c2
+    section: mcu
+    kind: component
+    ref: C21
+    template_type: component
+    mpn: "GRM1555C1H6R0DA01D"
+    description: "LSE crystal load capacitor #2"
+    interfaces:
+      - name: OSC32_OUT
+        direction: bidirectional
+      - name: GND
+        direction: passive
+
+  # ============================================================
+  # RS-485 INTERFACE - ADM2587E (isolated)
+  # ============================================================
+  - id: rs485_transceiver
+    section: rs485
+    kind: component
+    ref: U5
+    template_type: component
+    mpn: "ADM2587EBRWZ"
+    description: "Isolated RS-485 transceiver, 500kbps, 2.5kV isolation"
+    interfaces:
+      - name: VCC_3V3
+        direction: input
+      - name: GND
+        direction: passive
+      - name: UART1_TX
+        direction: input
+      - name: UART1_RX
+        direction: output
+      - name: RS485_DE
+        direction: input
+      - name: RS485_A
+        direction: bidirectional
+      - name: RS485_B
+        direction: bidirectional
+      - name: RS485_GND
+        direction: passive
+
+  # RS-485 decoupling
+  - id: rs485_vdd1_cap
+    section: rs485
+    kind: component
+    ref: C22
+    template_type: component
+    mpn: "GRM188R71H104KA93D"
+    description: "RS-485 VDD1 decoupling (logic side)"
+    interfaces:
+      - name: VCC_3V3
+        direction: bidirectional
+      - name: GND
+        direction: passive
+
+  - id: rs485_vdd2_cap
+    section: rs485
+    kind: component
+    ref: C23
+    template_type: component
+    mpn: "GRM188R71H104KA93D"
+    description: "RS-485 VDD2 decoupling (bus side)"
+    interfaces:
+      - name: VISO
+        direction: bidirectional
+      - name: RS485_GND
+        direction: passive
+
+  - id: rs485_viso_cap
+    section: rs485
+    kind: component
+    ref: C24
+    template_type: component
+    mpn: "GRM21BR71A106KA73L"
+    description: "RS-485 VISO output capacitor"
+    interfaces:
+      - name: VISO
+        direction: bidirectional
+      - name: RS485_GND
+        direction: passive
+
+  # RS-485 TVS protection
+  - id: rs485_tvs_a
+    section: rs485
+    kind: component
+    ref: D4
+    template_type: component
+    mpn: "SM712-02HTG"
+    description: "TVS for RS-485 line A, 12V asymmetric"
+    interfaces:
+      - name: RS485_A
+        direction: bidirectional
+      - name: RS485_GND
+        direction: passive
+
+  - id: rs485_tvs_b
+    section: rs485
+    kind: component
+    ref: D5
+    template_type: component
+    mpn: "SM712-02HTG"
+    description: "TVS for RS-485 line B, 12V asymmetric"
+    interfaces:
+      - name: RS485_B
+        direction: bidirectional
+      - name: RS485_GND
+        direction: passive
+
+  # RS-485 termination resistor
+  - id: rs485_term
+    section: rs485
+    kind: component
+    ref: R9
+    template_type: component
+    mpn: "RC0603FR-07120RL"
+    description: "RS-485 termination resistor, 120 Ohm"
+    interfaces:
+      - name: RS485_A
+        direction: bidirectional
+      - name: RS485_B
+        direction: bidirectional
+
+  # RS-485 bias resistors
+  - id: rs485_bias_a
+    section: rs485
+    kind: component
+    ref: R10
+    template_type: component
+    mpn: "RC0603FR-07560RL"
+    description: "RS-485 bias resistor for line A (pull-up)"
+    interfaces:
+      - name: VISO
+        direction: bidirectional
+      - name: RS485_A
+        direction: bidirectional
+
+  - id: rs485_bias_b
+    section: rs485
+    kind: component
+    ref: R11
+    template_type: component
+    mpn: "RC0603FR-07560RL"
+    description: "RS-485 bias resistor for line B (pull-down)"
+    interfaces:
+      - name: RS485_B
+        direction: bidirectional
+      - name: RS485_GND
+        direction: passive
+
+  # RS-485 connector
+  - id: rs485_connector
+    section: rs485
+    kind: component
+    ref: J5
+    template_type: component
+    mpn: "ScrewTerminal_3pin_3.5mm"
+    description: "RS-485 screw terminal, 3-pin (A, B, GND)"
+    interfaces:
+      - name: RS485_A
+        direction: bidirectional
+      - name: RS485_B
+        direction: bidirectional
+      - name: RS485_GND
+        direction: passive
+
+  # ============================================================
+  # MEMORY - SPI NOR Flash
+  # ============================================================
+  - id: flash_memory
+    section: memory
+    kind: component
+    ref: U6
+    template_type: component
+    mpn: "W25Q64JVSSIQ"
+    description: "SPI NOR Flash, 64Mbit (8MB), SOIC-8"
+    interfaces:
+      - name: VCC_3V3
+        direction: input
+      - name: GND
+        direction: passive
+      - name: SPI1_SCK
+        direction: input
+      - name: SPI1_MOSI
+        direction: input
+      - name: SPI1_MISO
+        direction: output
+      - name: SPI1_CS_FLASH
+        direction: input
+
+  - id: flash_cap
+    section: memory
+    kind: component
+    ref: C25
+    template_type: component
+    mpn: "GRM188R71H104KA93D"
+    description: "Flash decoupling capacitor"
+    interfaces:
+      - name: VCC_3V3
+        direction: bidirectional
+      - name: GND
+        direction: passive
+
+  # ============================================================
+  # INDICATORS - LEDs
+  # ============================================================
+  - id: led_power
+    section: indicators
+    kind: component
+    ref: D6
+    template_type: component
+    mpn: "LTST-C191KGKT"
+    description: "Power indicator LED, green"
+    interfaces:
+      - name: VCC_3V3
+        direction: bidirectional
+      - name: LED_PWR
+        direction: bidirectional
+
+  - id: led_lora
+    section: indicators
+    kind: component
+    ref: D7
+    template_type: component
+    mpn: "LTST-C191KBKT"
+    description: "LoRa status LED, blue"
+    interfaces:
+      - name: VCC_3V3
+        direction: bidirectional
+      - name: LED_LORA
+        direction: bidirectional
+
+  - id: led_rs485
+    section: indicators
+    kind: component
+    ref: D8
+    template_type: component
+    mpn: "LTST-C191KSKT"
+    description: "RS-485 activity LED, yellow"
+    interfaces:
+      - name: VCC_3V3
+        direction: bidirectional
+      - name: LED_RS485
+        direction: bidirectional
+
+  - id: led_error
+    section: indicators
+    kind: component
+    ref: D9
+    template_type: component
+    mpn: "LTST-C191KRKT"
+    description: "Error indicator LED, red"
+    interfaces:
+      - name: VCC_3V3
+        direction: bidirectional
+      - name: LED_ERR
+        direction: bidirectional
+
+  # LED current limiting resistors
+  - id: led_r1
+    section: indicators
+    kind: component
+    ref: R12
+    template_type: component
+    mpn: "RC0603FR-071KL"
+    description: "LED current limiter #1"
+    interfaces:
+      - name: LED_PWR
+        direction: bidirectional
+      - name: GND
+        direction: passive
+
+  - id: led_r2
+    section: indicators
+    kind: component
+    ref: R13
+    template_type: component
+    mpn: "RC0603FR-071KL"
+    description: "LED current limiter #2"
+    interfaces:
+      - name: LED_LORA
+        direction: bidirectional
+      - name: GND
+        direction: passive
+
+  - id: led_r3
+    section: indicators
+    kind: component
+    ref: R14
+    template_type: component
+    mpn: "RC0603FR-071KL"
+    description: "LED current limiter #3"
+    interfaces:
+      - name: LED_RS485
+        direction: bidirectional
+      - name: GND
+        direction: passive
+
+  - id: led_r4
+    section: indicators
+    kind: component
+    ref: R15
+    template_type: component
+    mpn: "RC0603FR-071KL"
+    description: "LED current limiter #4"
+    interfaces:
+      - name: LED_ERR
+        direction: bidirectional
+      - name: GND
+        direction: passive
+
+  # ============================================================
+  # SERVICE INTERFACE - SWD + UART
+  # ============================================================
+  - id: swd_connector
+    section: service
+    kind: component
+    ref: J6
+    template_type: component
+    mpn: "PinHeader_5pin_1.27mm"
+    description: "SWD debug connector, 5-pin"
+    interfaces:
+      - name: VCC_3V3
+        direction: bidirectional
+      - name: GND
+        direction: passive
+      - name: SWDIO
+        direction: bidirectional
+      - name: SWCLK
+        direction: bidirectional
+      - name: NRST
+        direction: bidirectional
+
+  - id: uart_connector
+    section: service
+    kind: component
+    ref: J7
+    template_type: component
+    mpn: "PinHeader_4pin_1.27mm"
+    description: "UART service connector, 4-pin"
+    interfaces:
+      - name: VCC_3V3
+        direction: bidirectional
+      - name: GND
+        direction: passive
+      - name: UART1_TX
+        direction: bidirectional
+      - name: UART1_RX
+        direction: bidirectional
+
+  # ============================================================
+  # POWER MONITORING - Fuel Gauge
+  # ============================================================
+  - id: fuel_gauge
+    section: power_monitoring
+    kind: component
+    ref: U7
+    template_type: component
+    mpn: "MAX17048G+T"
+    description: "Battery fuel gauge, I2C, no sense resistor needed"
+    interfaces:
+      - name: VCC_3V3
+        direction: input
+      - name: GND
+        direction: passive
+      - name: VBAT
+        direction: input
+      - name: I2C1_SCL
+        direction: bidirectional
+      - name: I2C1_SDA
+        direction: bidirectional
+
+  - id: fuel_gauge_cap
+    section: power_monitoring
+    kind: component
+    ref: C26
+    template_type: component
+    mpn: "GRM188R71H104KA93D"
+    description: "Fuel gauge decoupling"
+    interfaces:
+      - name: VCC_3V3
+        direction: bidirectional
+      - name: GND
+        direction: passive
+
+  # ============================================================
+  # TEST POINTS
+  # ============================================================
+  - id: tp_vbat
+    section: test_points
+    kind: component
+    ref: TP1
+    template_type: component
+    mpn: "TestPoint_1mm"
+    description: "Test point: VBAT"
+    interfaces:
+      - name: VBAT
+        direction: bidirectional
+
+  - id: tp_3v3
+    section: test_points
+    kind: component
+    ref: TP2
+    template_type: component
+    mpn: "TestPoint_1mm"
+    description: "Test point: 3.3V"
+    interfaces:
+      - name: VCC_3V3
+        direction: bidirectional
+
+  - id: tp_gnd
+    section: test_points
+    kind: component
+    ref: TP3
+    template_type: component
+    mpn: "TestPoint_1mm"
+    description: "Test point: GND"
+    interfaces:
+      - name: GND
+        direction: passive
+
+  - id: tp_swdio
+    section: test_points
+    kind: component
+    ref: TP4
+    template_type: component
+    mpn: "TestPoint_1mm"
+    description: "Test point: SWDIO"
+    interfaces:
+      - name: SWDIO
+        direction: bidirectional
+
+  - id: tp_swclk
+    section: test_points
+    kind: component
+    ref: TP5
+    template_type: component
+    mpn: "TestPoint_1mm"
+    description: "Test point: SWCLK"
+    interfaces:
+      - name: SWCLK
+        direction: bidirectional

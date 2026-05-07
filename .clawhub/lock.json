@@ -1,0 +1,73 @@
+{
+  "version": 1,
+  "skills": {
+    "cad-viewer": {
+      "version": "1.0.2",
+      "installedAt": 1774887621587
+    },
+    "drawing-analyzer": {
+      "version": "2.1.0",
+      "installedAt": 1774887627162
+    },
+    "trace-to-svg": {
+      "version": "0.1.0",
+      "installedAt": 1774887632370
+    },
+    "engineering": {
+      "version": "1.0.0",
+      "installedAt": 1774887637252
+    },
+    "mampe-industrial-core": {
+      "version": "1.0.0",
+      "installedAt": 1774887642252
+    },
+    "obsidian": {
+      "version": "1.0.0",
+      "installedAt": 1774944378021
+    },
+    "whisper-stt": {
+      "version": "1.0.0",
+      "installedAt": 1774970677281
+    },
+    "summarize": {
+      "version": "1.0.0",
+      "installedAt": 1774971104187
+    },
+    "system-resource-monitor": {
+      "version": "1.0.0",
+      "installedAt": 1774971865481
+    },
+    "self-improving": {
+      "version": "1.2.16",
+      "installedAt": 1775194118794
+    },
+    "aider": {
+      "version": "1.0.0",
+      "installedAt": 1775301574470
+    },
+    "qmd": {
+      "version": "1.0.0",
+      "installedAt": 1775863582354
+    },
+    "arxiv": {
+      "version": "1.0.4",
+      "installedAt": 1775924521702
+    },
+    "pdf": {
+      "version": "0.1.0",
+      "installedAt": 1775924558986
+    },
+    "python": {
+      "version": "1.0.0",
+      "installedAt": 1775924604444
+    },
+    "voice-stt-tts": {
+      "version": "1.0.3",
+      "installedAt": 1777884122360
+    },
+    "telegram-media": {
+      "version": "1.0.0",
+      "installedAt": 1777886341750
+    }
+  }
+}

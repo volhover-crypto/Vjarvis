@@ -1,0 +1,15 @@
+{
+  "api_key": "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",
+  "base_url": "https://api.groq.com/openai/v1",
+  "proxy": "socks5h://127.0.0.1:10808",
+  "default_model": "llama-3.3-70b-versatile",
+  "available_models": [
+    "llama-3.3-70b-versatile",
+    "llama-3.1-8b-instant",
+    "llama-4-scout-17b-16e-instruct",
+    "qwen/qwen3-32b",
+    "moonshotai/kimi-k2-instruct",
+    "whisper-large-v3-turbo",
+    "whisper-large-v3"
+  ]
+}

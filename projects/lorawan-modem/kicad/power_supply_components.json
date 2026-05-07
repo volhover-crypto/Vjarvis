@@ -1,0 +1,488 @@
+[
+  {
+    "lib_id": "Connector:Conn_01x02_Male",
+    "at": [
+      152.4,
+      76.2,
+      0
+    ],
+    "unit": 1,
+    "in_bom": true,
+    "on_board": true,
+    "uuid": "5bee706b-3e58-48f1-b7c5-f68f72132968",
+    "properties": {
+      "Reference": "J1",
+      "Value": "SOLAR_IN",
+      "Footprint": "Connector_JST:JST_PH_B2B-PH-K_1x02_P2.00mm_Vertical",
+      "Datasheet": "~"
+    }
+  },
+  {
+    "lib_id": "Device:D_TVS",
+    "at": [
+      177.8,
+      76.2,
+      0
+    ],
+    "unit": 1,
+    "in_bom": true,
+    "on_board": true,
+    "uuid": "12ca0be2-23ad-4915-8b41-e86a7d0dd40d",
+    "properties": {
+      "Reference": "D1",
+      "Value": "SMBJ18A",
+      "Footprint": "Diode_SMD:D_SMB",
+      "Datasheet": "~"
+    }
+  },
+  {
+    "lib_id": "Device:D_Schottky",
+    "at": [
+      203.2,
+      76.2,
+      0
+    ],
+    "unit": 1,
+    "in_bom": true,
+    "on_board": true,
+    "uuid": "4a5448c6-6d5c-494a-a760-87479cbc47d0",
+    "properties": {
+      "Reference": "D2",
+      "Value": "SS34",
+      "Footprint": "Diode_SMD:D_SMA",
+      "Datasheet": "~"
+    }
+  },
+  {
+    "lib_id": "Device:C",
+    "at": [
+      228.6,
+      71.12,
+      0
+    ],
+    "unit": 1,
+    "in_bom": true,
+    "on_board": true,
+    "uuid": "820f435f-3957-4c46-baff-00de8be6b43c",
+    "properties": {
+      "Reference": "C1",
+      "Value": "100uF/25V",
+      "Footprint": "Capacitor_SMD:C_1210_3225Metric",
+      "Datasheet": "~"
+    }
+  },
+  {
+    "lib_id": "Device:C",
+    "at": [
+      241.3,
+      71.12,
+      0
+    ],
+    "unit": 1,
+    "in_bom": true,
+    "on_board": true,
+    "uuid": "48ae3a01-c922-4ef3-adac-b968953b63d1",
+    "properties": {
+      "Reference": "C2",
+      "Value": "100nF",
+      "Footprint": "Capacitor_SMD:C_0603_1608Metric",
+      "Datasheet": "~"
+    }
+  },
+  {
+    "lib_id": "Battery_Management:BQ24650RGER",
+    "at": [
+      304.8,
+      101.6,
+      0
+    ],
+    "unit": 1,
+    "in_bom": true,
+    "on_board": true,
+    "uuid": "97297b0f-05de-438d-b2d7-abc195023a98",
+    "properties": {
+      "Reference": "U1",
+      "Value": "BQ24650RGER",
+      "Footprint": "Package_DFN_QFN:QFN-24-1EP_4x4mm_P0.5mm_EP2.6x2.6mm",
+      "Datasheet": "https://www.ti.com/lit/ds/symlink/bq24650.pdf"
+    }
+  },
+  {
+    "lib_id": "Device:R",
+    "at": [
+      279.4,
+      81.28,
+      0
+    ],
+    "unit": 1,
+    "in_bom": true,
+    "on_board": true,
+    "uuid": "3bf0830b-468e-4a37-9547-7551321fcc55",
+    "properties": {
+      "Reference": "R1",
+      "Value": "100k",
+      "Footprint": "Resistor_SMD:R_0603_1608Metric",
+      "Datasheet": "~"
+    }
+  },
+  {
+    "lib_id": "Device:R",
+    "at": [
+      279.4,
+      91.44,
+      0
+    ],
+    "unit": 1,
+    "in_bom": true,
+    "on_board": true,
+    "uuid": "5f312ced-27f8-4f31-92ee-3ea6bc51f80c",
+    "properties": {
+      "Reference": "R2",
+      "Value": "49.9k",
+      "Footprint": "Resistor_SMD:R_0603_1608Metric",
+      "Datasheet": "~"
+    }
+  },
+  {
+    "lib_id": "Device:R",
+    "at": [
+      279.4,
+      101.6,
+      0
+    ],
+    "unit": 1,
+    "in_bom": true,
+    "on_board": true,
+    "uuid": "5a65ef7d-8b4d-4ac2-8ac2-e6b3301b8955",
+    "properties": {
+      "Reference": "R3",
+      "Value": "10k",
+      "Footprint": "Resistor_SMD:R_0603_1608Metric",
+      "Datasheet": "~"
+    }
+  },
+  {
+    "lib_id": "Device:R",
+    "at": [
+      330.2,
+      81.28,
+      0
+    ],
+    "unit": 1,
+    "in_bom": true,
+    "on_board": true,
+    "uuid": "2cf2a519-c427-4a01-ba67-f1a6106219cd",
+    "properties": {
+      "Reference": "R8",
+      "Value": "0.05",
+      "Footprint": "Resistor_SMD:R_0805_2012Metric",
+      "Datasheet": "~"
+    }
+  },
+  {
+    "lib_id": "Device:C",
+    "at": [
+      279.4,
+      111.76,
+      0
+    ],
+    "unit": 1,
+    "in_bom": true,
+    "on_board": true,
+    "uuid": "78a54682-3b35-4d3c-a3ad-63641cac0fbf",
+    "properties": {
+      "Reference": "C7",
+      "Value": "10nF",
+      "Footprint": "Capacitor_SMD:C_0603_1608Metric",
+      "Datasheet": "~"
+    }
+  },
+  {
+    "lib_id": "Device:C",
+    "at": [
+      330.2,
+      91.44,
+      0
+    ],
+    "unit": 1,
+    "in_bom": true,
+    "on_board": true,
+    "uuid": "696334a4-8ec0-4d46-8e58-efbd475a0007",
+    "properties": {
+      "Reference": "C8",
+      "Value": "1uF",
+      "Footprint": "Capacitor_SMD:C_0603_1608Metric",
+      "Datasheet": "~"
+    }
+  },
+  {
+    "lib_id": "Device:C",
+    "at": [
+      330.2,
+      101.6,
+      0
+    ],
+    "unit": 1,
+    "in_bom": true,
+    "on_board": true,
+    "uuid": "73d42447-0b82-4642-8289-65bb95ef3479",
+    "properties": {
+      "Reference": "C9",
+      "Value": "10uF",
+      "Footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "Datasheet": "~"
+    }
+  },
+  {
+    "lib_id": "Device:L",
+    "at": [
+      355.6,
+      81.28,
+      0
+    ],
+    "unit": 1,
+    "in_bom": true,
+    "on_board": true,
+    "uuid": "c281be9c-b600-4f46-865f-77309cd9bfc1",
+    "properties": {
+      "Reference": "L1",
+      "Value": "10uH/3A",
+      "Footprint": "Inductor_SMD:L_7.3x7.3_H3.5",
+      "Datasheet": "~"
+    }
+  },
+  {
+    "lib_id": "Connector:Conn_01x02_Male",
+    "at": [
+      406.4,
+      76.2,
+      0
+    ],
+    "unit": 1,
+    "in_bom": true,
+    "on_board": true,
+    "uuid": "b3211639-0802-4c4e-85f7-ac65388a9ffc",
+    "properties": {
+      "Reference": "J2",
+      "Value": "BATTERY",
+      "Footprint": "Connector_JST:JST_PH_B2B-PH-K_1x02_P2.00mm_Vertical",
+      "Datasheet": "~"
+    }
+  },
+  {
+    "lib_id": "Device:R",
+    "at": [
+      381,
+      91.44,
+      0
+    ],
+    "unit": 1,
+    "in_bom": true,
+    "on_board": true,
+    "uuid": "4fcfe5a1-900e-44f5-8457-e192e4d81c7d",
+    "properties": {
+      "Reference": "R4",
+      "Value": "100k",
+      "Footprint": "Resistor_SMD:R_0603_1608Metric",
+      "Datasheet": "~"
+    }
+  },
+  {
+    "lib_id": "Device:R",
+    "at": [
+      381,
+      101.6,
+      0
+    ],
+    "unit": 1,
+    "in_bom": true,
+    "on_board": true,
+    "uuid": "44d38dc8-c0fa-4cf5-8125-67f08a2f7d32",
+    "properties": {
+      "Reference": "R5",
+      "Value": "49.9k",
+      "Footprint": "Resistor_SMD:R_0603_1608Metric",
+      "Datasheet": "~"
+    }
+  },
+  {
+    "lib_id": "Regulator_Switching:TPS62840DLAR",
+    "at": [
+      482.6,
+      101.6,
+      0
+    ],
+    "unit": 1,
+    "in_bom": true,
+    "on_board": true,
+    "uuid": "0c680a83-dd2a-418f-b3fb-d6ce4e53eac9",
+    "properties": {
+      "Reference": "U2",
+      "Value": "TPS62840DLAR",
+      "Footprint": "Package_SON:Texas_R-PDSO-N8",
+      "Datasheet": "https://www.ti.com/lit/ds/symlink/tps62840.pdf"
+    }
+  },
+  {
+    "lib_id": "Device:L",
+    "at": [
+      508,
+      81.28,
+      0
+    ],
+    "unit": 1,
+    "in_bom": true,
+    "on_board": true,
+    "uuid": "007af37b-e4cb-423c-b238-066c231dd41a",
+    "properties": {
+      "Reference": "L2",
+      "Value": "2.2uH",
+      "Footprint": "Inductor_SMD:L_2.0x1.6",
+      "Datasheet": "~"
+    }
+  },
+  {
+    "lib_id": "Device:C",
+    "at": [
+      520.7,
+      91.44,
+      0
+    ],
+    "unit": 1,
+    "in_bom": true,
+    "on_board": true,
+    "uuid": "1eb371bb-0415-4c9d-8b7e-d8158c2f1c2b",
+    "properties": {
+      "Reference": "C3",
+      "Value": "22uF",
+      "Footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "Datasheet": "~"
+    }
+  },
+  {
+    "lib_id": "Device:C",
+    "at": [
+      533.4,
+      91.44,
+      0
+    ],
+    "unit": 1,
+    "in_bom": true,
+    "on_board": true,
+    "uuid": "18ddd1ba-4b37-4aee-b408-45f8583b9410",
+    "properties": {
+      "Reference": "C4",
+      "Value": "100nF",
+      "Footprint": "Capacitor_SMD:C_0603_1608Metric",
+      "Datasheet": "~"
+    }
+  },
+  {
+    "lib_id": "Device:R",
+    "at": [
+      508,
+      111.76,
+      0
+    ],
+    "unit": 1,
+    "in_bom": true,
+    "on_board": true,
+    "uuid": "fee93bfe-361c-4dd1-bc47-cc1e2d2ca493",
+    "properties": {
+      "Reference": "R6",
+      "Value": "1M",
+      "Footprint": "Resistor_SMD:R_0603_1608Metric",
+      "Datasheet": "~"
+    }
+  },
+  {
+    "lib_id": "Device:R",
+    "at": [
+      520.7,
+      111.76,
+      0
+    ],
+    "unit": 1,
+    "in_bom": true,
+    "on_board": true,
+    "uuid": "05a6eb03-35ff-4c78-9804-f5968787b7c6",
+    "properties": {
+      "Reference": "R7",
+      "Value": "332k",
+      "Footprint": "Resistor_SMD:R_0603_1608Metric",
+      "Datasheet": "~"
+    }
+  },
+  {
+    "lib_id": "Regulator_Linear:TPS7A0233PDBVR",
+    "at": [
+      584.2,
+      101.6,
+      0
+    ],
+    "unit": 1,
+    "in_bom": true,
+    "on_board": true,
+    "uuid": "006f62f9-2341-45bc-992d-1b51a0ce2301",
+    "properties": {
+      "Reference": "U3",
+      "Value": "TPS7A0233PDBVR",
+      "Footprint": "Package_TO_SOT_SMD:SOT-23-5",
+      "Datasheet": "https://www.ti.com/lit/ds/symlink/tps7a02.pdf"
+    }
+  },
+  {
+    "lib_id": "Device:C",
+    "at": [
+      609.6,
+      91.44,
+      0
+    ],
+    "unit": 1,
+    "in_bom": true,
+    "on_board": true,
+    "uuid": "aaef17a6-a7fb-494b-9e30-7e757726525a",
+    "properties": {
+      "Reference": "C5",
+      "Value": "1uF",
+      "Footprint": "Capacitor_SMD:C_0603_1608Metric",
+      "Datasheet": "~"
+    }
+  },
+  {
+    "lib_id": "Device:C",
+    "at": [
+      622.3,
+      91.44,
+      0
+    ],
+    "unit": 1,
+    "in_bom": true,
+    "on_board": true,
+    "uuid": "a0476170-b3cf-417e-a273-514405a71b4b",
+    "properties": {
+      "Reference": "C6",
+      "Value": "100nF",
+      "Footprint": "Capacitor_SMD:C_0603_1608Metric",
+      "Datasheet": "~"
+    }
+  },
+  {
+    "lib_id": "Connector:Conn_01x02_Male",
+    "at": [
+      635,
+      76.2,
+      0
+    ],
+    "unit": 1,
+    "in_bom": true,
+    "on_board": true,
+    "uuid": "28759c44-ef86-4a3e-af54-642f8fcaddda",
+    "properties": {
+      "Reference": "J3",
+      "Value": "PWR_OUT",
+      "Footprint": "Connector_JST:JST_PH_B2B-PH-K_1x02_P2.00mm_Vertical",
+      "Datasheet": "~"
+    }
+  }
+]

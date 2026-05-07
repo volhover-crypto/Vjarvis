@@ -1,0 +1,29 @@
+{
+  "project": {
+    "name": "lorawan-modem-eda",
+    "version": "0.1.0",
+    "description": ""
+  },
+  "power": {
+    "input": {
+      "type": "",
+      "voltage": {
+        "min": 0,
+        "max": 0
+      }
+    },
+    "rails": []
+  },
+  "board": {
+    "size": {
+      "width_mm": 0,
+      "height_mm": 0
+    },
+    "mounting_holes": []
+  },
+  "interfaces": [],
+  "environment": {
+    "temp_min_c": -20,
+    "temp_max_c": 70
+  }
+}

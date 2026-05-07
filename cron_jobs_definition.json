@@ -1,0 +1,56 @@
+{
+ "jobs": [
+  {
+   "id": "daily-memory-log",
+   "name": "📝 Дневной лог памяти",
+   "schedule": { "kind": "cron", "expr": "50 23 * * *", "tz": "Europe/Moscow" },
+   "session": "isolated",
+   "model": "claude-haiku",
+   "message": "Создай файл memory/[сегодняшняя дата].md. Структура: ## Задачи выполнены / ## Решения приняты / ## Проблемы / ## Открытые вопросы / ## Контекст для следующей сессии. Читай транскрипт текущей сессии как источник данных.",
+   "announce": true,
+   "channel": "telegram"
+  },
+  {
+   "id": "morning-brief",
+   "name": "☀️ Утренний брифинг",
+   "schedule": { "kind": "cron", "expr": "0 7 * * 1-5", "tz": "Europe/Moscow" },
+   "session": "isolated",
+   "model": "claude-sonnet",
+   "thinking": "medium",
+   "message": "Прочитай memory/[вчера].md и MEMORY.md. Составь краткий брифинг: что осталось незакрытым, что запланировано сегодня, какие приоритеты. Максимум 10 пунктов.",
+   "announce": true,
+   "channel": "telegram"
+  },
+  {
+   "id": "weekly-consolidation",
+   "name": "📚 Недельная консолидация",
+   "schedule": { "kind": "cron", "expr": "0 4 * * 1", "tz": "Europe/Moscow" },
+   "session": "isolated",
+   "model": "claude-sonnet",
+   "thinking": "high",
+   "message": "Прочитай все файлы memory/*.md за последние 7 дней. Синтезируй ключевые инсайты и добавь раздел '## Неделя [дата]' в MEMORY.md. Удали дублирующиеся записи из дневных логов. Не перезаписывай MEMORY.md — только ДОБАВЛЯЙ.",
+   "requests_limit": 20
+  },
+  {
+   "id": "monthly-archive",
+   "name": "🗄️ Месячный архив",
+   "schedule": { "kind": "cron", "expr": "0 3 1 * *", "tz": "Europe/Moscow" },
+   "session": "isolated",
+   "model": "claude-opus",
+   "thinking": "high",
+   "message": "Создай архивный файл memory/archive/[год]-[месяц].md с полным дайджестом прошлого месяца. Обнови раздел 'Долгосрочные паттерны' в MEMORY.md. Сделай git commit архива.",
+   "requests_limit": 30,
+   "announce": true,
+   "channel": "telegram"
+  },
+  {
+   "id": "sensor-anomaly-check",
+   "name": "🌿 Мониторинг сенсоров АСУ ТП",
+   "schedule": { "kind": "every", "everyMs": 14400000 },
+   "session": "isolated",
+   "model": "claude-haiku",
+   "message": "Проверь ~/data/raw/sensors_latest.json. Если обнаружишь значения вне нормы (pH < 5.5 или > 7.5, влажность < 20% или > 90%) — отправь алерт в Telegram. Записывай результат проверки в ~/logs/sensor_checks.log",
+   "requests_limit": 5
+  }
+ ]
+}

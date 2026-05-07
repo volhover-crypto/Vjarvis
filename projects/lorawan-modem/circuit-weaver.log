@@ -1,0 +1,177 @@
+2026-05-07 10:59:23,859 INFO circuit_weaver: [validate:start] CLI invoked: circuit-weaver validate
+2026-05-07 10:59:23,859 INFO circuit_weaver: [validate:load-spec] Loading design spec from lorawan-modem.yaml
+2026-05-07 10:59:23,884 INFO circuit_weaver.generator: Allocated 0 components to 0 sheet(s)
+2026-05-07 10:59:23,885 INFO circuit_weaver.generator:   -> /tmp/schematic_mvp_validate_a_a459_zsn/{'name': 'lorawan-modem', 'version': '0.1', 'date': '2026-05-07', 'company': 'AgroELEMENT'}_report.md (design report)
+2026-05-07 10:59:23,885 INFO circuit_weaver.pcb_export: PCB placement hint: /tmp/schematic_mvp_validate_a_a459_zsn/{'name': 'lorawan-modem', 'version': '0.1', 'date': '2026-05-07', 'company': 'AgroELEMENT'}_placement.kicad_pcb
+2026-05-07 10:59:23,885 INFO circuit_weaver.pcb_export: Board: 50.0 x 40.0 mm, 0 footprints, 0 nets, 0 net-class assignments
+2026-05-07 10:59:23,886 INFO circuit_weaver.generator: Allocated 0 components to 0 sheet(s)
+2026-05-07 10:59:23,886 INFO circuit_weaver.generator:   -> /tmp/schematic_mvp_validate_b_mkha2n3s/{'name': 'lorawan-modem', 'version': '0.1', 'date': '2026-05-07', 'company': 'AgroELEMENT'}_report.md (design report)
+2026-05-07 10:59:23,886 INFO circuit_weaver.pcb_export: PCB placement hint: /tmp/schematic_mvp_validate_b_mkha2n3s/{'name': 'lorawan-modem', 'version': '0.1', 'date': '2026-05-07', 'company': 'AgroELEMENT'}_placement.kicad_pcb
+2026-05-07 10:59:23,886 INFO circuit_weaver.pcb_export: Board: 50.0 x 40.0 mm, 0 footprints, 0 nets, 0 net-class assignments
+2026-05-07 10:59:23,887 INFO circuit_weaver: [validate:end] CLI exited via SystemExit
+2026-05-07 11:00:08,051 INFO circuit_weaver: [validate:start] CLI invoked: circuit-weaver validate
+2026-05-07 11:00:08,051 INFO circuit_weaver: [validate:load-spec] Loading design spec from lorawan-modem.yaml
+2026-05-07 11:00:08,075 INFO circuit_weaver.generator: Allocated 0 components to 0 sheet(s)
+2026-05-07 11:00:08,076 INFO circuit_weaver.generator:   -> /tmp/schematic_mvp_validate_a_6evdwtc7/{'name': 'lorawan-modem', 'version': '0.1', 'date': '2026-05-07', 'company': 'AgroELEMENT'}_report.md (design report)
+2026-05-07 11:00:08,076 INFO circuit_weaver.pcb_export: PCB placement hint: /tmp/schematic_mvp_validate_a_6evdwtc7/{'name': 'lorawan-modem', 'version': '0.1', 'date': '2026-05-07', 'company': 'AgroELEMENT'}_placement.kicad_pcb
+2026-05-07 11:00:08,076 INFO circuit_weaver.pcb_export: Board: 50.0 x 40.0 mm, 0 footprints, 0 nets, 0 net-class assignments
+2026-05-07 11:00:08,076 INFO circuit_weaver.generator: Allocated 0 components to 0 sheet(s)
+2026-05-07 11:00:08,077 INFO circuit_weaver.generator:   -> /tmp/schematic_mvp_validate_b_7j16reiw/{'name': 'lorawan-modem', 'version': '0.1', 'date': '2026-05-07', 'company': 'AgroELEMENT'}_report.md (design report)
+2026-05-07 11:00:08,077 INFO circuit_weaver.pcb_export: PCB placement hint: /tmp/schematic_mvp_validate_b_7j16reiw/{'name': 'lorawan-modem', 'version': '0.1', 'date': '2026-05-07', 'company': 'AgroELEMENT'}_placement.kicad_pcb
+2026-05-07 11:00:08,077 INFO circuit_weaver.pcb_export: Board: 50.0 x 40.0 mm, 0 footprints, 0 nets, 0 net-class assignments
+2026-05-07 11:00:08,077 INFO circuit_weaver: [validate:end] CLI exited via SystemExit
+2026-05-07 11:46:20,682 INFO circuit_weaver: [validate:start] CLI invoked: circuit-weaver validate
+2026-05-07 11:46:20,682 INFO circuit_weaver: [validate:load-spec] Loading design spec from lorawan-modem.yaml
+2026-05-07 11:46:20,720 ERROR circuit_weaver.dispatcher: CLI command 'validate' failed: Unknown interface direction 'bidir'. Expected one of: bidirectional, input, output, passive
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/dist-packages/circuit_weaver/dispatcher.py", line 2573, in main
+    _cw_dispatch_result = _main_dispatch(args, _cw_log_workflow_step)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/circuit_weaver/dispatcher.py", line 2608, in _main_dispatch
+    report = _run_with_stderr_capture(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/circuit_weaver/dispatcher.py", line 1993, in _run_with_stderr_capture
+    result = func()
+             ^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/circuit_weaver/dispatcher.py", line 2609, in <lambda>
+    lambda: validate_design(
+            ^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/circuit_weaver/dispatcher.py", line 1202, in validate_design
+    compiled = compile_design_ir(spec, enrich_parts=enrich_parts)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/circuit_weaver/design_loader.py", line 271, in compile_design_ir
+    ir = normalize_design_spec(spec)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/circuit_weaver/design_ir.py", line 314, in normalize_design_spec
+    top_interfaces.append(_normalize_interface_dict(raw, block_id=resolved_block_id))
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/circuit_weaver/design_ir.py", line 204, in _normalize_interface_dict
+    ).normalized()
+      ^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/circuit_weaver/design_ir.py", line 101, in normalized
+    raise ValueError(f"Unknown interface direction '{self.direction}'. Expected one of: {valid}")
+ValueError: Unknown interface direction 'bidir'. Expected one of: bidirectional, input, output, passive
+2026-05-07 11:46:20,722 INFO circuit_weaver: [validate:error] Unhandled exception: Unknown interface direction 'bidir'. Expected one of: bidirectional, input, output, passive
+2026-05-07 11:46:53,477 INFO circuit_weaver: [validate:start] CLI invoked: circuit-weaver validate
+2026-05-07 11:46:53,477 INFO circuit_weaver: [validate:load-spec] Loading design spec from lorawan-modem.yaml
+2026-05-07 11:46:53,724 INFO circuit_weaver.symbol_resolver: DigiKey tier skipped: DIGIKEY_CLIENT_ID, DIGIKEY_CLIENT_SECRET not set. Run 'circuit-weaver doctor' to configure.
+2026-05-07 11:46:53,724 INFO circuit_weaver.symbol_resolver: Mouser tier skipped: MOUSER_SEARCH_API_KEY not set. Run 'circuit-weaver doctor' to configure.
+2026-05-07 11:46:53,724 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN 100uF/25V through any tier
+2026-05-07 11:46:53,811 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN 100nF through any tier
+2026-05-07 11:46:53,811 ERROR circuit_weaver.dispatcher: CLI command 'validate' failed: '<=' not supported between instances of 'str' and 'int'
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/dist-packages/circuit_weaver/dispatcher.py", line 2573, in main
+    _cw_dispatch_result = _main_dispatch(args, _cw_log_workflow_step)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/circuit_weaver/dispatcher.py", line 2608, in _main_dispatch
+    report = _run_with_stderr_capture(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/circuit_weaver/dispatcher.py", line 1993, in _run_with_stderr_capture
+    result = func()
+             ^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/circuit_weaver/dispatcher.py", line 2609, in <lambda>
+    lambda: validate_design(
+            ^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/circuit_weaver/dispatcher.py", line 1202, in validate_design
+    compiled = compile_design_ir(spec, enrich_parts=enrich_parts)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/circuit_weaver/design_loader.py", line 274, in compile_design_ir
+    components, metadata = resolve_project_spec(engine_spec, enrich_parts=enrich_parts)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/circuit_weaver/project_spec.py", line 870, in resolve_project_spec
+    resolved = _resolve_component(
+               ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/circuit_weaver/project_spec.py", line 665, in _resolve_component
+    errors = template.validate_params(item)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/circuit_weaver/subcircuits/battery_charger.py", line 94, in validate_params
+    elif ichg <= 0:
+         ^^^^^^^^^
+TypeError: '<=' not supported between instances of 'str' and 'int'
+2026-05-07 11:46:53,814 INFO circuit_weaver: [validate:error] Unhandled exception: '<=' not supported between instances of 'str' and 'int'
+2026-05-07 11:47:31,365 INFO circuit_weaver: [validate:start] CLI invoked: circuit-weaver validate
+2026-05-07 11:47:31,365 INFO circuit_weaver: [validate:load-spec] Loading design spec from lorawan-modem.yaml
+2026-05-07 11:47:31,508 INFO circuit_weaver.symbol_resolver: DigiKey tier skipped: DIGIKEY_CLIENT_ID, DIGIKEY_CLIENT_SECRET not set. Run 'circuit-weaver doctor' to configure.
+2026-05-07 11:47:31,508 INFO circuit_weaver.symbol_resolver: Mouser tier skipped: MOUSER_SEARCH_API_KEY not set. Run 'circuit-weaver doctor' to configure.
+2026-05-07 11:47:31,508 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN 100uF/25V through any tier
+2026-05-07 11:47:31,603 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN 100nF through any tier
+2026-05-07 11:47:31,707 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN 0.05 through any tier
+2026-05-07 11:47:31,798 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN 100k through any tier
+2026-05-07 11:47:31,895 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN 49.9k through any tier
+2026-05-07 11:47:31,982 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN 10k through any tier
+2026-05-07 11:47:32,080 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN 10nF through any tier
+2026-05-07 11:47:32,183 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN 1uF through any tier
+2026-05-07 11:47:32,278 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN 10uF through any tier
+2026-05-07 11:47:32,382 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN 10uH/3A through any tier
+2026-05-07 11:47:32,483 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN 2.2uH through any tier
+2026-05-07 11:47:32,576 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN 22uF through any tier
+2026-05-07 11:47:32,660 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN 1M through any tier
+2026-05-07 11:47:32,750 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN 332k through any tier
+2026-05-07 11:47:32,850 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN STM32WL55JCI6 through any tier
+2026-05-07 11:47:32,935 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN 1pF through any tier
+2026-05-07 11:47:33,018 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN 3.9nH through any tier
+2026-05-07 11:47:33,104 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN 1.5pF through any tier
+2026-05-07 11:47:33,105 INFO circuit_weaver.symbol_resolver: Resolved PESD5V0S1BA via ic_data
+2026-05-07 11:47:33,206 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN 10pF through any tier
+2026-05-07 11:47:33,306 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN 6pF through any tier
+2026-05-07 11:47:33,392 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN ADM2587EBRWZ through any tier
+2026-05-07 11:47:33,479 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN SM712 through any tier
+2026-05-07 11:47:33,580 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN 120 through any tier
+2026-05-07 11:47:33,682 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN 560 through any tier
+2026-05-07 11:47:33,768 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN W25Q64JVSSIQ through any tier
+2026-05-07 11:47:33,853 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN Green_LED through any tier
+2026-05-07 11:47:33,936 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN Blue_LED through any tier
+2026-05-07 11:47:34,039 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN Yellow_LED through any tier
+2026-05-07 11:47:34,133 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN Red_LED through any tier
+2026-05-07 11:47:34,218 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN 1k through any tier
+2026-05-07 11:47:34,233 INFO circuit_weaver: [validate:end] CLI exited via SystemExit
+2026-05-07 11:52:52,488 INFO circuit_weaver: [validate:start] CLI invoked: circuit-weaver validate
+2026-05-07 11:52:52,488 INFO circuit_weaver: [validate:load-spec] Loading design spec from lorawan-modem.yaml
+2026-05-07 11:52:52,757 INFO circuit_weaver.symbol_resolver: DigiKey tier skipped: DIGIKEY_CLIENT_ID, DIGIKEY_CLIENT_SECRET not set. Run 'circuit-weaver doctor' to configure.
+2026-05-07 11:52:52,757 INFO circuit_weaver.symbol_resolver: Mouser tier skipped: MOUSER_SEARCH_API_KEY not set. Run 'circuit-weaver doctor' to configure.
+2026-05-07 11:52:52,757 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN JST_PH_B2B-PH-K through any tier
+2026-05-07 11:52:52,843 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN SMBJ18A through any tier
+2026-05-07 11:52:52,948 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN SS34 through any tier
+2026-05-07 11:52:53,035 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN GRM32ER71E107KA12L through any tier
+2026-05-07 11:52:53,131 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN GRM188R71H104KA93D through any tier
+2026-05-07 11:52:53,233 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN BQ24650RGER through any tier
+2026-05-07 11:52:53,329 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN RL2512FK-070R05L through any tier
+2026-05-07 11:52:53,422 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN RC0603FR-07100KL through any tier
+2026-05-07 11:52:53,505 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN RC0603FR-0749K9L through any tier
+2026-05-07 11:52:53,602 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN RC0603FR-0710KL through any tier
+2026-05-07 11:52:53,703 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN GRM188R71H103KA01D through any tier
+2026-05-07 11:52:53,810 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN GRM188R71H105KA12D through any tier
+2026-05-07 11:52:53,900 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN GRM21BR71A106KA73L through any tier
+2026-05-07 11:52:54,002 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN SRP7028A-100M through any tier
+2026-05-07 11:52:54,089 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN TPS62840DLAR through any tier
+2026-05-07 11:52:54,189 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN LQM21PN2R2MC0D through any tier
+2026-05-07 11:52:54,282 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN GRM21BR71A226ME44L through any tier
+2026-05-07 11:52:54,371 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN RC0603FR-071ML through any tier
+2026-05-07 11:52:54,469 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN RC0603FR-07332KL through any tier
+2026-05-07 11:52:54,568 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN TPS7A0233PDBVR through any tier
+2026-05-07 11:52:54,655 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN STM32WL55JCI6 through any tier
+2026-05-07 11:52:54,741 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN GRM1555C1H1R0BA01D through any tier
+2026-05-07 11:52:54,828 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN LQP03TN3N9B02D through any tier
+2026-05-07 11:52:54,931 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN GRM1555C1H1R5BA01D through any tier
+2026-05-07 11:52:55,033 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN SMA_Edge_50Ohm through any tier
+2026-05-07 11:52:55,034 INFO circuit_weaver.symbol_resolver: Resolved PESD5V0S1BA via ic_data
+2026-05-07 11:52:55,129 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN ABM8-32.000MHZ-B2-T through any tier
+2026-05-07 11:52:55,230 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN GRM1555C1H100JA01D through any tier
+2026-05-07 11:52:55,315 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN ABS07-32.768KHZ-T through any tier
+2026-05-07 11:52:55,409 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN GRM1555C1H6R0DA01D through any tier
+2026-05-07 11:52:55,493 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN ADM2587EBRWZ through any tier
+2026-05-07 11:52:55,577 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN SM712-02HTG through any tier
+2026-05-07 11:52:55,666 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN RC0603FR-07120RL through any tier
+2026-05-07 11:52:55,754 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN RC0603FR-07560RL through any tier
+2026-05-07 11:52:55,840 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN ScrewTerminal_3pin_3.5mm through any tier
+2026-05-07 11:52:55,924 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN W25Q64JVSSIQ through any tier
+2026-05-07 11:52:56,032 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN LTST-C191KGKT through any tier
+2026-05-07 11:52:56,118 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN LTST-C191KBKT through any tier
+2026-05-07 11:52:56,212 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN LTST-C191KSKT through any tier
+2026-05-07 11:52:56,313 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN LTST-C191KRKT through any tier
+2026-05-07 11:52:56,399 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN RC0603FR-071KL through any tier
+2026-05-07 11:52:56,501 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN PinHeader_5pin_1.27mm through any tier
+2026-05-07 11:52:56,598 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN PinHeader_4pin_1.27mm through any tier
+2026-05-07 11:52:56,599 INFO circuit_weaver.symbol_resolver: Resolved MAX17048G+T via ic_data
+2026-05-07 11:52:56,698 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN TestPoint_1mm through any tier
+2026-05-07 11:52:56,712 INFO circuit_weaver: [validate:end] CLI exited via SystemExit

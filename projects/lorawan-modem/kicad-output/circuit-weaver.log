@@ -1,0 +1,54 @@
+2026-05-07 11:54:29,077 INFO circuit_weaver.symbol_resolver: DigiKey tier skipped: DIGIKEY_CLIENT_ID, DIGIKEY_CLIENT_SECRET not set. Run 'circuit-weaver doctor' to configure.
+2026-05-07 11:54:29,077 INFO circuit_weaver.symbol_resolver: Mouser tier skipped: MOUSER_SEARCH_API_KEY not set. Run 'circuit-weaver doctor' to configure.
+2026-05-07 11:54:29,077 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN JST_PH_B2B-PH-K through any tier
+2026-05-07 11:54:29,172 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN SMBJ18A through any tier
+2026-05-07 11:54:29,276 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN SS34 through any tier
+2026-05-07 11:54:29,374 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN GRM32ER71E107KA12L through any tier
+2026-05-07 11:54:29,466 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN GRM188R71H104KA93D through any tier
+2026-05-07 11:54:29,561 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN BQ24650RGER through any tier
+2026-05-07 11:54:29,658 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN RL2512FK-070R05L through any tier
+2026-05-07 11:54:29,753 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN RC0603FR-07100KL through any tier
+2026-05-07 11:54:29,859 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN RC0603FR-0749K9L through any tier
+2026-05-07 11:54:29,947 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN RC0603FR-0710KL through any tier
+2026-05-07 11:54:30,032 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN GRM188R71H103KA01D through any tier
+2026-05-07 11:54:30,135 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN GRM188R71H105KA12D through any tier
+2026-05-07 11:54:30,230 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN GRM21BR71A106KA73L through any tier
+2026-05-07 11:54:30,333 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN SRP7028A-100M through any tier
+2026-05-07 11:54:30,440 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN TPS62840DLAR through any tier
+2026-05-07 11:54:30,544 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN LQM21PN2R2MC0D through any tier
+2026-05-07 11:54:30,639 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN GRM21BR71A226ME44L through any tier
+2026-05-07 11:54:30,732 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN RC0603FR-071ML through any tier
+2026-05-07 11:54:30,818 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN RC0603FR-07332KL through any tier
+2026-05-07 11:54:30,904 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN TPS7A0233PDBVR through any tier
+2026-05-07 11:54:30,989 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN STM32WL55JCI6 through any tier
+2026-05-07 11:54:31,097 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN GRM1555C1H1R0BA01D through any tier
+2026-05-07 11:54:31,186 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN LQP03TN3N9B02D through any tier
+2026-05-07 11:54:31,281 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN GRM1555C1H1R5BA01D through any tier
+2026-05-07 11:54:31,372 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN SMA_Edge_50Ohm through any tier
+2026-05-07 11:54:31,373 INFO circuit_weaver.symbol_resolver: Resolved PESD5V0S1BA via ic_data
+2026-05-07 11:54:31,459 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN ABM8-32.000MHZ-B2-T through any tier
+2026-05-07 11:54:31,561 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN GRM1555C1H100JA01D through any tier
+2026-05-07 11:54:31,656 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN ABS07-32.768KHZ-T through any tier
+2026-05-07 11:54:31,741 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN GRM1555C1H6R0DA01D through any tier
+2026-05-07 11:54:31,832 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN ADM2587EBRWZ through any tier
+2026-05-07 11:54:31,923 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN SM712-02HTG through any tier
+2026-05-07 11:54:32,007 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN RC0603FR-07120RL through any tier
+2026-05-07 11:54:32,092 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN RC0603FR-07560RL through any tier
+2026-05-07 11:54:32,177 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN ScrewTerminal_3pin_3.5mm through any tier
+2026-05-07 11:54:32,280 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN W25Q64JVSSIQ through any tier
+2026-05-07 11:54:32,364 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN LTST-C191KGKT through any tier
+2026-05-07 11:54:32,465 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN LTST-C191KBKT through any tier
+2026-05-07 11:54:32,550 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN LTST-C191KSKT through any tier
+2026-05-07 11:54:32,654 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN LTST-C191KRKT through any tier
+2026-05-07 11:54:32,739 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN RC0603FR-071KL through any tier
+2026-05-07 11:54:32,824 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN PinHeader_5pin_1.27mm through any tier
+2026-05-07 11:54:32,921 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN PinHeader_4pin_1.27mm through any tier
+2026-05-07 11:54:32,922 INFO circuit_weaver.symbol_resolver: Resolved MAX17048G+T via ic_data
+2026-05-07 11:54:33,027 WARNING circuit_weaver.symbol_resolver: Failed to resolve MPN TestPoint_1mm through any tier
+2026-05-07 11:54:33,042 ERROR circuit_weaver.dispatcher: Design has 71 hard validation error(s) in structural/implementation categories — blocking generation: {'structural': 71, 'electrical': 5, 'implementation': 1, 'presentation': 0, 'placement_readiness': 98}
+2026-05-07 11:54:33,042 ERROR circuit_weaver.dispatcher: Artifact generation failed for output directory kicad-output
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/dist-packages/circuit_weaver/dispatcher.py", line 1711, in generate_artifacts
+    raise ValueError(
+ValueError: Design has 71 structural/implementation error(s) — fix these before generation (these are not bypassable via --no-require-valid)
+2026-05-07 11:54:33,043 INFO circuit_weaver: [generate:end] CLI exited via SystemExit
