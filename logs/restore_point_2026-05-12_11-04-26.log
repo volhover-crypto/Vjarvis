@@ -1,0 +1,417 @@
+[2026-05-12 11:04:26] Starting restore point creation: 2026-05-12_11-04-26
+[2026-05-12 11:04:26] Collecting system status...
+[2026-05-12 11:04:28] Listing skills...
+[2026-05-12 11:04:28] Copying tools documentation...
+[2026-05-12 11:04:28] Extracting accesses from MEMORY.md...
+[2026-05-12 11:04:28] Collecting resource usage...
+[2026-05-12 11:04:28] Creating summary...
+[2026-05-12 11:04:30] Appending note to MEMORY.md...
+[2026-05-12 11:04:30] Attempting upload to Google Drive...
+<3>ERROR : MEMORY.md: Failed to copy: failed to make directory: googleapi: Error 403: Request had insufficient authentication scopes.
+Details:
+[
+  {
+    "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+    "domain": "googleapis.com",
+    "metadata": {
+      "method": "google.apps.drive.v3.DriveFiles.Create",
+      "service": "drive.googleapis.com"
+    },
+    "reason": "ACCESS_TOKEN_SCOPE_INSUFFICIENT"
+  }
+]
+
+More details:
+Reason: insufficientPermissions, Message: Insufficient Permission
+<3>ERROR : SUMMARY.md: Failed to copy: failed to make directory: googleapi: Error 403: Request had insufficient authentication scopes.
+Details:
+[
+  {
+    "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+    "domain": "googleapis.com",
+    "metadata": {
+      "method": "google.apps.drive.v3.DriveFiles.Create",
+      "service": "drive.googleapis.com"
+    },
+    "reason": "ACCESS_TOKEN_SCOPE_INSUFFICIENT"
+  }
+]
+
+More details:
+Reason: insufficientPermissions, Message: Insufficient Permission
+<3>ERROR : TOOLS.md: Failed to copy: failed to make directory: googleapi: Error 403: Request had insufficient authentication scopes.
+Details:
+[
+  {
+    "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+    "domain": "googleapis.com",
+    "metadata": {
+      "method": "google.apps.drive.v3.DriveFiles.Create",
+      "service": "drive.googleapis.com"
+    },
+    "reason": "ACCESS_TOKEN_SCOPE_INSUFFICIENT"
+  }
+]
+
+More details:
+Reason: insufficientPermissions, Message: Insufficient Permission
+<3>ERROR : accesses.txt: Failed to copy: failed to make directory: googleapi: Error 403: Request had insufficient authentication scopes.
+Details:
+[
+  {
+    "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+    "domain": "googleapis.com",
+    "metadata": {
+      "method": "google.apps.drive.v3.DriveFiles.Create",
+      "service": "drive.googleapis.com"
+    },
+    "reason": "ACCESS_TOKEN_SCOPE_INSUFFICIENT"
+  }
+]
+
+More details:
+Reason: insufficientPermissions, Message: Insufficient Permission
+<3>ERROR : resources.txt: Failed to copy: failed to make directory: googleapi: Error 403: Request had insufficient authentication scopes.
+Details:
+[
+  {
+    "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+    "domain": "googleapis.com",
+    "metadata": {
+      "method": "google.apps.drive.v3.DriveFiles.Create",
+      "service": "drive.googleapis.com"
+    },
+    "reason": "ACCESS_TOKEN_SCOPE_INSUFFICIENT"
+  }
+]
+
+More details:
+Reason: insufficientPermissions, Message: Insufficient Permission
+<3>ERROR : system_status.txt: Failed to copy: failed to make directory: googleapi: Error 403: Request had insufficient authentication scopes.
+Details:
+[
+  {
+    "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+    "domain": "googleapis.com",
+    "metadata": {
+      "method": "google.apps.drive.v3.DriveFiles.Create",
+      "service": "drive.googleapis.com"
+    },
+    "reason": "ACCESS_TOKEN_SCOPE_INSUFFICIENT"
+  }
+]
+
+More details:
+Reason: insufficientPermissions, Message: Insufficient Permission
+<3>ERROR : skills.txt: Failed to copy: failed to make directory: googleapi: Error 403: Request had insufficient authentication scopes.
+Details:
+[
+  {
+    "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+    "domain": "googleapis.com",
+    "metadata": {
+      "method": "google.apps.drive.v3.DriveFiles.Create",
+      "service": "drive.googleapis.com"
+    },
+    "reason": "ACCESS_TOKEN_SCOPE_INSUFFICIENT"
+  }
+]
+
+More details:
+Reason: insufficientPermissions, Message: Insufficient Permission
+<3>ERROR : Attempt 1/3 failed with 7 errors and: failed to make directory: googleapi: Error 403: Request had insufficient authentication scopes.
+Details:
+[
+  {
+    "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+    "domain": "googleapis.com",
+    "metadata": {
+      "method": "google.apps.drive.v3.DriveFiles.Create",
+      "service": "drive.googleapis.com"
+    },
+    "reason": "ACCESS_TOKEN_SCOPE_INSUFFICIENT"
+  }
+]
+
+More details:
+Reason: insufficientPermissions, Message: Insufficient Permission
+<3>ERROR : MEMORY.md: Failed to copy: failed to make directory: googleapi: Error 403: Request had insufficient authentication scopes.
+Details:
+[
+  {
+    "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+    "domain": "googleapis.com",
+    "metadata": {
+      "method": "google.apps.drive.v3.DriveFiles.Create",
+      "service": "drive.googleapis.com"
+    },
+    "reason": "ACCESS_TOKEN_SCOPE_INSUFFICIENT"
+  }
+]
+
+More details:
+Reason: insufficientPermissions, Message: Insufficient Permission
+<3>ERROR : SUMMARY.md: Failed to copy: failed to make directory: googleapi: Error 403: Request had insufficient authentication scopes.
+Details:
+[
+  {
+    "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+    "domain": "googleapis.com",
+    "metadata": {
+      "method": "google.apps.drive.v3.DriveFiles.Create",
+      "service": "drive.googleapis.com"
+    },
+    "reason": "ACCESS_TOKEN_SCOPE_INSUFFICIENT"
+  }
+]
+
+More details:
+Reason: insufficientPermissions, Message: Insufficient Permission
+<3>ERROR : TOOLS.md: Failed to copy: failed to make directory: googleapi: Error 403: Request had insufficient authentication scopes.
+Details:
+[
+  {
+    "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+    "domain": "googleapis.com",
+    "metadata": {
+      "method": "google.apps.drive.v3.DriveFiles.Create",
+      "service": "drive.googleapis.com"
+    },
+    "reason": "ACCESS_TOKEN_SCOPE_INSUFFICIENT"
+  }
+]
+
+More details:
+Reason: insufficientPermissions, Message: Insufficient Permission
+<3>ERROR : accesses.txt: Failed to copy: failed to make directory: googleapi: Error 403: Request had insufficient authentication scopes.
+Details:
+[
+  {
+    "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+    "domain": "googleapis.com",
+    "metadata": {
+      "method": "google.apps.drive.v3.DriveFiles.Create",
+      "service": "drive.googleapis.com"
+    },
+    "reason": "ACCESS_TOKEN_SCOPE_INSUFFICIENT"
+  }
+]
+
+More details:
+Reason: insufficientPermissions, Message: Insufficient Permission
+<3>ERROR : resources.txt: Failed to copy: failed to make directory: googleapi: Error 403: Request had insufficient authentication scopes.
+Details:
+[
+  {
+    "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+    "domain": "googleapis.com",
+    "metadata": {
+      "method": "google.apps.drive.v3.DriveFiles.Create",
+      "service": "drive.googleapis.com"
+    },
+    "reason": "ACCESS_TOKEN_SCOPE_INSUFFICIENT"
+  }
+]
+
+More details:
+Reason: insufficientPermissions, Message: Insufficient Permission
+<3>ERROR : system_status.txt: Failed to copy: failed to make directory: googleapi: Error 403: Request had insufficient authentication scopes.
+Details:
+[
+  {
+    "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+    "domain": "googleapis.com",
+    "metadata": {
+      "method": "google.apps.drive.v3.DriveFiles.Create",
+      "service": "drive.googleapis.com"
+    },
+    "reason": "ACCESS_TOKEN_SCOPE_INSUFFICIENT"
+  }
+]
+
+More details:
+Reason: insufficientPermissions, Message: Insufficient Permission
+<3>ERROR : skills.txt: Failed to copy: failed to make directory: googleapi: Error 403: Request had insufficient authentication scopes.
+Details:
+[
+  {
+    "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+    "domain": "googleapis.com",
+    "metadata": {
+      "method": "google.apps.drive.v3.DriveFiles.Create",
+      "service": "drive.googleapis.com"
+    },
+    "reason": "ACCESS_TOKEN_SCOPE_INSUFFICIENT"
+  }
+]
+
+More details:
+Reason: insufficientPermissions, Message: Insufficient Permission
+<3>ERROR : Attempt 2/3 failed with 7 errors and: failed to make directory: googleapi: Error 403: Request had insufficient authentication scopes.
+Details:
+[
+  {
+    "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+    "domain": "googleapis.com",
+    "metadata": {
+      "method": "google.apps.drive.v3.DriveFiles.Create",
+      "service": "drive.googleapis.com"
+    },
+    "reason": "ACCESS_TOKEN_SCOPE_INSUFFICIENT"
+  }
+]
+
+More details:
+Reason: insufficientPermissions, Message: Insufficient Permission
+<3>ERROR : MEMORY.md: Failed to copy: failed to make directory: googleapi: Error 403: Request had insufficient authentication scopes.
+Details:
+[
+  {
+    "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+    "domain": "googleapis.com",
+    "metadata": {
+      "method": "google.apps.drive.v3.DriveFiles.Create",
+      "service": "drive.googleapis.com"
+    },
+    "reason": "ACCESS_TOKEN_SCOPE_INSUFFICIENT"
+  }
+]
+
+More details:
+Reason: insufficientPermissions, Message: Insufficient Permission
+<3>ERROR : SUMMARY.md: Failed to copy: failed to make directory: googleapi: Error 403: Request had insufficient authentication scopes.
+Details:
+[
+  {
+    "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+    "domain": "googleapis.com",
+    "metadata": {
+      "method": "google.apps.drive.v3.DriveFiles.Create",
+      "service": "drive.googleapis.com"
+    },
+    "reason": "ACCESS_TOKEN_SCOPE_INSUFFICIENT"
+  }
+]
+
+More details:
+Reason: insufficientPermissions, Message: Insufficient Permission
+<3>ERROR : TOOLS.md: Failed to copy: failed to make directory: googleapi: Error 403: Request had insufficient authentication scopes.
+Details:
+[
+  {
+    "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+    "domain": "googleapis.com",
+    "metadata": {
+      "method": "google.apps.drive.v3.DriveFiles.Create",
+      "service": "drive.googleapis.com"
+    },
+    "reason": "ACCESS_TOKEN_SCOPE_INSUFFICIENT"
+  }
+]
+
+More details:
+Reason: insufficientPermissions, Message: Insufficient Permission
+<3>ERROR : accesses.txt: Failed to copy: failed to make directory: googleapi: Error 403: Request had insufficient authentication scopes.
+Details:
+[
+  {
+    "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+    "domain": "googleapis.com",
+    "metadata": {
+      "method": "google.apps.drive.v3.DriveFiles.Create",
+      "service": "drive.googleapis.com"
+    },
+    "reason": "ACCESS_TOKEN_SCOPE_INSUFFICIENT"
+  }
+]
+
+More details:
+Reason: insufficientPermissions, Message: Insufficient Permission
+<3>ERROR : resources.txt: Failed to copy: failed to make directory: googleapi: Error 403: Request had insufficient authentication scopes.
+Details:
+[
+  {
+    "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+    "domain": "googleapis.com",
+    "metadata": {
+      "method": "google.apps.drive.v3.DriveFiles.Create",
+      "service": "drive.googleapis.com"
+    },
+    "reason": "ACCESS_TOKEN_SCOPE_INSUFFICIENT"
+  }
+]
+
+More details:
+Reason: insufficientPermissions, Message: Insufficient Permission
+<3>ERROR : system_status.txt: Failed to copy: failed to make directory: googleapi: Error 403: Request had insufficient authentication scopes.
+Details:
+[
+  {
+    "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+    "domain": "googleapis.com",
+    "metadata": {
+      "method": "google.apps.drive.v3.DriveFiles.Create",
+      "service": "drive.googleapis.com"
+    },
+    "reason": "ACCESS_TOKEN_SCOPE_INSUFFICIENT"
+  }
+]
+
+More details:
+Reason: insufficientPermissions, Message: Insufficient Permission
+<3>ERROR : skills.txt: Failed to copy: failed to make directory: googleapi: Error 403: Request had insufficient authentication scopes.
+Details:
+[
+  {
+    "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+    "domain": "googleapis.com",
+    "metadata": {
+      "method": "google.apps.drive.v3.DriveFiles.Create",
+      "service": "drive.googleapis.com"
+    },
+    "reason": "ACCESS_TOKEN_SCOPE_INSUFFICIENT"
+  }
+]
+
+More details:
+Reason: insufficientPermissions, Message: Insufficient Permission
+<3>ERROR : Attempt 3/3 failed with 7 errors and: failed to make directory: googleapi: Error 403: Request had insufficient authentication scopes.
+Details:
+[
+  {
+    "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+    "domain": "googleapis.com",
+    "metadata": {
+      "method": "google.apps.drive.v3.DriveFiles.Create",
+      "service": "drive.googleapis.com"
+    },
+    "reason": "ACCESS_TOKEN_SCOPE_INSUFFICIENT"
+  }
+]
+
+More details:
+Reason: insufficientPermissions, Message: Insufficient Permission
+<6>INFO  : 
+Transferred:   	          0 B / 0 B, -, 0 B/s, ETA -
+Errors:                 7 (retrying may help)
+Elapsed time:        19.7s
+
+Failed to copy with 7 errors: last error was: failed to make directory: googleapi: Error 403: Request had insufficient authentication scopes.
+Details:
+[
+  {
+    "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+    "domain": "googleapis.com",
+    "metadata": {
+      "method": "google.apps.drive.v3.DriveFiles.Create",
+      "service": "drive.googleapis.com"
+    },
+    "reason": "ACCESS_TOKEN_SCOPE_INSUFFICIENT"
+  }
+]
+
+More details:
+Reason: insufficientPermissions, Message: Insufficient Permission
+[2026-05-12 11:04:50] WARNING: Upload to Google Drive failed (likely insufficient scopes). Backup stored locally only.
+[2026-05-12 11:04:50] Restore point creation completed.
+[2026-05-12 11:04:50] Backup location: /root/.openclaw/workspace/backup/restore_2026-05-12_11-04-26

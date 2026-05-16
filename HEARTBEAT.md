@@ -1,5 +1,45 @@
 # HEARTBEAT.md
 
+## 🔴 ПРИ КАЖДОМ СТАРТЕ СЕССИИ (обязательно, непреложно)
+
+**Перед любым ответом пользователю — выполнить полное самотестирование:**
+
+```bash
+# 1. Gateway
+openclaw gateway status          # running? plugins loaded?
+
+# 2. Плагины
+openclaw plugins list             # memory-tencentdb, deltachat, telegram, openrouter, duckduckgo, groq — все enabled?
+
+# 3. PostgreSQL + GBrain
+pg_isready -h localhost -p 5432   # accepting connections?
+gbrain search "тест" --limit 1    # search functional?
+
+# 4. Ресурсы
+df -h /                           # disk < 90%?
+free -h                           # RAM available > 200MB?
+
+# 5. TencentDB Agent Memory
+ls ~/.openclaw/memory-tdai/       # data dir exists?
+du -sh ~/.openclaw/memory-tdai/   # size reasonable?
+
+# 6. Ключевые файлы
+ls ~/.openclaw/workspace/{SOUL.md,MEMORY.md,AGENTS.md,HEARTBEAT.md}  # all present?
+```
+
+**Если любая проверка не прошла → немедленно сообщить с тегом `[ERROR]`. Не начинать работу с пользователем до устранения или явного подтверждения.**
+
+**Формат отчёта после каждого самотестирования:**
+```
+🧪 Session Self-Report:
+  [✅/❌] Gateway: [running/stopped] | Plugins: [N loaded] | PG: [ok/down]
+  [✅/❌] GBrain: [ok/error] | Disk: [XX%] | RAM: [XXX MB free]
+  [✅/❌] memory-tdai: [exists/missing] | Workspace: [ok/incomplete]
+  → [✅ All passed / ❌ N failed: details]
+```
+
+---
+
 ## КАЖДЫЕ 30 МИНУТ (при активной сессии)
 → Если нет задач → ответить HEARTBEAT_OK
 

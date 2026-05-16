@@ -1,0 +1,17 @@
+=== Disk Usage ===
+Filesystem      Size  Used Avail Use% Mounted on
+tmpfs           360M  5.8M  355M   2% /run
+tmpfs           5.0M     0  5.0M   0% /run/lock
+/dev/vda3        40G   31G  7.1G  82% /
+tmpfs           900M  1.1M  899M   1% /dev/shm
+efivarfs        256K   19K  233K   8% /sys/firmware/efi/efivars
+/dev/vda2       100M  4.4M   96M   5% /boot/efi
+tmpfs           180M   16K  180M   1% /run/user/0
+
+=== Memory Usage ===
+               total        used        free      shared  buff/cache   available
+Mem:           1.8Gi       943Mi       210Mi       5.8Mi       818Mi       856Mi
+Swap:          2.9Gi       238Mi       2.6Gi
+
+=== Uptime ===
+ 11:04:28 up 41 days, 14:11,  0 user,  load average: 0.08, 0.02, 0.01

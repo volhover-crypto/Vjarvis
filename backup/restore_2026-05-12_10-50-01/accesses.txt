@@ -1,0 +1,21 @@
+## 🔐 Доступы и токены
+
+### GitHub
+- **Токен:** `/root/.openclaw/secrets/github_token`
+- **User:** volhover-crypto
+- **Репозитории:**
+  - `jarvis-web-console` — https://github.com/volhover-crypto/jarvis-web-console
+  - `Vjarvis` — https://github.com/volhover-crypto/Vjarvis (бэкап рабочей среды)
+- **Восстановление:**
+  ```bash
+  export GITHUB_TOKEN=$(cat /root/.openclaw/secrets/github_token)
+  git clone https://volhover-crypto:${GITHUB_TOKEN}@github.com/volhover-crypto/Vjarvis.git
+  ```
+
+### Google Drive (OAuth)
+- **Credentials:** `/root/.openclaw/secrets/google_oauth.json`
+- **rclone config:** `/root/.openclaw/secrets/rclone.conf`
+- **Scope:** `drive.readonly` (только чтение)
+- **Папки:** Jarvis, YAG, istohniki, RAG_Knowledge_Base_v2
+- **Восстановление:**
+  ```bash

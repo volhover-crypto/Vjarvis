@@ -1,0 +1,33 @@
+# Jarvis Web Console — Windows
+
+## Быстрый старт
+
+1. Установи Python 3.10+: https://www.python.org/downloads/ (поставь галочку "Add Python to PATH")
+2. Открой командную строку (Win+R → cmd → Enter)
+3. Установи зависимости:
+   ```
+   pip install fastapi uvicorn python-multipart
+   ```
+4. Запусти сервер:
+   ```
+   python jarvis_console.py
+   ```
+5. Открой в браузере: http://localhost:8080
+6. Пароль: jarvis1972
+
+## Настройка Telegram (опционально)
+
+Чтобы сообщения из веб-консоли автоматически отправлялись Джарвису в Telegram:
+
+1. Создай бота через @BotFather в Telegram → `/newbot`
+2. Пришли мне (Джарвису) Bot Token и Chat ID — я всё настрою
+3. Или задай через переменные окружения:
+   ```
+   set TELEGRAM_BOT_TOKEN=xxx
+   set TELEGRAM_CHAT_ID=yyy
+   python jarvis_console.py
+   ```
+
+## Остановка
+
+Ctrl+C в окне командной строки

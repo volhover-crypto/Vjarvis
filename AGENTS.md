@@ -9,33 +9,31 @@
 
 ## 📁 Основные директории
 
-- `docs/` — проверенные правила, пороги, регламенты по доменам  
-  → Подробнее: `docs/principles.md` (Golden Principles), `docs/agronomy/`, `docs/viticulture/`, `docs/iot/`, `docs/ai_tools/`
 - `skills/` — модульные навыки агента  
-  → Подробнее: `skills/agronomy_advisor/`, `skills/iot_monitor/`, `skills/report_generator/`, `skills/reflexion_loop/`, `skills/crystallizer/`
+  → Подробнее: `skills/agent-skills/` (22 инженерных навыка), `skills/agronomy_advisor/`, `skills/iot_monitor/`
 - `memory/` — дневные логи, журналы ошибок, кейсы, библиотека принципов  
-  → Подробнее: `memory/YYYY-MM-DD.md` (дневные логи), `memory/error_patterns.md`, `memory/principles_lib.md`, `memory/cases/`
-- `plans/` — execution plans активных проектов  
-  → Подробнее: `plans/<project_name>.md`
+  → Подробнее: `memory/YYYY-MM-DD.md`, `memory/error_patterns.md`, `memory/principles_lib.md`
 - `vault/` — основное хранилище знаний (Obsidian)  
-  → Подробнее: корневое хранилище markdown-файлов для долгосрочного архива
+  → Подробнее: `vault/WIKI.md` (schema), `vault/learning-log.md` (лог обучения), `vault/reading/` (конспекты), `vault/knowledge/` (домены)
 - `~/self-improving/` — личный журнал уроков и улучшений агента  
   → Подробнее: `~/self-improving/memory.md` (append-only журнал уроков)
+- `/root/.openclaw/secrets/` — токены и credentials (chmod 600)  
+  → Подробнее: `MEMORY.md` раздел «🔐 Доступы и токены»
 
 ---
 
 ## 🔗 Быстрые ссылки на ключевые файлы
 
-- **Принципы работы (Golden Principles)** → `docs/principles.md`
+- **Принципы работы** → `SOUL.md`
 - **Профиль пользователя** → `USER.md`
-- **Идентичность и стиль** → `SOUL.md`
+- **Идентичность и стиль** → `IDENTITY.md`
 - **Сводка ключевых воспоминаний** → `MEMORY.md`
+- **Журнал обучения** → `vault/learning-log.md`
+- **Schema wiki** → `vault/WIKI.md`
 - **Журнал уроков (append-only)** → `~/self-improving/memory.md`
-- **База ошибок агента** → `memory/error_patterns.md`
-- **Библиотека стратегических принципов (EvolveR)** → `memory/principles_lib.md`
-- **Кейсы: агро-решения, IoT-инциденты** → `memory/cases/`
-- **Экспорт планов проектов** → `plans/`
-- **Основное хранилище знаний** → `/root/vault/`
+- **База ошибок** → `memory/error_patterns.md`
+- **Библиотека принципов** → `memory/principles_lib.md`
+- **Секреты и токены** → `/root/.openclaw/secrets/`
 
 ---
 
@@ -43,11 +41,21 @@
 
 - При начале работы: проверьте, в какой домене или задаче вы находитесь
 - Используйте ссылки выше, чтобы быстро перейти к нужному разделу
-- При обновлении среды: изменяйте файлы в `docs/`, `skills/`, `memory/`, `plans/` — а не этот файл
-- Этот файл предназначен только для навигации — не редактируйте его для хранения знания
+- При обновлении среды: изменяйте файлы в `skills/`, `memory/`, `vault/` — а не этот файл
+- Этот файл предназначен только для навигации
 
 ---
 
-*Файл AGENTS.md обновлен как навигационная карта: 01.05.2026*  
-*Соответствует правилу Constitutional Layer из Nurture-First Development (NFD): содержит только указатели на знание, не само знание*  
-*Целевой объём: ≤100 строк (текущий размер: ~50 строк)*
+## 🚨 Восстановление после сбоя
+
+1. **GitHub:** `export GITHUB_TOKEN=$(cat /root/.openclaw/secrets/github_token)`
+2. **Google Drive:** `cp /root/.openclaw/secrets/rclone.conf /root/.config/rclone/rclone.conf`
+3. **Vault:** `gbrain sync --repo /root/vault`
+4. **OpenClaw:** `openclaw gateway restart`
+
+Подробная инструкция в `MEMORY.md` раздел «🚨 Восстановление после сбоя».
+
+---
+
+*Файл AGENTS.md обновлен: 12.05.2026*  
+*Соответствует правилу Constitutional Layer из NFD*

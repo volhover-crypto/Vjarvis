@@ -1,0 +1,15 @@
+id: eda-kicad-schematic-001
+name: Generate KiCad schematic structure
+description: Test that the skill can generate a valid KiCad schematic file with proper S-expression format for KiCad 7.
+tags:
+  - schematic
+  - kicad7
+  - happy-path
+inputs:
+  prompt: "Create a KiCad 7 schematic file for a power supply with input 12V, output 5V and 3.3V using LDO regulator. Include decoupling capacitors."
+expected:
+  output_contains:
+    - "kicad_sch"
+    - "lib_symbols"
+  outcomes:
+    - type: task_completed

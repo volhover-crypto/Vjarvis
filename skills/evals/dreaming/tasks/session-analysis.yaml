@@ -1,0 +1,18 @@
+id: dreaming-analysis-001
+name: Analyze session logs for patterns
+description: |
+  Test that the Dreaming skill can analyze daily logs
+  and extract meaningful patterns.
+tags:
+  - dreaming
+  - analysis
+  - memory
+inputs:
+  prompt: "Analyze the last 5 daily logs in memory/ directory. Identify recurring problems, successful patterns, and write insights to MEMORY.md. Follow the Dreaming workflow from skills/dreaming/SKILL.md."
+expected:
+  output_contains:
+    - "паттерн"
+    - "инсайт"
+    - "проблема"
+  outcomes:
+    - type: task_completed

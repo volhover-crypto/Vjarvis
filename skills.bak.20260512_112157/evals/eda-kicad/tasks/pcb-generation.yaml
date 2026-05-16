@@ -1,0 +1,16 @@
+id: eda-kicad-pcb-001
+name: Generate PCB with footprints
+description: Test that the skill can generate a KiCad 7 PCB file with real footprints loaded from libraries.
+tags:
+  - pcb
+  - footprint
+  - kicad7
+inputs:
+  prompt: "Generate a KiCad 7 PCB file with 3 resistors (R_0402), 2 capacitors (C_0402), and 1 MCU (LQFP-32). Use pcbnew Python API with FootprintLoad."
+expected:
+  output_contains:
+    - "kicad_pcb"
+    - "FootprintLoad"
+    - "pad"
+  outcomes:
+    - type: task_completed

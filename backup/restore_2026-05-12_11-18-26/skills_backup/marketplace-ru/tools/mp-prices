@@ -1,0 +1,329 @@
+#!/bin/bash
+# CLI для управления ценами товаров (мульти-платформа)
+
+set -e
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+LIB_DIR="$(cd "${SCRIPT_DIR}/../lib" && pwd)"
+
+source "${LIB_DIR}/common/platform.sh"
+
+resolve_platform "$@"
+set -- "${REMAINING_ARGS[@]}"
+
+source_platform_libs "$CURRENT_PLATFORM" prices
+
+PLATFORM_NAME=$(platform_display_name "$CURRENT_PLATFORM")
+
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+YELLOW='\033[1;33m'
+RED='\033[0;31m'
+NC='\033[0m'
+
+show_help() {
+    cat <<EOF
+Использование: mp-prices [--platform ozon|wb|ymarket] <команда> [опции]
+
+Команды:
+  get <sku>                    Получить текущую цену товара
+  update <sku> <price>         Обновить цену товара
+  list                         Показать цены всех товаров
+  rollback <batch-id>          Откатить batch изменений
+  rollback --last              Откатить последний batch
+  history                      Показать историю изменений
+  confirm-quarantine           (только ymarket) Подтвердить карантинные цены
+
+Опции:
+  --platform <name>            Платформа (ozon, wb, ymarket; по умолчанию ozon)
+  --mock                       Использовать mock данные
+  --old-price <price>          Установить старую цену
+  --yes                        Подтвердить без prompt (≤50%)
+  --force                      Разрешить --yes для >50%
+
+EOF
+}
+
+_load_creds() { load_and_check_credentials || exit 1; }
+
+_get_price() {
+    case "$CURRENT_PLATFORM" in
+        ozon)    get_price "$@" ;;
+        wb)      wb_get_prices "$@" ;;
+        ymarket) ym_get_prices "$@" ;;
+    esac
+}
+
+_update_price() {
+    case "$CURRENT_PLATFORM" in
+        ozon)    update_price "$@" ;;
+        wb)      wb_update_price "$@" ;;
+        ymarket) ym_update_prices "$@" ;;
+    esac
+}
+
+_get_prices_bulk() {
+    case "$CURRENT_PLATFORM" in
+        ozon)    get_prices_bulk "$@" ;;
+        wb)      wb_get_prices "$@" ;;
+        ymarket) ym_get_prices "$@" ;;
+    esac
+}
+
+_format_price() {
+    case "$CURRENT_PLATFORM" in
+        ozon)    format_price "$1" ;;
+        wb)      format_wb_price "$1" ;;
+        ymarket) format_ym_price "$1" ;;
+    esac
+}
+
+# Извлечь числовое значение цены из JSON ответа
+_extract_price_value() {
+    local json=$1
+    case "$CURRENT_PLATFORM" in
+        ozon)    echo "$json" | jq -r '.result.items[0].price.price // "0"' ;;
+        wb)      echo "$json" | jq -r '(.data.listGoods[0].sizes[0].price // 0) / 100' ;;
+        ymarket) echo "$json" | jq -r '.result.offers[0].price.value // "0"' ;;
+    esac
+}
+
+cmd_get() {
+    local sku=$1; shift
+    [[ -z "$sku" ]] && echo "ERROR: Укажите SKU" >&2 && exit 1
+
+    local args=("$sku")
+    local is_mock=false
+    while [[ $# -gt 0 ]]; do
+        [[ "$1" == "--mock" ]] && is_mock=true
+        args+=("$1"); shift
+    done
+
+    [[ "$is_mock" == "false" ]] && _load_creds
+
+    echo ""
+    echo -e "${BLUE}💰 Цена товара (${PLATFORM_NAME})${NC}"
+    echo ""
+
+    local price_json
+    price_json=$(_get_price "${args[@]}")
+    [[ $? -ne 0 ]] && echo -e "${RED}ERROR: Не удалось получить цену${NC}" >&2 && exit 1
+
+    _format_price "$price_json"
+    echo ""
+}
+
+cmd_update() {
+    local sku=$1
+    local new_price=$2
+    shift 2
+
+    [[ -z "$sku" ]] || [[ -z "$new_price" ]] && echo "ERROR: Укажите SKU и цену" >&2 && exit 1
+
+    local is_mock=false
+    local old_price_arg=""
+    local auto_confirm=false
+    local force_mode=false
+
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+            --mock) is_mock=true; shift ;;
+            --old-price) old_price_arg="$2"; shift 2 ;;
+            --yes) auto_confirm=true; shift ;;
+            --force) force_mode=true; shift ;;
+            *) shift ;;
+        esac
+    done
+
+    # For WB: user enters rubles, API wants kopecks
+    local display_price="$new_price"
+    local api_price="$new_price"
+    if [[ "$CURRENT_PLATFORM" == "wb" ]]; then
+        api_price=$(rubles_to_kopecks "$new_price")
+    fi
+
+    export BATCH_ID=$(audit_generate_batch_id)
+    [[ "$is_mock" == "false" ]] && _load_creds
+
+    echo ""
+    echo -e "${BLUE}💰 Обновление цены (${PLATFORM_NAME})${NC}"
+    echo ""
+
+    # Get current price
+    local get_args=("$sku")
+    [[ "$is_mock" == "true" ]] && get_args+=("--mock")
+
+    local current_json=$(_get_price "${get_args[@]}")
+    local old_price=$(_extract_price_value "$current_json")
+
+    if [[ -z "$old_price" ]] || [[ "$old_price" == "null" ]]; then
+        old_price="0"
+    fi
+
+    # Validate change
+    if [[ "$old_price" != "0" ]]; then
+        if type validate_price_change &>/dev/null && ! validate_price_change "$old_price" "$display_price" 2>/dev/null; then
+            if [[ "$auto_confirm" == "true" ]] && [[ "$force_mode" == "false" ]]; then
+                echo -e "${RED}ERROR: --yes запрещён для изменений >50%${NC}" >&2
+                exit 1
+            fi
+            read -p "Продолжить несмотря на большое изменение? (y/N): " force_update
+            [[ ! "$force_update" =~ ^[Yy]$ ]] && echo "Отменено" && exit 0
+        fi
+    fi
+
+    local change_percent=$(calculate_change_percent "$old_price" "$display_price")
+
+    echo "SKU: $sku"
+    echo "Старая цена: $old_price ₽"
+    echo "Новая цена:  $display_price ₽"
+    echo "Изменение:   $change_percent"
+    echo ""
+
+    if [[ "$auto_confirm" == "false" ]]; then
+        echo -e "${YELLOW}⚠️  Это изменит цену на площадке!${NC}"
+        read -p "Подтвердите (y/N): " confirm
+        [[ ! "$confirm" =~ ^[Yy]$ ]] && echo "Отменено" && exit 0
+    fi
+
+    echo "🔄 Обновление цены..."
+
+    local update_args=("$sku" "$api_price")
+    [[ "$is_mock" == "true" ]] && update_args+=("--mock")
+    [[ -n "$old_price_arg" ]] && update_args+=("--old-price" "$old_price_arg")
+    update_args+=("--batch-id" "$BATCH_ID" "--audit-old-price" "$old_price")
+
+    local result_json=$(_update_price "${update_args[@]}")
+    local result=$?
+
+    if [[ $result -eq 0 ]]; then
+        echo -e "${GREEN}✅ Цена обновлена!${NC}"
+
+        # YM: auto-check quarantine
+        if [[ "$CURRENT_PLATFORM" == "ymarket" ]]; then
+            echo ""
+            echo "🔍 Проверка карантина цен..."
+            local q_args=("$sku")
+            [[ "$is_mock" == "true" ]] && q_args+=("--mock")
+            local quarantine_json=$(ym_get_quarantined_prices "${q_args[@]}" 2>/dev/null)
+            local q_count=$(echo "$quarantine_json" | jq -r '.result.quarantineOffers | length' 2>/dev/null)
+            if [[ -n "$q_count" ]] && [[ "$q_count" -gt 0 ]]; then
+                echo -e "${YELLOW}⚠️  Цена попала в карантин! Необходимо подтвердить:${NC}"
+                echo "  mp-prices confirm-quarantine --platform ymarket --mock"
+            else
+                echo "✅ Цена не в карантине"
+            fi
+        fi
+    else
+        echo -e "${RED}❌ Ошибка обновления${NC}" >&2
+        exit 1
+    fi
+    echo ""
+}
+
+cmd_list() {
+    local args=()
+    local is_mock=false
+    while [[ $# -gt 0 ]]; do
+        [[ "$1" == "--mock" ]] && is_mock=true
+        args+=("$1"); shift
+    done
+
+    [[ "$is_mock" == "false" ]] && _load_creds
+
+    echo ""
+    echo -e "${BLUE}💰 Цены товаров (${PLATFORM_NAME})${NC}"
+    echo ""
+
+    local prices_json
+    prices_json=$(_get_prices_bulk "${args[@]}")
+    [[ $? -ne 0 ]] && echo -e "${RED}ERROR: Не удалось получить цены${NC}" >&2 && exit 1
+
+    case "$CURRENT_PLATFORM" in
+        ozon)
+            echo "$prices_json" | jq -r '.result.items[] | "SKU: \(.offer_id)\n💰 Цена: \(.price.price) ₽\n---"'
+            ;;
+        wb)
+            echo "$prices_json" | jq -r '.data.listGoods[] | "Артикул: \(.nmID)\n💰 Цена: \(.sizes[0].price / 100) ₽\n---"'
+            ;;
+        ymarket)
+            echo "$prices_json" | jq -r '.result.offers[] | "SKU: \(.offerId)\n💰 Цена: \(.price.value) ₽\n---"'
+            ;;
+    esac
+    echo ""
+}
+
+cmd_confirm_quarantine() {
+    if [[ "$CURRENT_PLATFORM" != "ymarket" ]]; then
+        echo "ERROR: confirm-quarantine доступен только для Яндекс Маркет" >&2
+        exit 1
+    fi
+
+    local args=()
+    local is_mock=false
+    while [[ $# -gt 0 ]]; do
+        [[ "$1" == "--mock" ]] && is_mock=true
+        args+=("$1"); shift
+    done
+
+    [[ "$is_mock" == "false" ]] && _load_creds
+
+    echo ""
+    echo -e "${BLUE}🔍 Карантин цен (${PLATFORM_NAME})${NC}"
+    echo ""
+
+    local q_json=$(ym_get_quarantined_prices "${args[@]}")
+    local q_count=$(echo "$q_json" | jq -r '.result.quarantineOffers | length' 2>/dev/null)
+
+    if [[ -z "$q_count" ]] || [[ "$q_count" == "0" ]]; then
+        echo "✅ Нет цен в карантине"
+        return 0
+    fi
+
+    echo "Цен в карантине: $q_count"
+    echo "$q_json" | jq -r '.result.quarantineOffers[] | "  SKU: \(.offerId) — \(.currentPrice.value) → \(.newPrice.value) ₽"'
+    echo ""
+
+    if [[ "$is_mock" == "false" ]]; then
+        read -p "Подтвердить все карантинные цены? (y/N): " confirm
+        [[ ! "$confirm" =~ ^[Yy]$ ]] && echo "Отменено" && return 0
+    fi
+
+    local confirm_json=$(ym_confirm_quarantine "${args[@]}")
+    echo -e "${GREEN}✅ Карантинные цены подтверждены${NC}"
+    echo ""
+}
+
+cmd_rollback() {
+    local batch_id=""
+    local is_mock=false
+    local use_last=false
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+            --last) use_last=true; shift ;;
+            --mock) is_mock=true; shift ;;
+            *) batch_id="$1"; shift ;;
+        esac
+    done
+    if [[ "$use_last" == "true" ]]; then
+        batch_id=$(audit_get_last_batch_id "price_update")
+        [[ -z "$batch_id" ]] && echo "ERROR: Нет batch для отката" >&2 && exit 1
+        echo "Последний batch: $batch_id"
+    fi
+    [[ -z "$batch_id" ]] && echo "ERROR: Укажите batch ID или --last" >&2 && exit 1
+    rollback_batch "$batch_id" "price" "$is_mock" || true
+}
+
+cmd_history() { audit_show_history "$@"; }
+
+case "${1:-}" in
+    get)    shift; cmd_get "$@" ;;
+    update) shift; cmd_update "$@" ;;
+    list)   shift; cmd_list "$@" ;;
+    confirm-quarantine) shift; cmd_confirm_quarantine "$@" ;;
+    rollback) shift; cmd_rollback "$@" ;;
+    history)  shift; cmd_history "$@" ;;
+    -h|--help|help) show_help ;;
+    "") echo "ERROR: Команда не указана" >&2; show_help; exit 1 ;;
+    *)  echo "ERROR: Неизвестная команда: $1" >&2; show_help; exit 1 ;;
+esac

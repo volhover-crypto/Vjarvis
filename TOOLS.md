@@ -27,6 +27,20 @@ Skills define _how_ tools work. This file is for _your_ specifics — the stuff 
 - Форматы вывода: json, txt, srt, vtt
 - Зависимости: openai-whisper, torch, ffmpeg
 
+### n8n (автоматизация и интеграция)
+- URL: http://localhost:5678 (внешний: http://176.12.74.69:5678)
+- Логин: admin@jarvis.local
+- Пароль: A03g10l31~
+- API key: /root/.openclaw/secrets/n8n_api_key
+- Версия: 2.20.9
+- Docker: /root/n8n/docker-compose.yml
+- Активные workflows:
+  - Infrastructure Monitor — каждые 30 мин, проверка всех сервисов + Telegram alert
+  - Session Context Recovery — ежедневно 6:00, сбор контекста из логов
+  - Memory Crystallizer — ежедневно 2:00, git sync + GBrain sync
+  - Task Tracker — пн-пт 8:00, поиск открытых задач + Telegram
+  - Error Pattern Detector — ежедневно 3:00, сканирование логов + Telegram
+
 ### Syncthing (синхронизация файлов)
 - URL: http://176.12.74.69:8384
 - Логин: admin
@@ -71,6 +85,16 @@ Skills define _how_ tools work. This file is for _your_ specifics — the stuff 
 - Цикл синхронизации: gbrain sync --repo /root/vault && gbrain embed --stale
 
 Add whatever helps you do your job. This is your cheat sheet.
+
+### Sherlock (OSINT username checker)
+- Используется для поиска аккаунтов по username на сотнях платформ
+- Скрипт: `/tmp/sherlock_venv/bin/sherlock` (установлен в виртуальном окружении)
+- Пример использования: `/tmp/sherlock_venv/bin/sherlock Volhover --print-found`
+- Результат: список найденных профилей с прямыми ссылками
+- Ограничения: ищет только по точному username, не по ФИО или другим данным
+- Для работы требует активного интернет-соединения
+
+---
 
 
 ### Управление знаниями (обновлено)

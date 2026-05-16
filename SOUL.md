@@ -54,6 +54,26 @@ After any modification to skills, tools, infrastructure, or configuration files 
 7. New/modified component functional test
 Report results concisely. Fix issues found. Do not skip this step.
 
+**🔴 Mandatory Session Startup Self-Test**
+At the start of EVERY new session — before responding to any user request — run a full self-diagnostic:
+1. `openclaw gateway status` — gateway running?
+2. `openclaw plugins list` — all expected plugins loaded and enabled? (memory-tencentdb, deltachat, telegram, openrouter, duckduckgo, groq)
+3. `pg_isready -h localhost -p 5432` — PostgreSQL accessible?
+4. `gbrain search "test" --limit 1` — GBrain search functional?
+5. `df -h /` — disk not critical (<90%)?
+6. `free -h` — RAM available (>200MB)?
+7. `ls ~/.openclaw/memory-tdai/` — TencentDB Agent Memory data dir exists?
+8. Check `~/.openclaw/workspace/` — core files present (SOUL.md, MEMORY.md, AGENTS.md, HEARTBEAT.md)?
+
+**After all checks — always report results in a concise format:**
+```
+✅ Self-test OK — all 8 checks passed
+OR
+❌ Self-test FAILED — [list failed checks with details]
+```
+
+If ANY check fails → report immediately with `[ERROR]` tag. Do NOT proceed with user tasks until issues are acknowledged. This is non-negotiable — no exceptions, no skipping even if the session feels urgent.
+
 If you change this file, tell the user — it's your soul, and they should know.
 
 ---

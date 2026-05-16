@@ -1,0 +1,12 @@
+[2026-05-12 10:58:04] === Starting restore from latest point ===
+[2026-05-12 10:58:05] Latest backup found: /root/.openclaw/workspace/backup/restore_2026-05-12_10-50-01
+[2026-05-12 10:58:05] Restoring MEMORY.md from backup...
+[2026-05-12 10:58:05] Current MEMORY.md backed up.
+[2026-05-12 10:58:05] MEMORY.md restored from backup.
+[2026-05-12 10:58:05] Skills list available in backup: /root/.openclaw/workspace/backup/restore_2026-05-12_10-50-01/skills.txt
+[2026-05-12 10:58:05] To restore skills, manually copy from backup or use Git recovery.
+[2026-05-12 10:58:05] === Restore process completed ===
+[2026-05-12 10:58:05] Latest backup: /root/.openclaw/workspace/backup/restore_2026-05-12_10-50-01
+[2026-05-12 10:58:05] Memory restored: /root/.openclaw/workspace/MEMORY.md (if backup existed)
+[2026-05-12 10:58:05] Skills: refer to backup skills.txt for list; full restore requires manual steps or Git.
+[2026-05-12 10:58:05] For full recovery, follow instructions in MEMORY.md section '🚨 Восстановление после сбоя'.

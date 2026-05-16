@@ -1,0 +1,16 @@
+id: eda-kicad-gerber-001
+name: Export Gerber files
+description: Test that the skill can export manufacturing Gerber files from a KiCad 7 PCB using pcbnew Python API.
+tags:
+  - gerber
+  - manufacturing
+  - export
+inputs:
+  prompt: "Write a Python script to export Gerber files from a KiCad 7 PCB using pcbnew. Export F.Cu, B.Cu, F.Mask, B.Mask, F.SilkS, B.SilkS, F.Paste, B.Paste, Edge_Cuts layers. Use PLOT_CONTROLLER with SetUseGerberProtelExtensions(True)."
+expected:
+  output_contains:
+    - "PLOT_CONTROLLER"
+    - "PlotLayer"
+    - "Gerber"
+  outcomes:
+    - type: task_completed
