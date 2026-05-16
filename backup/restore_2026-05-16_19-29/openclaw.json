@@ -1,0 +1,424 @@
+{
+  "meta": {
+    "lastTouchedVersion": "2026.5.7",
+    "lastTouchedAt": "2026-05-16T06:39:30.568Z"
+  },
+  "env": {
+    "GROQ_API_KEY": "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"
+  },
+  "wizard": {
+    "lastRunAt": "2026-05-11T08:08:30.703Z",
+    "lastRunVersion": "2026.5.7",
+    "lastRunCommand": "doctor",
+    "lastRunMode": "local"
+  },
+  "auth": {
+    "profiles": {
+      "openrouter:default": {
+        "provider": "openrouter",
+        "mode": "api_key"
+      }
+    }
+  },
+  "agents": {
+    "defaults": {
+      "model": {
+        "primary": "openrouter/owl-alpha"
+      },
+      "models": {
+        "openrouter/auto": {
+          "alias": "OpenRouter"
+        },
+        "openrouter/owl-alpha": {
+          "alias": "OpenRouter owl alpha"
+        },
+        "openrouter/xiaomi/mimo-v2-pro": {},
+        "openrouter/nvidia/nemotron-3-super-120b-a12b:free": {
+          "alias": "nvidia nemotron 3"
+        },
+        "groq/llama-3.3-70b-versatile": {
+          "alias": "Groq Llama 3.3"
+        },
+        "groq/llama-3.1-8b-instant": {
+          "alias": "Groq Llama 8B"
+        },
+        "groq/qwen/qwen3-32b": {
+          "alias": "Groq Qwen 3"
+        }
+      },
+      "workspace": "/root/.openclaw/workspace",
+      "compaction": {
+        "mode": "safeguard"
+      }
+    }
+  },
+  "tools": {
+    "profile": "coding",
+    "web": {
+      "search": {
+        "enabled": true,
+        "provider": "duckduckgo"
+      }
+    },
+    "media": {
+      "audio": {
+        "enabled": true,
+        "maxBytes": 20971520,
+        "models": [
+          {
+            "type": "cli",
+            "command": "/root/.openclaw/workspace/voice-messages/bin/python",
+            "args": [
+              "/root/.openclaw/workspace/voice-messages/transcribe.py",
+              "--audio",
+              "{{MediaPath}}",
+              "--lang",
+              "ru",
+              "--model",
+              "small"
+            ],
+            "timeoutSeconds": 120
+          }
+        ]
+      }
+    }
+  },
+  "commands": {
+    "native": "auto",
+    "nativeSkills": "auto",
+    "restart": true,
+    "ownerDisplay": "raw",
+    "ownerAllowFrom": [
+      "telegram:1051427322"
+    ]
+  },
+  "session": {
+    "dmScope": "per-channel-peer"
+  },
+  "hooks": {
+    "internal": {
+      "enabled": true,
+      "entries": {
+        "session-memory": {
+          "enabled": true
+        },
+        "boot-md": {
+          "enabled": true
+        },
+        "n8n-voice-transcriber": {
+          "enabled": true
+        }
+      }
+    }
+  },
+  "channels": {
+    "telegram": {
+      "enabled": true,
+      "dmPolicy": "allowlist",
+      "botToken": "8472727224:AAFmL2LPz3pzUOpcCEa22RfdrzLo-RPmTR4",
+      "groups": {
+        "*": {
+          "requireMention": true
+        }
+      },
+      "allowFrom": [
+        "1051427322"
+      ],
+      "groupPolicy": "allowlist",
+      "streaming": {
+        "mode": "partial"
+      }
+    },
+    "deltachat": {
+      "enabled": true,
+      "email": "auto",
+      "dataDir": "/root/.openclaw/deltachat-data",
+      "rpcServerPath": "deltachat-rpc-server",
+      "dmPolicy": "open",
+      "groupPolicy": "open",
+      "requireMention": false,
+      "sendReadReceipts": true,
+      "allowFrom": [
+        "*"
+      ]
+    }
+  },
+  "gateway": {
+    "port": 18789,
+    "mode": "local",
+    "bind": "loopback",
+    "controlUi": {
+      "allowInsecureAuth": true
+    },
+    "auth": {
+      "mode": "token",
+      "token": "037cf837b2698e910baac7a3f8d3d36d95daff5aa8b3035b"
+    },
+    "tailscale": {
+      "mode": "off",
+      "resetOnExit": false
+    },
+    "nodes": {
+      "denyCommands": [
+        "camera.snap",
+        "camera.clip",
+        "screen.record",
+        "contacts.add",
+        "calendar.add",
+        "reminders.add",
+        "sms.send"
+      ]
+    }
+  },
+  "messages": {
+    "tts": {
+      "auto": "inbound",
+      "provider": "microsoft",
+      "providers": {
+        "microsoft": {
+          "voice": "ru-RU-DmitryNeural",
+          "lang": "ru-RU"
+        }
+      }
+    },
+    "groupChat": {
+      "visibleReplies": "message_tool"
+    }
+  },
+  "plugins": {
+    "slots": {
+      "memory": "memory-tencentdb"
+    },
+    "entries": {
+      "duckduckgo": {
+        "enabled": true,
+        "config": {}
+      },
+      "memory-core": {
+        "enabled": false
+      },
+      "memory-lancedb": {
+        "enabled": false
+      },
+      "claude-mem": {
+        "enabled": false,
+        "config": {
+          "syncMemoryFile": true,
+          "syncMemoryFileExclude": [],
+          "workerPort": 37777,
+          "project": "openclaw"
+        }
+      },
+      "openrouter": {
+        "enabled": true
+      },
+      "deltachat": {
+        "enabled": true,
+        "config": {
+          "email": "auto",
+          "dataDir": "/root/.openclaw/deltachat-data",
+          "rpcServerPath": "deltachat-rpc-server",
+          "dmPolicy": "open",
+          "groupPolicy": "open",
+          "requireMention": false,
+          "sendReadReceipts": true
+        }
+      },
+      "groq": {
+        "enabled": true
+      },
+      "memory-powermem": {
+        "enabled": false
+      },
+      "memory-tencentdb": {
+        "enabled": true,
+        "config": {
+          "storeBackend": "sqlite",
+          "embedding": {
+            "enabled": false,
+            "provider": "none"
+          },
+          "recall": {
+            "enabled": true,
+            "strategy": "keyword",
+            "maxResults": 5,
+            "scoreThreshold": 0.3,
+            "timeoutMs": 5000
+          },
+          "capture": {
+            "enabled": true,
+            "excludeAgents": [],
+            "l0l1RetentionDays": 0
+          },
+          "extraction": {
+            "enabled": true,
+            "enableDedup": true,
+            "maxMemoriesPerSession": 20
+          },
+          "pipeline": {
+            "everyNConversations": 5,
+            "enableWarmup": true,
+            "l1IdleTimeoutSeconds": 600,
+            "l2MinIntervalSeconds": 900
+          },
+          "bm25": {
+            "enabled": true,
+            "language": "zh"
+          },
+          "offload": {
+            "enabled": false
+          }
+        },
+        "hooks": {
+          "allowConversationAccess": true
+        }
+      }
+    },
+    "allow": [
+      "deltachat",
+      "duckduckgo",
+      "groq",
+      "memory-powermem",
+      "memory-tencentdb",
+      "openrouter",
+      "telegram"
+    ],
+    "bundledDiscovery": "compat"
+  },
+  "skills": {
+    "entries": {
+      "1password": {
+        "enabled": false
+      },
+      "apple-notes": {
+        "enabled": false
+      },
+      "apple-reminders": {
+        "enabled": false
+      },
+      "bear-notes": {
+        "enabled": false
+      },
+      "blogwatcher": {
+        "enabled": false
+      },
+      "blucli": {
+        "enabled": false
+      },
+      "bluebubbles": {
+        "enabled": false
+      },
+      "camsnap": {
+        "enabled": false
+      },
+      "clawhub": {
+        "enabled": false
+      },
+      "coding-agent": {
+        "enabled": false
+      },
+      "discord": {
+        "enabled": false
+      },
+      "eightctl": {
+        "enabled": false
+      },
+      "gemini": {
+        "enabled": false
+      },
+      "gifgrep": {
+        "enabled": false
+      },
+      "gigachat": {
+        "enabled": false
+      },
+      "gog": {
+        "enabled": false
+      },
+      "goplaces": {
+        "enabled": false
+      },
+      "himalaya": {
+        "enabled": false
+      },
+      "imsg": {
+        "enabled": false
+      },
+      "mcporter": {
+        "enabled": false
+      },
+      "model-usage": {
+        "enabled": false
+      },
+      "nano-pdf": {
+        "enabled": false
+      },
+      "notion": {
+        "enabled": false
+      },
+      "obsidian": {
+        "enabled": false
+      },
+      "openai-whisper-api": {
+        "enabled": false
+      },
+      "openhue": {
+        "enabled": false
+      },
+      "oracle": {
+        "enabled": false
+      },
+      "ordercli": {
+        "enabled": false
+      },
+      "peekaboo": {
+        "enabled": false
+      },
+      "sag": {
+        "enabled": false
+      },
+      "session-logs": {
+        "enabled": false
+      },
+      "sherpa-onnx-tts": {
+        "enabled": false
+      },
+      "slack": {
+        "enabled": false
+      },
+      "songsee": {
+        "enabled": false
+      },
+      "sonoscli": {
+        "enabled": false
+      },
+      "spotify-player": {
+        "enabled": false
+      },
+      "things-mac": {
+        "enabled": false
+      },
+      "trace-to-svg": {
+        "enabled": false
+      },
+      "trello": {
+        "enabled": false
+      },
+      "voice-call": {
+        "enabled": false
+      },
+      "wacli": {
+        "enabled": false
+      },
+      "xurl": {
+        "enabled": false
+      },
+      "yandexgpt": {
+        "enabled": false
+      },
+      "yax": {
+        "enabled": false
+      }
+    }
+  }
+}

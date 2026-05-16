@@ -1,0 +1,314 @@
+│
+◇  Config warnings ────────────────────────────────────────────────────────╮
+│                                                                          │
+│  - plugins.entries.memory-powermem: plugin memory-powermem: installed    │
+│    plugin package requires compiled runtime output for TypeScript entry  │
+│    index.ts: expected ./dist/index.js, ./dist/index.mjs,                 │
+│    ./dist/index.cjs, index.js, index.mjs, index.cjs                      │
+│  - plugins.entries.clawdboost: plugin clawdboost: installed plugin       │
+│    package requires compiled runtime output for TypeScript entry         │
+│    src/index.ts: expected ./dist/index.js, ./dist/index.mjs,             │
+│    ./dist/index.cjs, src/index.js, src/index.mjs, src/index.cjs          │
+│  - plugins.entries.memory-lancedb: plugin not installed: memory-lancedb  │
+│    — install the official external plugin with: openclaw plugins         │
+│    install @openclaw/memory-lancedb                                      │
+│  - plugins.entries.memory-powermem: plugin not found: memory-powermem    │
+│    (stale config entry ignored; remove it from plugins config)           │
+│  - plugins.allow: plugin not found: memory-powermem (stale config entry  │
+│    ignored; remove it from plugins config)                               │
+│  - plugins.entries.claude-mem: plugin disabled (disabled in config) but  │
+│    config is present                                                     │
+│                                                                          │
+├──────────────────────────────────────────────────────────────────────────╯
+Plugins (6/95 enabled)
+Source roots:
+  stock: /usr/lib/node_modules/openclaw/dist/extensions
+  global: /root/.openclaw/extensions
+
+┌──────────────┬──────────┬──────────┬──────────┬───────────────────────────────────────────────────────────┬──────────┐
+│ Name         │ ID       │ Format   │ Status   │ Source                                                    │ Version  │
+├──────────────┼──────────┼──────────┼──────────┼───────────────────────────────────────────────────────────┼──────────┤
+│ Active       │ active-  │ openclaw │ disabled │ stock:active-memory/index.js                              │          │
+│ Memory       │ memory   │          │          │ Runs a bounded blocking memory sub-agent before eligible  │          │
+│              │          │          │          │ conversational replies and injects relevant memory into   │          │
+│              │          │          │          │ prompt context.                                           │          │
+│ @openclaw/   │ alibaba  │ openclaw │ disabled │ stock:alibaba/index.js                                    │ 2026.5.7 │
+│ alibaba-     │          │          │          │                                                           │          │
+│ provider     │          │          │          │                                                           │          │
+│ @openclaw/   │ amazon-  │ openclaw │ disabled │ stock:amazon-bedrock/index.js                             │ 2026.5.7 │
+│ amazon-      │ bedrock  │          │          │                                                           │          │
+│ bedrock-     │          │          │          │                                                           │          │
+│ provider     │          │          │          │                                                           │          │
+│ @openclaw/   │ amazon-  │ openclaw │ disabled │ stock:amazon-bedrock-mantle/index.js                      │ 2026.5.7 │
+│ amazon-      │ bedrock- │          │          │                                                           │          │
+│ bedrock-     │ mantle   │          │          │                                                           │          │
+│ mantle-      │          │          │          │                                                           │          │
+│ provider     │          │          │          │                                                           │          │
+│ @openclaw/   │ anthropi │ openclaw │ disabled │ stock:anthropic/index.js                                  │ 2026.5.7 │
+│ anthropic-   │ c        │          │          │                                                           │          │
+│ provider     │          │          │          │                                                           │          │
+│ @openclaw/   │ anthropi │ openclaw │ disabled │ stock:anthropic-vertex/index.js                           │ 2026.5.7 │
+│ anthropic-   │ c-vertex │          │          │                                                           │          │
+│ vertex-      │          │          │          │                                                           │          │
+│ provider     │          │          │          │                                                           │          │
+│ @openclaw/   │ arcee    │ openclaw │ disabled │ stock:arcee/index.js                                      │ 2026.5.7 │
+│ arcee-       │          │          │          │                                                           │          │
+│ provider     │          │          │          │                                                           │          │
+│ Azure Speech │ azure-   │ openclaw │ disabled │ stock:azure-speech/index.js                               │ 2026.5.7 │
+│              │ speech   │          │          │ Azure AI Speech text-to-speech (MP3, native Ogg/Opus      │          │
+│              │          │          │          │ voice notes, PCM telephony).                              │          │
+│ Bonjour      │ bonjour  │ openclaw │ disabled │ stock:bonjour/index.js                                    │ 2026.5.7 │
+│ Gateway      │          │          │          │ Advertise the local OpenClaw gateway over Bonjour/mDNS.   │          │
+│ Discovery    │          │          │          │                                                           │          │
+│ @openclaw/   │ browser  │ openclaw │ disabled │ stock:browser/index.js                                    │ 2026.5.7 │
+│ browser-     │          │          │          │                                                           │          │
+│ plugin       │          │          │          │                                                           │          │
+│ @openclaw/   │ byteplus │ openclaw │ disabled │ stock:byteplus/index.js                                   │ 2026.5.7 │
+│ byteplus-    │          │          │          │                                                           │          │
+│ provider     │          │          │          │                                                           │          │
+│ @openclaw/   │ cerebras │ openclaw │ disabled │ stock:cerebras/index.js                                   │ 2026.5.7 │
+│ cerebras-    │          │          │          │                                                           │          │
+│ provider     │          │          │          │                                                           │          │
+│ @openclaw/   │ chutes   │ openclaw │ disabled │ stock:chutes/index.js                                     │ 2026.5.7 │
+│ chutes-      │          │          │          │                                                           │          │
+│ provider     │          │          │          │                                                           │          │
+│ @openclaw/   │ cloudfla │ openclaw │ disabled │ stock:cloudflare-ai-gateway/index.js                      │ 2026.5.7 │
+│ cloudflare-  │ re-ai-   │          │          │                                                           │          │
+│ ai-gateway-  │ gateway  │          │          │                                                           │          │
+│ provider     │          │          │          │                                                           │          │
+│ @openclaw/   │ comfy    │ openclaw │ disabled │ stock:comfy/index.js                                      │ 2026.5.7 │
+│ comfy-       │          │          │          │                                                           │          │
+│ provider     │          │          │          │                                                           │          │
+│ @openclaw/   │ copilot- │ openclaw │ disabled │ stock:copilot-proxy/index.js                              │ 2026.5.7 │
+│ copilot-     │ proxy    │          │          │                                                           │          │
+│ proxy        │          │          │          │                                                           │          │
+│ @openclaw/   │ deepgram │ openclaw │ disabled │ stock:deepgram/index.js                                   │ 2026.5.7 │
+│ deepgram-    │          │          │          │                                                           │          │
+│ provider     │          │          │          │                                                           │          │
+│ @openclaw/   │ deepinfr │ openclaw │ disabled │ stock:deepinfra/index.js                                  │ 2026.5.7 │
+│ deepinfra-   │ a        │          │          │                                                           │          │
+│ provider     │          │          │          │                                                           │          │
+│ @openclaw/   │ deepseek │ openclaw │ disabled │ stock:deepseek/index.js                                   │ 2026.5.7 │
+│ deepseek-    │          │          │          │                                                           │          │
+│ provider     │          │          │          │                                                           │          │
+│ Device       │ device-  │ openclaw │ disabled │ stock:device-pair/index.js                                │          │
+│ Pairing      │ pair     │          │          │ Generate setup codes and approve device pairing requests. │          │
+│ Document     │ document │ openclaw │ disabled │ stock:document-extract/index.js                           │ 2026.5.7 │
+│ Extraction   │ -extract │          │          │ Extract text and fallback page images from local          │          │
+│              │          │          │          │ document attachments.                                     │          │
+│ @openclaw/   │ duckduck │ openclaw │ enabled  │ stock:duckduckgo/index.js                                 │ 2026.5.7 │
+│ duckduckgo-  │ go       │          │          │                                                           │          │
+│ plugin       │          │          │          │                                                           │          │
+│ @openclaw/   │ elevenla │ openclaw │ disabled │ stock:elevenlabs/index.js                                 │ 2026.5.7 │
+│ elevenlabs-  │ bs       │          │          │                                                           │          │
+│ speech       │          │          │          │                                                           │          │
+│ @openclaw/   │ exa      │ openclaw │ disabled │ stock:exa/index.js                                        │ 2026.5.7 │
+│ exa-plugin   │          │          │          │                                                           │          │
+│ @openclaw/   │ fal      │ openclaw │ disabled │ stock:fal/index.js                                        │ 2026.5.7 │
+│ fal-provider │          │          │          │                                                           │          │
+│ File         │ file-    │ openclaw │ disabled │ stock:file-transfer/index.js                              │ 2026.5.7 │
+│ Transfer     │ transfer │          │          │ Fetch, list, and write files on paired nodes via          │          │
+│              │          │          │          │ dedicated node commands. Bypasses bash stdout truncation  │          │
+│              │          │          │          │ by using base64 over node.invoke for binaries up to 16    │          │
+│              │          │          │          │ MB.                                                       │          │
+│ @openclaw/   │ firecraw │ openclaw │ disabled │ stock:firecrawl/index.js                                  │ 2026.5.7 │
+│ firecrawl-   │ l        │          │          │                                                           │          │
+│ plugin       │          │          │          │                                                           │          │
+│ @openclaw/   │ firework │ openclaw │ disabled │ stock:fireworks/index.js                                  │ 2026.5.7 │
+│ fireworks-   │ s        │          │          │                                                           │          │
+│ provider     │          │          │          │                                                           │          │
+│ @openclaw/   │ github-  │ openclaw │ disabled │ stock:github-copilot/index.js                             │ 2026.5.7 │
+│ github-      │ copilot  │          │          │                                                           │          │
+│ copilot-     │          │          │          │                                                           │          │
+│ provider     │          │          │          │                                                           │          │
+│ @openclaw/   │ google   │ openclaw │ disabled │ stock:google/index.js                                     │ 2026.5.7 │
+│ google-      │          │          │          │                                                           │          │
+│ plugin       │          │          │          │                                                           │          │
+│ @openclaw/   │ gradium  │ openclaw │ disabled │ stock:gradium/index.js                                    │ 2026.5.7 │
+│ gradium-     │          │          │          │                                                           │          │
+│ speech       │          │          │          │                                                           │          │
+│ @openclaw/   │ groq     │ openclaw │ enabled  │ stock:groq/index.js                                       │ 2026.5.7 │
+│ groq-        │          │          │          │                                                           │          │
+│ provider     │          │          │          │                                                           │          │
+│ @openclaw/   │ huggingf │ openclaw │ disabled │ stock:huggingface/index.js                                │ 2026.5.7 │
+│ huggingface- │ ace      │          │          │                                                           │          │
+│ provider     │          │          │          │                                                           │          │
+│ @openclaw/   │ imessage │ openclaw │ disabled │ stock:imessage/index.js                                   │ 2026.5.7 │
+│ imessage     │          │          │          │                                                           │          │
+│ Inworld      │ inworld  │ openclaw │ disabled │ stock:inworld/index.js                                    │ 2026.5.7 │
+│              │          │          │          │ Inworld streaming text-to-speech (MP3, OGG_OPUS, PCM      │          │
+│              │          │          │          │ telephony).                                               │          │
+│ @openclaw/   │ irc      │ openclaw │ disabled │ stock:irc/index.js                                        │ 2026.5.7 │
+│ irc          │          │          │          │                                                           │          │
+│ @openclaw/   │ kilocode │ openclaw │ disabled │ stock:kilocode/index.js                                   │ 2026.5.7 │
+│ kilocode-    │          │          │          │                                                           │          │
+│ provider     │          │          │          │                                                           │          │
+│ @openclaw/   │ kimi     │ openclaw │ disabled │ stock:kimi-coding/index.js                                │ 2026.5.7 │
+│ kimi-        │          │          │          │                                                           │          │
+│ provider     │          │          │          │                                                           │          │
+│ @openclaw/   │ litellm  │ openclaw │ disabled │ stock:litellm/index.js                                    │ 2026.5.7 │
+│ litellm-     │          │          │          │                                                           │          │
+│ provider     │          │          │          │                                                           │          │
+│ LLM Task     │ llm-task │ openclaw │ disabled │ stock:llm-task/index.js                                   │ 2026.5.7 │
+│              │          │          │          │ Generic JSON-only LLM tool for structured tasks callable  │          │
+│              │          │          │          │ from workflows.                                           │          │
+│ @openclaw/   │ lmstudio │ openclaw │ disabled │ stock:lmstudio/index.js                                   │ 2026.5.7 │
+│ lmstudio-    │          │          │          │                                                           │          │
+│ provider     │          │          │          │                                                           │          │
+│ @openclaw/   │ matrix   │ openclaw │ disabled │ stock:matrix/index.js                                     │ 2026.5.7 │
+│ matrix       │          │          │          │                                                           │          │
+│ @openclaw/   │ mattermo │ openclaw │ disabled │ stock:mattermost/index.js                                 │ 2026.5.7 │
+│ mattermost   │ st       │          │          │                                                           │          │
+│ @openclaw/   │ memory-  │ openclaw │ disabled │ stock:memory-core/index.js                                │ 2026.5.7 │
+│ memory-core  │ core     │          │          │                                                           │          │
+│ Memory Wiki  │ memory-  │ openclaw │ disabled │ stock:memory-wiki/index.js                                │ 2026.5.7 │
+│              │ wiki     │          │          │ Persistent wiki compiler and Obsidian-friendly knowledge  │          │
+│              │          │          │          │ vault for OpenClaw.                                       │          │
+│ @openclaw/   │ microsof │ openclaw │ disabled │ stock:microsoft/index.js                                  │ 2026.5.7 │
+│ microsoft-   │ t        │          │          │                                                           │          │
+│ speech       │          │          │          │                                                           │          │
+│ @openclaw/   │ microsof │ openclaw │ disabled │ stock:microsoft-foundry/index.js                          │ 2026.5.7 │
+│ microsoft-   │ t-       │          │          │                                                           │          │
+│ foundry      │ foundry  │          │          │                                                           │          │
+│ Claude       │ migrate- │ openclaw │ disabled │ stock:migrate-claude/index.js                             │ 2026.5.7 │
+│ Migration    │ claude   │          │          │ Imports Claude Code and Claude Desktop instructions, MCP  │          │
+│              │          │          │          │ servers, skills, and safe configuration into OpenClaw.    │          │
+│ Hermes       │ migrate- │ openclaw │ disabled │ stock:migrate-hermes/index.js                             │ 2026.5.7 │
+│ Migration    │ hermes   │          │          │ Imports Hermes configuration, memories, skills, and       │          │
+│              │          │          │          │ supported credentials into OpenClaw.                      │          │
+│ @openclaw/   │ minimax  │ openclaw │ disabled │ stock:minimax/index.js                                    │ 2026.5.7 │
+│ minimax-     │          │          │          │                                                           │          │
+│ provider     │          │          │          │                                                           │          │
+│ @openclaw/   │ mistral  │ openclaw │ disabled │ stock:mistral/index.js                                    │ 2026.5.7 │
+│ mistral-     │          │          │          │                                                           │          │
+│ provider     │          │          │          │                                                           │          │
+│ @openclaw/   │ moonshot │ openclaw │ disabled │ stock:moonshot/index.js                                   │ 2026.5.7 │
+│ moonshot-    │          │          │          │                                                           │          │
+│ provider     │          │          │          │                                                           │          │
+│ @openclaw/   │ nvidia   │ openclaw │ disabled │ stock:nvidia/index.js                                     │ 2026.5.7 │
+│ nvidia-      │          │          │          │                                                           │          │
+│ provider     │          │          │          │                                                           │          │
+│ @openclaw/   │ ollama   │ openclaw │ disabled │ stock:ollama/index.js                                     │ 2026.5.7 │
+│ ollama-      │          │          │          │                                                           │          │
+│ provider     │          │          │          │                                                           │          │
+│ OpenProse    │ open-    │ openclaw │ disabled │ stock:open-prose/index.js                                 │ 2026.5.7 │
+│              │ prose    │          │          │ OpenProse VM skill pack with a /prose slash command.      │          │
+│ @openclaw/   │ openai   │ openclaw │ disabled │ stock:openai/index.js                                     │ 2026.5.7 │
+│ openai-      │          │          │          │                                                           │          │
+│ provider     │          │          │          │                                                           │          │
+│ @openclaw/   │ opencode │ openclaw │ disabled │ stock:opencode/index.js                                   │ 2026.5.7 │
+│ opencode-    │          │          │          │                                                           │          │
+│ provider     │          │          │          │                                                           │          │
+│ @openclaw/   │ opencode │ openclaw │ disabled │ stock:opencode-go/index.js                                │ 2026.5.7 │
+│ opencode-go- │ -go      │          │          │                                                           │          │
+│ provider     │          │          │          │                                                           │          │
+│ @openclaw/   │ openrout │ openclaw │ enabled  │ stock:openrouter/index.js                                 │ 2026.5.7 │
+│ openrouter-  │ er       │          │          │                                                           │          │
+│ provider     │          │          │          │                                                           │          │
+│ OpenShell    │ openshel │ openclaw │ disabled │ stock:openshell/index.js                                  │ 2026.5.7 │
+│ Sandbox      │ l        │          │          │ Sandbox backend powered by OpenShell with mirrored local  │          │
+│              │          │          │          │ workspaces and SSH-based command execution.               │          │
+│ @openclaw/   │ perplexi │ openclaw │ disabled │ stock:perplexity/index.js                                 │ 2026.5.7 │
+│ perplexity-  │ ty       │          │          │                                                           │          │
+│ plugin       │          │          │          │                                                           │          │
+│ Phone        │ phone-   │ openclaw │ disabled │ stock:phone-control/index.js                              │          │
+│ Control      │ control  │          │          │ Arm/disarm high-risk phone node commands (camera/screen/  │          │
+│              │          │          │          │ writes) with an optional auto-expiry.                     │          │
+│ @openclaw/   │ qianfan  │ openclaw │ disabled │ stock:qianfan/index.js                                    │ 2026.5.7 │
+│ qianfan-     │          │          │          │                                                           │          │
+│ provider     │          │          │          │                                                           │          │
+│ @openclaw/   │ qwen     │ openclaw │ disabled │ stock:qwen/index.js                                       │ 2026.5.7 │
+│ qwen-        │          │          │          │                                                           │          │
+│ provider     │          │          │          │                                                           │          │
+│ @openclaw/   │ runway   │ openclaw │ disabled │ stock:runway/index.js                                     │ 2026.5.7 │
+│ runway-      │          │          │          │                                                           │          │
+│ provider     │          │          │          │                                                           │          │
+│ @openclaw/   │ searxng  │ openclaw │ disabled │ stock:searxng/index.js                                    │ 2026.5.7 │
+│ searxng-     │          │          │          │                                                           │          │
+│ plugin       │          │          │          │                                                           │          │
+│ @openclaw/   │ senseaud │ openclaw │ disabled │ stock:senseaudio/index.js                                 │ 2026.5.7 │
+│ senseaudio-  │ io       │          │          │                                                           │          │
+│ provider     │          │          │          │                                                           │          │
+│ @openclaw/   │ sglang   │ openclaw │ disabled │ stock:sglang/index.js                                     │ 2026.5.7 │
+│ sglang-      │          │          │          │                                                           │          │
+│ provider     │          │          │          │                                                           │          │
+│ @openclaw/   │ signal   │ openclaw │ disabled │ stock:signal/index.js                                     │ 2026.5.7 │
+│ signal       │          │          │          │                                                           │          │
+│ Skill        │ skill-   │ openclaw │ disabled │ stock:skill-workshop/index.js                             │ 2026.5.7 │
+│ Workshop     │ workshop │          │          │ Captures repeatable workflows as workspace skills, with   │          │
+│              │          │          │          │ pending review, safe writes, and skill prompt refresh.    │          │
+│ @openclaw/   │ slack    │ openclaw │ disabled │ stock:slack/index.js                                      │ 2026.5.7 │
+│ slack        │          │          │          │                                                           │          │
+│ @openclaw/   │ stepfun  │ openclaw │ disabled │ stock:stepfun/index.js                                    │ 2026.5.7 │
+│ stepfun-     │          │          │          │                                                           │          │
+│ provider     │          │          │          │                                                           │          │
+│ @openclaw/   │ syntheti │ openclaw │ disabled │ stock:synthetic/index.js                                  │ 2026.5.7 │
+│ synthetic-   │ c        │          │          │                                                           │          │
+│ provider     │          │          │          │                                                           │          │
+│ Talk Voice   │ talk-    │ openclaw │ disabled │ stock:talk-voice/index.js                                 │          │
+│              │ voice    │          │          │ Manage Talk voice selection (list/set).                   │          │
+│ @openclaw/   │ tavily   │ openclaw │ disabled │ stock:tavily/index.js                                     │ 2026.5.7 │
+│ tavily-      │          │          │          │                                                           │          │
+│ plugin       │          │          │          │                                                           │          │
+│ @openclaw/   │ telegram │ openclaw │ enabled  │ stock:telegram/index.js                                   │ 2026.5.7 │
+│ telegram     │          │          │          │                                                           │          │
+│ @openclaw/   │ tencent  │ openclaw │ disabled │ stock:tencent/index.js                                    │ 2026.5.7 │
+│ tencent-     │          │          │          │                                                           │          │
+│ provider     │          │          │          │                                                           │          │
+│ Thread       │ thread-  │ openclaw │ disabled │ stock:thread-ownership/index.js                           │          │
+│ Ownership    │ ownershi │          │          │ Prevents multiple agents from responding in the same      │          │
+│              │ p        │          │          │ Slack thread. Uses HTTP calls to the slack-forwarder      │          │
+│              │          │          │          │ ownership API.                                            │          │
+│ @openclaw/   │ together │ openclaw │ disabled │ stock:together/index.js                                   │ 2026.5.7 │
+│ together-    │          │          │          │                                                           │          │
+│ provider     │          │          │          │                                                           │          │
+│ tokenjuice   │          │ openclaw │ disabled │ stock:tokenjuice/index.js                                 │ 2026.5.7 │
+│              │          │          │          │ Compacts exec and bash tool results with tokenjuice       │          │
+│              │          │          │          │ reducers.                                                 │          │
+│ @openclaw/   │ tts-     │ openclaw │ disabled │ stock:tts-local-cli/index.js                              │ 2026.5.7 │
+│ tts-local-   │ local-   │          │          │                                                           │          │
+│ cli          │ cli      │          │          │                                                           │          │
+│ @openclaw/   │ venice   │ openclaw │ disabled │ stock:venice/index.js                                     │ 2026.5.7 │
+│ venice-      │          │          │          │                                                           │          │
+│ provider     │          │          │          │                                                           │          │
+│ @openclaw/   │ vercel-  │ openclaw │ disabled │ stock:vercel-ai-gateway/index.js                          │ 2026.5.7 │
+│ vercel-ai-   │ ai-      │          │          │                                                           │          │
+│ gateway-     │ gateway  │          │          │                                                           │          │
+│ provider     │          │          │          │                                                           │          │
+│ @openclaw/   │ vllm     │ openclaw │ disabled │ stock:vllm/index.js                                       │ 2026.5.7 │
+│ vllm-        │          │          │          │                                                           │          │
+│ provider     │          │          │          │                                                           │          │
+│ @openclaw/   │ volcengi │ openclaw │ disabled │ stock:volcengine/index.js                                 │ 2026.5.7 │
+│ volcengine-  │ ne       │          │          │                                                           │          │
+│ provider     │          │          │          │                                                           │          │
+│ @openclaw/   │ voyage   │ openclaw │ disabled │ stock:voyage/index.js                                     │ 2026.5.7 │
+│ voyage-      │          │          │          │                                                           │          │
+│ provider     │          │          │          │                                                           │          │
+│ @openclaw/   │ vydra    │ openclaw │ disabled │ stock:vydra/index.js                                      │ 2026.5.7 │
+│ vydra-       │          │          │          │                                                           │          │
+│ provider     │          │          │          │                                                           │          │
+│ Web          │ web-     │ openclaw │ disabled │ stock:web-readability/index.js                            │ 2026.5.7 │
+│ Readability  │ readabil │          │          │ Extract readable article content from local HTML web      │          │
+│ Extraction   │ ity      │          │          │ fetch responses.                                          │          │
+│ Webhooks     │ webhooks │ openclaw │ disabled │ stock:webhooks/index.js                                   │ 2026.5.7 │
+│              │          │          │          │ Authenticated inbound webhooks that bind external         │          │
+│              │          │          │          │ automation to OpenClaw TaskFlows.                         │          │
+│ @openclaw/   │ xai      │ openclaw │ disabled │ stock:xai/index.js                                        │ 2026.5.7 │
+│ xai-plugin   │          │          │          │                                                           │          │
+│ @openclaw/   │ xiaomi   │ openclaw │ disabled │ stock:xiaomi/index.js                                     │ 2026.5.7 │
+│ xiaomi-      │          │          │          │                                                           │          │
+│ provider     │          │          │          │                                                           │          │
+│ @openclaw/   │ zai      │ openclaw │ disabled │ stock:zai/index.js                                        │ 2026.5.7 │
+│ zai-provider │          │          │          │                                                           │          │
+│ Memory       │ memory-  │ openclaw │ enabled  │ ~/.openclaw/npm/node_modules/@tencentdb-agent-memory/     │ 0.3.5    │
+│ (TencentDB)  │ tencentd │          │          │ memory-tencentdb/dist/index.mjs                           │          │
+│              │ b        │          │          │ Four-layer memory system — auto-captures, structures,     │          │
+│              │          │          │          │ and profiles conversational knowledge                     │          │
+│ Claude-Mem   │ claude-  │ openclaw │ disabled │ global:claude-mem/dist/index.js                           │ 11.0.0   │
+│ (Persistent  │ mem      │          │          │ Official OpenClaw plugin for Claude-Mem. Records          │          │
+│ Memory)      │          │          │          │ observations from embedded runner sessions and streams    │          │
+│              │          │          │          │ them to messaging channels.                               │          │
+│ Delta Chat   │ deltacha │ openclaw │ enabled  │ global:deltachat/dist/index.js                            │ 0.1.17   │
+│              │ t        │          │          │ OpenClaw channel plugin for Delta Chat messaging.         │          │
+│              │          │          │          │ Requires the deltachat-rpc-server binary on PATH.         │          │
+└──────────────┴──────────┴──────────┴──────────┴───────────────────────────────────────────────────────────┴──────────┘
