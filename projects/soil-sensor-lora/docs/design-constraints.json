@@ -1,0 +1,128 @@
+{
+  "project": "soil-sensor-lora",
+  "version": "1.0",
+  "date": "2026-05-18",
+  "author": "Jarvis EDA / Александр Волховер",
+
+  "board": {
+    "dimensions": { "width_mm": 60, "height_mm": 40 },
+    "layers": 2,
+    "thickness_mm": 1.6,
+    "copper_weight_oz": 1,
+    "surface_finish": "HASL",
+    "solder_mask": "green",
+    "silkscreen": "white",
+    "min_trace_width_mm": 0.2,
+    "min_clearance_mm": 0.15,
+    "min_via_size_mm": 0.3,
+    "min_via_drill_mm": 0.2
+  },
+
+  "power": {
+    "input_voltage_range": "5-12V DC",
+    "battery": "Li-Ion 3.7V 18650",
+    "solar_panel": "6V/1W",
+    "ldo_output": "3.3V",
+    "max_current_ma": 200,
+    "sleep_current_ua": 2.5
+  },
+
+  "mcu": {
+    "part": "STM32WL55CCU6",
+    "package": "QFN-48",
+    "core": "ARM Cortex-M4 + M0",
+    "flash_kb": 256,
+    "ram_kb": 64,
+    "lora": {
+      "frequency_mhz": 868,
+      "tx_power_dbm": 22,
+      "modulation": "LoRa/FSK/GMSK"
+    },
+    "interfaces": {
+      "spi": 2,
+      "i2c": 2,
+      "uart": 2,
+      "adc": 12,
+      "gpio": 32
+    }
+  },
+
+  "sensors": {
+    "soil_ec": {
+      "interface": "analog",
+      "input": "AIN0 via ADS1115",
+      "range": "0-5 mS/cm",
+      "accuracy": "±2%"
+    },
+    "soil_ph": {
+      "interface": "analog",
+      "input": "AIN1 via ADS1115",
+      "range": "0-14 pH",
+      "accuracy": "±0.1 pH"
+    },
+    "soil_moisture": {
+      "interface": "analog",
+      "input": "AIN2 via ADS1115",
+      "range": "0-100% VWC",
+      "accuracy": "±3%"
+    },
+    "soil_temperature": {
+      "interface": "1-Wire",
+      "part": "DS18B20",
+      "range": "-55 to +125°C",
+      "accuracy": "±0.5°C"
+    },
+    "air_temperature": {
+      "interface": "internal",
+      "part": "STM32WL internal temp sensor",
+      "accuracy": "±2°C"
+    }
+  },
+
+  "communication": {
+    "lora": {
+      "frequency_mhz": 868,
+      "antenna": "SMA edge-launch",
+      "range_km": "5-15 (LOS)",
+      "protocol": "LoRaWAN Class A / proprietary"
+    },
+    "rs485": {
+      "standard": "EIA-485",
+      "transceiver": "MAX3485",
+      "protocol": "Modbus RTU",
+      "baudrate": 9600,
+      "termination": "120Ω selectable"
+    }
+  },
+
+  "power_management": {
+    "charger": "MCP73831",
+    "charge_current_ma": 500,
+    "ldo": "AMS1117-3.3",
+    "reverse_protection": "SS14 Schottky",
+    "battery_monitoring": "ADC via voltage divider"
+  },
+
+  "connectors": {
+    "dc_input": "JST-PH 2-pin",
+    "solar": "JST-PH 2-pin",
+    "battery": "JST-PH 2-pin",
+    "rs485": "JST-PH 4-pin (A/B/GND/VCC)",
+    "sensors": "JST-PH 6-pin (AIN0-3/GND/VCC)",
+    "swd": "Pin header 2.54mm 4-pin",
+    "antenna": "SMA edge-launch"
+  },
+
+  "environmental": {
+    "ip_rating": "IP67",
+    "operating_temp": "-20 to +60°C",
+    "storage_temp": "-40 to +85°C",
+    "humidity": "0-100% RH"
+  },
+
+  "compliance": {
+    "rohs": true,
+    "ce": "EN 300 220 (LoRa 868MHz)",
+    "fcc": "Part 15 (if 915MHz variant)"
+  }
+}

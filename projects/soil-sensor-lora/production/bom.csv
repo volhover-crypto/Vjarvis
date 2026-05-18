@@ -1,0 +1,46 @@
+Reference,Value,Package,LCSC Part#,Quantity,Description,Category
+U1,STM32WL55CCU6,QFN-48-1EP_6x6mm_P0.4mm,C511860,1,"MCU + LoRa SoC, ARM Cortex-M4/M0, 256KB Flash, 64KB RAM",MCU
+U2,MAX3485ESA+,SOIC-8_3.9x4.9mm_P1.27mm,C12935,1,"RS-485 Transceiver, 2.5Mbps, half-duplex",Interface
+U3,ADS1115IDGSR,MSOP-10_3x3mm_P0.5mm,C90723,1,"16-bit ADC, 4-ch, I2C, PGA, comparator",ADC
+U4,AMS1117-3.3,SOT-223-3_TabPin2,C6186,1,"LDO Regulator, 3.3V, 1A",Power
+U5,MCP73831T-2ACI/OT,SOT-23-5,C42414,1,"Li-Ion/Li-Po Charger, 500mA, single cell",Power
+U6,DS18B20+,TO-92_Inline,C32346,1,"Digital Temperature Sensor, 1-Wire, ±0.5°C",Sensor
+Y1,32.768kHz,Crystal_SMD_3215-2Pin_3.2x1.5mm,C32346,1,"RTC Crystal, 32.768kHz, ±20ppm",Crystal
+J1,SMA_868MHz,SMA_Samtec_SMA-J-P-H-ST-EM1,C280334,1,"SMA Edge Launch Connector, 50Ω",RF
+J2,RS-485,JST_PH_S4B-PH-K_1x04_P2.00mm_Horizontal,,1,"RS-485 Connector, 4-pin JST PH",Connector
+J3,Sensors_Analog,JST_PH_S6B-PH-K_1x06_P2.00mm_Horizontal,,1,"Sensor Input, 6-pin JST PH",Connector
+J4,DC_IN,JST_PH_S2B-PH-K_1x02_P2.00mm_Horizontal,,1,"DC Power Input, 2-pin JST PH",Connector
+J5,SOLAR,JST_PH_S2B-PH-K_1x02_P2.00mm_Horizontal,,1,"Solar Panel Input, 2-pin JST PH",Connector
+J6,BAT_LiIon,JST_PH_S2B-PH-K_1x02_P2.00mm_Horizontal,,1,"Li-Ion Battery, 2-pin JST PH",Connector
+J7,SWD,PinHeader_1x04_P2.54mm_Vertical,,1,"SWD Debug, 4-pin 2.54mm header",Connector
+D1,SS14,D_SMA,C2480,1,"Schottky Diode, 40V, 1A, reverse polarity protection",Protection
+D2,LED_Green,LED_0603_1608Metric,,1,"Charge Status LED, green",Indicator
+D3,TVS_6V,SOD-323,C38484,1,"TVS Diode, 6V, RS-485 bus protection",Protection
+D4,LED_Blue,LED_0603_1608Metric,,1,"Status LED, blue",Indicator
+C1,100uF/16V,C_1206_3216Metric,C19702,1,"Input bulk capacitor",Capacitor
+C2,100nF,C_0603_1608Metric,,1,"Input bypass capacitor",Capacitor
+C3,10uF/16V,C_1206_3216Metric,C19702,1,"LDO output capacitor",Capacitor
+C4,100nF,C_0603_1608Metric,,1,"LDO output bypass",Capacitor
+C5,100nF,C_0603_1608Metric,,1,"MCU VDD decoupling #1",Capacitor
+C6,100nF,C_0603_1608Metric,,1,"MCU VDD decoupling #2",Capacitor
+C7,1uF,C_0603_1608Metric,,1,"MCU VDD decoupling #3",Capacitor
+C8,10nF,C_0603_1608Metric,,1,"MCU VDD decoupling #4",Capacitor
+C9,6.8pF,C_0402_1005Metric,,1,"RTC crystal load cap #1",Capacitor
+C10,6.8pF,C_0402_1005Metric,,1,"RTC crystal load cap #2",Capacitor
+C11,100nF,C_0603_1608Metric,,1,"Reset button debounce",Capacitor
+C12,1pF,C_0402_1005Metric,,1,"LoRa antenna matching",Capacitor
+C13,100nF,C_0603_1608Metric,,1,"RS-485 transceiver bypass",Capacitor
+C14,100nF,C_0603_1608Metric,,1,"ADS1115 bypass",Capacitor
+C15,100nF,C_0603_1608Metric,,1,"DS18B20 bypass",Capacitor
+R1,2K,R_0603_1608Metric,,1,"Charge current set (500mA = 2K)",Resistor
+R2,1K,R_0603_1608Metric,,1,"LED current limit (charge)",Resistor
+R3,10K,R_0603_1608Metric,,1,"BOOT0 pull-down",Resistor
+R4,0R,R_0402_1005Metric,,1,"LoRa antenna matching (DNP option)",Resistor
+R5,120R,R_0603_1608Metric,,1,"RS-485 termination resistor",Resistor
+R6,4.7K,R_0603_1608Metric,,1,"I2C SDA pull-up",Resistor
+R7,4.7K,R_0603_1608Metric,,1,"I2C SCL pull-up",Resistor
+R8,4.7K,R_0603_1608Metric,,1,"1-Wire pull-up (DS18B20)",Resistor
+R9,1K,R_0603_1608Metric,,1,"Status LED current limit",Resistor
+SW1,SW_Push,SW_SPST_B3U-1000P,,1,"Reset button, tactile switch",Switch
+TP1,+3V3_TP,TestPoint_Pad_D1.0mm,,1,"3.3V test point",TestPoint
+TP2,GND_TP,TestPoint_Pad_D1.0mm,,1,"GND test point",TestPoint
