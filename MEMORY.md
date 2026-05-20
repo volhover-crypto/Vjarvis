@@ -2,7 +2,7 @@
 
 **Владелец:** Александр Волховер  
 **Агент:** Джарвис (Цифровой фамильяр v2.0)  
-**Последнее обновление:** 18.05.2026
+**Последнее обновление:** 20.05.2026
 
 ## 🔴 ЖЁСТКОЕ ПРАВИЛО: Самотестирование при каждом старте сессии
 
@@ -387,3 +387,126 @@
 - LoRaMac-node — эталонный LoRaWAN stack
 - RadioLib — универсальная LoRa библиотека
 - Vosk — офлайн STT для русского
+
+---
+
+## [2026-05-19_00:42] КРИСТАЛЛИЗАЦИЯ — Принципы работы с GBrain
+
+### Архитектура
+- **GBrain** = Obsidian vault (/root/vault/) → PostgreSQL 16 + pgvector → семантический поиск
+- **Источник:** github.com/garrytan/gbrain (garrytan/gbrain, v0.35.8.0)
+- **Бинарник:** /usr/local/bin/gbrain (собран через bun build src/cli.ts --compile)
+- **Исходники:** /tmp/gbrain-src/ (НЕ УДАЛЯТЬ — нужны для пересборки)
+- **Конфиг:** /root/.gbrain/config.json
+- **БД:** postgresql://gbrain:secure_password_123@localhost:5432/gbrain
+- **Пользователь БД:** gbrain (BYPASSRLS привилегия выдана)
+- **Схема:** v67 (миграция v23→67, 44 миграции, выполнены 2026-05-19)
+
+### RAM-патч (КРИТИЧЕСКИ ВАЖНО)
+Проблема: gbrain v0.35.8 при каждом запуске инициализирует AI gateway (~400MB RAM), что невозможно при 1.8GB общего RAM.
+Решение: патч в /tmp/gbrain-src/src/cli.ts — configureGateway() вызывается ТОЛЬКО при наличии OPENAI_API_KEY или ANTHROPIC_API_KEY.
+При любом обновлении gbrain — ОБЯЗАТЕЛЬНО пересобирать с патчем:
+  cd /tmp/gbrain-src && bun build src/cli.ts --compile --outfile /usr/local/bin/gbrain
+
+### Что работает без API ключа
+- gbrain search "запрос" — keyword search (tsvector, русский + английский)
+- gbrain query "вопрос" — hybrid search (tsvector + pgvector)
+- gbrain sync --repo /root/vault --no-embed — синхронизация vault → PostgreSQL
+- gbrain list -n N — список страниц
+
+### Что НЕ работает без API ключа
+- gbrain embed — генерация эмбеддингов (требует OpenAI/Anthropic ключ)
+- gbrain doctor — работает, но медленно и может упасть по RAM
+
+### GBrain Lite (fallback)
+- Путь: /usr/local/bin/gbrain-lite
+- Лёгкая обёртка через прямые SQL-запросы к PostgreSQL
+- Использовать если gbrain недоступен или падает по памяти
+- Команды: search, query, list, sync, doctor
+
+### Статистика БД (на 19.05.2026)
+- Страниц: 300
+- Чанков: 1840
+- С эмбеддингами: 1579
+- Модель эмбеддингов: text-embedding-3-large (1536 dims)
+- Последняя синхронизация: 2026-05-16T14:53:53Z
+
+### ЖЁСТКИЕ ПРАВИЛА
+1. НИКОГДА не запускать gbrain embed --stale без API ключа
+2. НИКОГДА не удалять /tmp/gbrain-src/
+3. При обновлении gbrain — ВСЕГДА пересобирать с RAM-патчем
+4. При падении gbrain по памяти — использовать gbrain-lite
+5. При восстановлении после сбоя — см. инструкцию в SOUL.md раздел "GBrain — Принципы работы"
+
+---
+
+## [2026-05-20] GSD Framework Integration
+
+### Источник
+- Репозиторий: github.com/gsd-build/get-shit-done
+- Автор: TÂCHES (Lex Christopherson)
+- Версия на момент анализа: v1.42.1
+- Звёзды: 31K+
+
+### Что интегрировано
+1. **Deviation Rules** (SOUL.md) — 4 правила отклонений при выполнении задач:
+   - Rule 1: Авто-fix багов (без разрешения)
+   - Rule 2: Авто-добавление критического (error handling, validation, auth)
+   - Rule 3: Авто-fix блокирующего (кроме установки пакетов)
+   - Rule 4: Остановка при архитектурных изменениях
+2. **Adversarial Verification** (SOUL.md) — goal-backward анализ, stub detection, wiring check
+3. **Phase-Based Work** (HEARTBEAT.md) — фазовый подход: discuss → plan → execute → verify → ship
+4. **Context Monitoring** (HEARTBEAT.md) — мониторинг context rot, протокол при исчерпании
+5. **Шаблоны** (templates/) — CONTEXT.md, PLAN.md, SUMMARY.md
+
+### Ключевые концепции GSD
+- Context rot: качество падает непрерывно по мере заполнения контекста (все 18 моделей деградируют)
+- Fresh context per agent: каждый сабагент получает чистые 200k токенов
+- File-based state: PROJECT.md, REQUIREMENTS.md, ROADMAP.md, STATE.md, CONTEXT.md
+- Absent = enabled: если ключ отсутствует в config — он true
+- Two-stage routing: 6 namespace-роутеров вместо 86 скиллов (экономия ~2000 токенов)
+- Package legitimacy checks: при падении установки пакета — checkpoint, не авто-замена
+
+### Что НЕ интегрировано (и почему)
+- `--dangerously-skip-permissions` — рискованно без отдельной ветки
+- Многоагентная архитектура — жрёт токены кратно (у нас 1.8GB RAM)
+- $GSD токен на Solana — не влияет на функциональность
+- Полный GSD CLI (gsd-sdk) — избыточно для нашей архитектуры
+
+### Файлы
+- `SOUL.md` — Deviation Rules + Adversarial Verification
+- `HEARTBEAT.md` — Phase-Based Work + Context Monitoring
+- `templates/CONTEXT.md` — шаблон решений по проекту
+- `templates/PLAN.md` — шаблон плана выполнения
+- `templates/SUMMARY.md` — шаблон отчёта
+- `AGENTS.md` — обновлены ссылки
+
+---
+
+## [2026-05-21] Learning Patterns Integration (Барбара Оакли)
+
+### Источник
+- Курс: «Accelerate Your Learning with ChatGPT» (Coursera, Oakley & White)
+- Ссылка: https://habr.com/ru/news/841434/
+- 30K+ записей, 98% одобрения, ~5 часов
+
+### Что интегрировано (8 паттернов)
+1. **Learning is Linking** — новое знание связывать с 2-3 существующими доменами в vault
+2. **Context Window ≈ Working Memory** — pre-test: 3 ключевых факта перед длинной сессией
+3. **Options, Not Answers** — при альтернативах предлагать варианты, не единственное решение
+4. **Metaphor Template** — объяснять через аналогии из доменов пользователя (виноградарство, IoT)
+5. **Flipped Interaction** — задать вопросы ДО выполнения, не сразу выполнять
+6. **Cognitive Verifier** — пересказать задачу своими словами, подтвердить с пользователем
+7. **Pre-test** — сначала попробовать, зафиксировать пробелы, потом изучить
+8. **Multimodal Prompts** — использовать скриншоты/фото как входные данные
+
+### Критические вопросы для Adversarial Verification (добавлено)
+- «Что здесь может пойти не так?» — 3 вопроса критика
+- «Пользователь получит то, что просил, или то, что я решил?»
+- «Если бы объяснял через аналогию — было бы понятно?»
+
+### Файлы обновлены
+- `SOUL.md` — секция «🧠 Learning Patterns» + критические вопросы в Adversarial Verification
+- `HEARTBEAT.md` — Pre-test + Flipped Interaction протоколы
+- `docs/agent-onboarding-guide.md` — раздел 7 «Learning Patterns» + обновлённый чеклист
+- `vault/reading/agent-onboarding-guide.md` — синхронизировано

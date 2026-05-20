@@ -34,6 +34,11 @@
 - **База ошибок** → `memory/error_patterns.md`
 - **Библиотека принципов** → `memory/principles_lib.md`
 - **Секреты и токены** → `/root/.openclaw/secrets/`
+- **Шаблоны фазовой работы** → `templates/CONTEXT.md`, `templates/PLAN.md`, `templates/SUMMARY.md`
+- **Deviation Rules** → `SOUL.md` раздел «🔧 Deviation Rules»
+- **Adversarial Verification** → `SOUL.md` раздел «🎯 Adversarial Verification»
+- **Phase-Based Work** → `HEARTBEAT.md` раздел «📋 PHASE-BASED WORK»
+- **Context Monitoring** → `HEARTBEAT.md` раздел «🔍 CONTEXT MONITORING»
 
 ---
 
@@ -57,5 +62,5 @@
 
 ---
 
-*Файл AGENTS.md обновлен: 12.05.2026*  
+*Файл AGENTS.md обновлен: 20.05.2026*  
 *Соответствует правилу Constitutional Layer из NFD*

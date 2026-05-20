@@ -146,3 +146,98 @@
   6. Прототип "Агры Элемент 2.0" — май-июнь, запуск сайта
   7. Виртуальный менеджер проекта — AI-агент для координации сроков и задач
   8. Отчёты — автоматическая генерация срезов работ через AI
+
+---
+### 2026-05-18 23:47 GMT+5
+- **Модель:** openrouter/owl-alpha
+- **Контекст:** Запрос отчёта от пользователя
+- **Результаты:**
+  - [✅] Gateway: running (pid 1294779, active)
+  - [✅] Plugins: 6/95 enabled (duckduckgo, groq, openrouter, telegram, memory-tencentdb, deltachat)
+  - [✅] PostgreSQL: accepting connections (localhost:5432)
+  - [❌] GBrain: binary not found in PATH — требует восстановления
+  - [✅] Disk: 80% (30G used / 40G total, 7.8G avail)
+  - [✅] RAM: 1.8GB total, 595MB available, 662MB buff/cache
+  - [✅] memory-tdai: exists (conversations, persona.md, records, scene_blocks, vectors.db)
+  - [✅] Workspace: SOUL.md, MEMORY.md, AGENTS.md, HEARTBEAT.md — all present
+- **Итог:** ❌ 1 failed — gbrain binary missing
+
+---
+### 2026-05-19 00:42 GMT+5
+- **Модель:** openrouter/owl-alpha
+- **Контекст:** Восстановление gbrain после удаления при очистке диска
+- **Действия:**
+  1. Установлен bun 1.3.14 (был удалён при очистке)
+  2. Клонирован garrytan/gbrain (v0.35.8.0) из GitHub
+  3. Собран бинарник /usr/local/bin/gbrain через bun build
+  4. Обнаружена несовместимость: gbrain v0.35.8 требует >1.5GB RAM для AI gateway
+  5. Проблема: configureGateway() вызывается всегда, даже без API ключей
+  6. Решение: пропатчен cli.ts — gateway инициализируется только при наличии OPENAI_API_KEY или ANTHROPIC_API_KEY
+  7. Пересобран бинарник с патчем
+  8. Миграция схемы: v23 → 67 (44 миграции, все выполнены)
+  9. Даны привилегии BYPASSRLS пользователю gbrain
+  10. Создан gbrain-lite — лёгкая обёртка через psql для keyword search
+- **Результат:**
+  - gbrain search ✅ работает (keyword search через tsvector)
+  - gbrain query ✅ работает (hybrid search)
+  - gbrain sync ✅ работает
+  - gbrain list ⚠️ работает, но формат вывода изменился
+  - gbrain embed ❌ требует AI gateway + API ключ
+  - gbrain doctor ⚠️ работает, но медленно
+- **Итог:** ✅ GBrain восстановлен и функционален для keyword/hybrid search
+
+---
+
+## 2026-05-20 00:30 — GSD Integration + Self-Test
+
+**Модель:** openrouter/owl-alpha
+**Контекст:** Интеграция GSD framework (Deviation Rules, Adversarial Verification, Phase-Based Work, Context Monitoring). Самотестирование после изменений.
+
+### Результаты проверок:
+1. ✅ **Gateway:** running (pid 1294779, port 18789)
+2. ✅ **Plugins:** 6/95 enabled (duckduckgo, groq, openrouter, telegram, memory-tencentdb, deltachat)
+3. ✅ **PostgreSQL:** accepting connections (localhost:5432)
+4. ✅ **GBrain:** search functional (schema v34→67 migrated, keyword search OK)
+5. ✅ **Disk:** 85% (32G/40G, 6.0G avail)
+6. ✅ **RAM:** 463Mi available (1.8Gi total, 1.3Gi used)
+7. ✅ **memory-tdai:** exists (conversations, persona.md, records, scene_blocks, vectors.db)
+8. ✅ **Workspace:** SOUL.md, MEMORY.md, AGENTS.md, HEARTBEAT.md — all present
+
+### Изменения в этой сессии:
+- `SOUL.md` — добавлены Deviation Rules (Rule 1-4) + Adversarial Verification
+- `HEARTBEAT.md` — добавлены Phase-Based Work + Context Monitoring секции
+- `templates/CONTEXT.md` — шаблон решений по проекту (D-01, D-02...)
+- `templates/PLAN.md` — шаблон плана выполнения с deviation rules
+- `templates/SUMMARY.md` — шаблон отчёта с отклонениями
+- `AGENTS.md` — обновлены ссылки на новые шаблоны и секции
+- `MEMORY.md` — добавлена запись [2026-05-20] GSD Framework Integration
+- `vault/reading/gsd-framework-analysis.md` — полный конспект анализа GSD
+- git commit + push в vault (32 files changed, 1199 insertions)
+
+### Итог: ✅ All 8 checks passed
+
+---
+### 2026-05-21T00:22+05:00 | Сессия: Learning Patterns Integration
+**Модель:** openrouter/owl-alpha
+**Контекст:** Внедрение 8 паттернов Барбары Оакли из курса «Accelerate Your Learning with ChatGPT»
+
+**Результаты самотестирования:**
+1. ✅ Gateway: running (systemd, port 18789)
+2. ✅ Plugins: 6/95 enabled (memory-tencentdb, deltachat, telegram, openrouter, duckduckgo, groq)
+3. ✅ PostgreSQL: accepting connections (localhost:5432)
+4. ❌ GBrain: timeout (gbrain search не отвечает за 10 сек)
+5. ✅ Disk: 85% (32G/40G, 6.0G free)
+6. ⚠️ RAM: 410MB available (1.8GB total, 1.4GB used) — на пределе
+7. ✅ memory-tdai: exists (conversations, persona.md, records)
+8. ✅ Workspace: all 4 core files present
+
+**Действия:**
+- GBrain timeout — известная проблема при нехватке RAM, использовать gbrain-lite
+- RAM на пределе (410MB) — следить за потреблением
+
+**Изменения в файлах:**
+- SOUL.md: +секция «🧠 Learning Patterns» (8 паттернов), +критические вопросы в Adversarial Verification
+- HEARTBEAT.md: +Pre-test протокол, +Flipped Interaction протокол
+- MEMORY.md: +запись [2026-05-21] Learning Patterns Integration
+- docs/agent-onboarding-guide.md: +раздел 7 «Learning Patterns», обновлённый чеклист
+- vault/reading/agent-onboarding-guide.md: синхронизировано

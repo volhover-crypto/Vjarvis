@@ -79,10 +79,15 @@ Skills define _how_ tools work. This file is for _your_ specifics — the stuff 
 
 ## GBRAIN INFRASTRUCTURE
 - PostgreSQL 16: localhost:5432
-- База данных: gbrain
-- Расширение: pgvector (HNSW-индекс)
+- База данных: gbrain (пользователь gbrain, BYPASSRLS)
+- Расширение: pgvector (HNSW-индекс), pg_trgm, pgcrypto
 - Vault: /root/vault (Obsidian, markdown-файлы)
-- Цикл синхронизации: gbrain sync --repo /root/vault && gbrain embed --stale
+- Бинарник: /usr/local/bin/gbrain (v0.35.8, собран через bun build)
+- Исходники: /tmp/gbrain-src/ (НЕ УДАЛЯТЬ)
+- Конфиг: /root/.gbrain/config.json
+- RAM-патч: configureGateway() только при наличии OPENAI/ANTHROPIC ключа
+- Синхронизация: gbrain sync --repo /root/vault --no-embed
+- ⚠️ gbrain embed --stale НЕ работает без API ключа (упадёт по RAM)
 
 Add whatever helps you do your job. This is your cheat sheet.
 
@@ -107,10 +112,9 @@ Add whatever helps you do your job. This is your cheat sheet.
 | mem0ai | ✅ УСТАНОВЛЕН | Персональная memoria (/root/mem0env) |
 | mcp-memory | РЕЗЕРВНЫЙ | Использовать если gbrain недоступen |
 
-## GBRAIN INFRASTRUCTURE
-- PostgreSQL 16: localhost:5432
-- База данных: gbrain
-- Расширение: pgvector (HNSW-индекс)
-- Vault: /root/vault (Obsidian, markdown-файлы)
-- Цикл синхронизации: gbrain sync --repo /root/vault && gbrain embed --stale
+## GBRAIN INFRASTRUCTURE (дубликат — для быстрого доступа)
+- Полная документация: SOUL.md раздел "GBrain — Принципы работы"
+- MEMORY.md: раздел [2026-05-19_00:42] КРИСТАЛЛИЗАЦИЯ
+- Быстрый поиск: gbrain search "запрос" или gbrain-lite search "запрос"
+- Синхронизация: gbrain sync --repo /root/vault --no-embed
 

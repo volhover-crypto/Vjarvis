@@ -1,9 +1,9 @@
 ---
 name: gbrain-integration
-version: 1.0.0
-description: Управление базой знаний GBrain — поиск, импорт, синхронизация
+version: 2.0.0
+description: Управление базой знаний GBrain — поиск, импорт, синхронизация (v0.35.8, RAM-патч)
 capabilities:
- - Искать людей и проектов в базе знаний GBrain
+ - Искать по ключевым словам и семантически в базе знаний GBrain
  - Создавать новые страницы wiki по итогам аналитических сессий
  - Добавлять timeline-события в хронологию проектов
  - Синхронизировать Obsidian Vault с PostgreSQL базой
@@ -25,13 +25,26 @@ inputs:
  required: false
 ---
 
-# GBrain Integration Skill
+# GBrain Integration Skill v2.0
+
+## КРИТИЧЕСКИЕ ОГРАНИЧЕНИЯ (1.8GB RAM)
+
+- **AI Gateway ОТКЛЮЧЁН** — работает только keyword search + hybrid search (tsvector + pgvector)
+- **gbrain embed НЕ работает** без OpenAI/Anthropic API ключа
+- **gbrain doctor может упасть** по RAM — использовать `gbrain-lite doctor` для диагностики
+- **При падении gbrain** — использовать `gbrain-lite` (fallback через psql)
+- **НЕ запускать `gbrain embed --stale`** — упадёт по RAM без API ключа
 
 ## BRAIN-AGENT LOOP (выполнять для каждого значимого запроса)
 
 ### READ (перед ответом)
 ```bash
-gbrain search "[ключевые слова из запроса]"
+# Основной поиск (keyword + hybrid)
+gbrain search "[ключевые слова из запроса]" --limit 5
+
+# Если gbrain недоступен — fallback
+gbrain-lite search "[ключевые слова]" --limit 5
+
 # Если результаты есть → использовать как контекст
 # Если результатов нет → продолжить без них
 ```
@@ -64,12 +77,35 @@ updated: YYYY-MM-DD
 
 ### SYNC (фоново после обновления vault)
 ```bash
-gbrain sync --repo /root/vault
-gbrain embed --stale # только если эмбеддинг-модель доступна
+# Основной путь (без embedding)
+gbrain sync --repo /root/vault --no-embed
+
+# Fallback если gbrain упал
+gbrain-lite sync /root/vault
+
+# Embedding — ТОЛЬКО при наличии API ключа и >2GB RAM
+# gbrain embed --stale  # НЕ ЗАПУСКАТЬ без ключа!
 ```
 
 ## ТИПЫ ПОИСКОВЫХ ЗАПРОСОВ
 - По проекту: `gbrain search "Золотая Балка"` → все связанные файлы
-- По человеку: `gbrain query "person: Иванов"` → карточка человека
+- По человеку: `gbrain query "Иванов"` → карточка человека
 - По концепции: `gbrain search "виноградарство ирригация"` → связанные знания
-- Семантический: `gbrain query --semantic "управление поливом"` (требует эмбеддинги)
+- Семантический: `gbrain query "управление поливом"` (hybrid search, работает без API ключа)
+
+## ДИАГНОСТИКА
+```bash
+# Быстрая диагностика (не требует много RAM)
+gbrain-lite doctor
+
+# Полная диагностика (может упасть по RAM)
+gbrain doctor --json
+```
+
+## ВОССТАНОВЛЕНИЕ ПОСЛЕ СБОЯ
+1. `curl -fsSL https://bun.sh/install | bash`
+2. `git clone https://github.com/garrytan/gbrain.git /tmp/gbrain-src`
+3. `cd /tmp/gbrain-src && bun install`
+4. Применить RAM-патч (см. SOUL.md)
+5. `bun build src/cli.ts --compile --outfile /usr/local/bin/gbrain`
+6. Проверить: `gbrain search "test" --limit 1`
