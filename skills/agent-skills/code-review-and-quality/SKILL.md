@@ -249,3 +249,4 @@ description: Многоосевой код-ревью. Используй пер
 - Performance checks: `performance-optimization`
 - Security checklist: `skills/agent-skills/references/security-checklist.md`
 - Testing patterns: `skills/agent-skills/references/testing-patterns.md`
+- Комплексный quality pack (deslop + compiler + thermo + verify): `code-quality-pack`

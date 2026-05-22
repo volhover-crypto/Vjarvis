@@ -10,7 +10,7 @@
 ## 📁 Основные директории
 
 - `skills/` — модульные навыки агента  
-  → Подробнее: `skills/agent-skills/` (22 инженерных навыка), `skills/agronomy_advisor/`, `skills/iot_monitor/`
+  → Подробнее: `skills/agent-skills/` (22 инженерных навыка), `skills/agronomy_advisor/`, `skills/iot_monitor/`, `skills/code-quality-pack/` (deslop + compiler-check + thermo-review + verify-this)
 - `memory/` — дневные логи, журналы ошибок, кейсы, библиотека принципов  
   → Подробнее: `memory/YYYY-MM-DD.md`, `memory/error_patterns.md`, `memory/principles_lib.md`
 - `vault/` — основное хранилище знаний (Obsidian)  
