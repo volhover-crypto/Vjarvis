@@ -510,3 +510,39 @@
 - `HEARTBEAT.md` — Pre-test + Flipped Interaction протоколы
 - `docs/agent-onboarding-guide.md` — раздел 7 «Learning Patterns» + обновлённый чеклист
 - `vault/reading/agent-onboarding-guide.md` — синхронизировано
+
+---
+
+## [2026-05-23] n8n Auth System — Завершено
+
+### Архитектура
+- **Auth Service**: FastAPI + asyncpg + bcrypt, порт 8765, systemd (`jarvis-auth.service`)
+- **n8n**: `network_mode: host` (для доступа к localhost:8765), webhook → HTTP Request → Respond
+- **PostgreSQL**: `auth_users` + `auth_sessions` в базе `gbrain`
+- **Хранение паролей**: bcrypt (hash в поле `password_hash`)
+
+### Ключевые решения
+- n8n Code node с `require('pg')` не работает (sandbox) → вынесено в отдельный микросервис
+- n8n в bridge network не видит localhost хоста → `network_mode: host`
+- Docker контейнер auth service не видит PostgreSQL на хосте → auth service на хосте через systemd
+- Hash был в старом формате `$2b$12$...` → перегенерирован через `bcrypt.hashpw()`
+
+### Credentials
+- **Admin user**: `admin` / `A03g10l31~` / `admin@jarvis.local`
+- **n8n**: admin@jarvis.local / A03g10l31~
+
+### Эндпоинты
+- `POST http://176.12.74.69:5678/webhook/auth/login` — авторизация (username + password → token)
+- `GET /auth/verify?token=...` — проверка токена
+- `POST /auth/logout?token=...` — логаут
+- `GET /health` — health check
+
+### Файлы
+- `/root/auth-service/main.py` — FastAPI auth service
+- `/etc/systemd/system/jarvis-auth.service` — systemd unit
+- `/root/n8n/docker-compose.yml` — n8n с `network_mode: host`
+- `/root/.openclaw/workspace/web/login.html` — HTML форма логина
+
+### n8n Workflow
+- ID: `rFNcxozuWQI5c0wo`
+- Webhook (`/auth/login`) → HTTP Request (`POST http://localhost:8765/auth/login`) → Respond

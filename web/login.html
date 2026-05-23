@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jarvis — Авторизация</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { 
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #0a0a0a; 
+  color: #e0e0e0; 
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  min-height: 100vh;
+}
+.container {
+  background: #141414;
+  border: 1px solid #333;
+  border-radius: 12px;
+  padding: 40px;
+  width: 100%;
+  max-width: 400px;
+}
+h1 { font-size: 24px; margin-bottom: 8px; color: #fff; }
+.subtitle { font-size: 14px; color: #888; margin-bottom: 32px; }
+label { display: block; font-size: 13px; color: #aaa; margin-bottom: 6px; }
+input {
+  width: 100%;
+  padding: 12px 16px;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 8px;
+  color: #e0e0e0;
+  font-size: 15px;
+  margin-bottom: 16px;
+  outline: none;
+}
+input:focus { border-color: #555; }
+button {
+  width: 100%;
+  padding: 14px;
+  background: #fff;
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 8px;
+}
+button:hover { background: #ddd; }
+#result {
+  margin-top: 16px;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  display: none;
+}
+.success { background: #1a2a1a; border: 1px solid #2a4a2a; color: #6a9a6a; }
+.error { background: #2a1a1a; border: 1px solid #4a2a2a; color: #aa6a6a; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>🧠 Jarvis</h1>
+  <p class="subtitle">Вход в систему</p>
+  
+  <label for="username">Логин или Email</label>
+  <input type="text" id="username" placeholder="admin" autocomplete="username">
+  
+  <label for="password">Пароль</label>
+  <input type="password" id="password" placeholder="••••••••" autocomplete="current-password">
+  
+  <button onclick="login()">Войти</button>
+  
+  <div id="result"></div>
+</div>
+
+<script>
+async function login() {
+  const username = document.getElementById('username').value.trim();
+  const password = document.getElementById('password').value.trim();
+  const result = document.getElementById('result');
+  
+  if (!username || !password) {
+    result.className = 'error';
+    result.textContent = 'Заполните все поля';
+    result.style.display = 'block';
+    return;
+  }
+  
+  try {
+    const resp = await fetch('http://176.12.74.69:5678/webhook/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    });
+    const data = await resp.json();
+    
+    if (data.success) {
+      localStorage.setItem('jarvis_token', data.token);
+      result.className = 'success';
+      result.innerHTML = '✅ Успешно! Токен сохранён.<br>Пользователь: ' + data.user.username;
+    } else {
+      result.className = 'error';
+      result.textContent = '❌ ' + (data.error || 'Ошибка авторизации');
+    }
+    result.style.display = 'block';
+  } catch (err) {
+    result.className = 'error';
+    result.textContent = '❌ Ошибка соединения: ' + err.message;
+    result.style.display = 'block';
+  }
+}
+</script>
+</body>
+</html>

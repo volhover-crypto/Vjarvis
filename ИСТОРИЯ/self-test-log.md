@@ -241,3 +241,100 @@
 - MEMORY.md: +запись [2026-05-21] Learning Patterns Integration
 - docs/agent-onboarding-guide.md: +раздел 7 «Learning Patterns», обновлённый чеклист
 - vault/reading/agent-onboarding-guide.md: синхронизировано
+
+---
+## 2026-05-21 01:34 (GMT+5) — Сессия начата
+- **Модель:** openrouter/owl-alpha
+- **Контекст:** Первое сообщение от пользователя — «как дела?»
+
+### Результаты самотестирования:
+| # | Проверка | Результат |
+|---|----------|-----------|
+| 1 | Gateway | ✅ running (systemd, port 18789) |
+| 2 | Plugins | ✅ 6/95 enabled: duckduckgo, groq, openrouter, telegram, memory-tencentdb, deltachat |
+| 3 | PostgreSQL | ✅ accepting connections (localhost:5432) |
+| 4 | GBrain | ❌ SIGKILL по таймауту (два попытки, оба убиты) |
+| 5 | Disk | ✅ 85% (32G/40G, 6.0G free) |
+| 6 | RAM | ⚠️ 523Mi available (1.8Gi total, 1.3Gi used) |
+| 7 | memory-tdai | ✅ exists (conversations, records, scene_blocks, vectors.db) |
+| 8 | Workspace | ✅ SOUL.md, MEMORY.md, AGENTS.md, HEARTBEAT.md present |
+
+### Итог: ❌ 1 failed — GBrain не отвечает (вероятно нехватка RAM или процесс зависает)
+
+### 01:42 — Проверка последней интеграции (Barbara Oakley Learning Patterns)
+- **Коммит:** `0ea5b12` — «feat: integrate 8 Barbara Oakley Learning Patterns» (21.05.2026 00:32)
+- **GitHub:** запушен в origin/master, рассинхронизации нет
+- **Проверенные файлы:**
+  - SOUL.md — ✅ секция `🧠 Learning Patterns` (строка 187), 8 паттернов + критические вопросы
+  - HEARTBEAT.md — ✅ Pre-test + Flipped Interaction протоколы
+  - MEMORY.md — ✅ запись [2026-05-21] Learning Patterns Integration
+  - templates/ — ✅ CONTEXT.md, PLAN.md, SUMMARY.md на месте
+  - docs/agent-onboarding-guide.md — ✅ раздел 7 «Learning Patterns»
+  - projects/sensor-stand/ — ✅ Python-генераторы + 12 STL файлов
+- **Итог:** интеграция прошла чисто, всё на месте и синхронизировано
+- **Незначительные отклонения:** self-test-log.md не закоммичен (текущая сессия), memory/2026-05-21-0106.md — untracked
+
+---
+## 2026-05-22 11:47 (Asia/Almaty)
+- **Модель:** openrouter/owl-alpha
+- **Контекст:** Запрошено полное самотестирование и проверка ресурсов
+
+### Результаты:
+1. ✅ **Gateway:** running (pid 1366421), port 18789, connectivity ok
+2. ✅ **Plugins:** 6/95 enabled — duckduckgo ✅, groq ✅, openrouter ✅, telegram ✅, memory-tencentdb ✅, deltachat ✅
+3. ✅ **PostgreSQL:** accepting connections (localhost:5432)
+4. ✅ **GBrain:** search functional (schema v34→67, migrations pending but search works)
+5. ✅ **Disk:** 85% (32G/40G, 5.9G avail) — в пределах нормы (<90%)
+6. ✅ **RAM:** 1.8GB total, 514MB available — приемлемо (>200MB)
+7. ✅ **memory-tdai:** существует, 1.9MB vectors.db + WAL
+8. ✅ **Workspace:** SOUL.md, MEMORY.md, AGENTS.md, HEARTBEAT.md — все на месте
+
+### Заметки:
+- GBrain: schema migration pending (33 миграции), search работает
+- Swap: 464MB used из 2.9GB — умеренное использование
+- Плагины memory-powermem и clawdboost — stale config warnings (не критично)
+- Все ключевые сервисы работают
+
+**Итог:** ✅ All 8 checks passed
+
+---
+### 2026-05-22 17:01 (Asia/Almaty) — openrouter/owl-alpha
+1. ✅ Gateway: running (pid 1366421, port 18789)
+2. ✅ Plugins: 6 enabled (duckduckgo, groq, openrouter, telegram, deltachat, memory-tencentdb) — stale warnings для memory-powermem и clawdboost (не критично)
+3. ✅ PostgreSQL: accepting connections (localhost:5432)
+4. ✅ GBrain: search functional (schema v34→67 migration pending, search работает)
+5. ✅ Disk: 85% (32G/40G, 5.9G free)
+6. ⚠️ RAM: 543MB available из 1.8GB (1.2GB used) — на пределе, но работает
+7. ✅ memory-tdai: exists (conversations, persona.md, records, scene_blocks, vectors.db)
+8. ✅ Workspace: all core files present
+
+**Итог:** ✅ All 8 checks passed (RAM — watch)
+
+---
+### 2026-05-22 21:19 (Asia/Almaty) — openrouter/owl-alpha (post-restart)
+1. ✅ Gateway: running (pid 1387885, port 18789) — restarted OK
+2. ✅ Plugins: 6 enabled (duckduckgo, groq, openrouter, telegram, deltachat, memory-tencentdb)
+3. ✅ PostgreSQL: accepting connections (localhost:5432)
+4. ✅ GBrain: search functional
+5. ✅ Disk: 85% (32G/40G, 5.8G free)
+6. ✅ RAM: 617MB available — улучшение после рестарта (было 543MB)
+7. ✅ memory-tdai: exists (conversations, persona.md, records, scene_blocks, vectors.db)
+8. ✅ Workspace: all core files present
+
+**Итог:** ✅ All 8 checks passed
+**Контекст:** Gateway restart после кодирования code-quality-pack. RAM улучшилось.
+
+---
+
+## 2026-05-23 09:50 (GMT+5) — Session Start
+- **Модель:** openrouter/owl-alpha
+- **Gateway:** ✅ running (pid by systemd, port 18789)
+- **Plugins:** ✅ 6 enabled (memory-tencentdb, deltachat, telegram, openrouter, duckduckgo, groq)
+- **PostgreSQL:** ✅ accepting connections (localhost:5432)
+- **GBrain:** ✅ search functional (schema v34→67 migration pending, search works)
+- **Disk:** ⚠️ 85% (32G/40G) — растёт, был 80% 18.05
+- **RAM:** ⚠️ 113MB free / 1.8Gi total (swap 752Mi used)
+- **memory-tdai:** ✅ exists (conversations, persona.md, records, scene_blocks, vectors.db)
+- **Workspace:** ✅ SOUL.md, MEMORY.md, AGENTS.md, HEARTBEAT.md — all present
+- **Заметки:** GBrain schema migration pending (v34→67), event trigger auto_rls_on_create_table не создался из-за permissions — не критично для работы. Disk 85% — мониторить.
+- **Контекст:** Обычный старт сессии, пользователь написал «Привет»
