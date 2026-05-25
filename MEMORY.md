@@ -546,3 +546,40 @@
 ### n8n Workflow
 - ID: `rFNcxozuWQI5c0wo`
 - Webhook (`/auth/login`) → HTTP Request (`POST http://localhost:8765/auth/login`) → Respond
+
+---
+
+## [2026-05-26] Claude-BugHunter — Архитектурная интеграция
+
+### Источник
+- Репозиторий: github.com/elementalsouls/Claude-BugHunter
+- Автор: Sachin Sharma (Bug Hunting & GenAI Security Research)
+- Состав: 51 skills + 15 slash commands + 574+ disclosed HackerOne reports
+- Клон: /tmp/Claude-BugHunter/ (4.7MB, 173 файла)
+
+### Что интегрировано
+- **7-Question Gate** — обязательная валидация ДО отчёта (Q1-Q7, первый FAIL = KILL)
+- **5-Phase Hunting Workflow** — SCOPE → RECON → HUNT → VALIDATE → REPORT
+- **Red Team Discipline** — DO NOT STOP directive, 10 self-throttling anti-patterns
+- **A→B Bug Chaining** — систематическое наращивание цепочек (IDOR→ATO, SSRF→RCE)
+- **OOB-Or-It-Didn't-Happen Gate** — Collaborator confirmation для blind vulns
+- **Evidence Hygiene** — cookie redaction, PII black-bar, HAR sanitization
+- **Report Writing** — impact-first, title formula, CVSS 3.1, no "could potentially"
+- **Enterprise Attack Surface** — VPN, M365, Cloud IAM, VMware matrices
+
+### Связь с существующей системой
+- Adversarial Verification (SOUL.md) ↔ 7-Question Gate (расширение)
+- Deviation Rules (SOUL.md) ↔ OOB Gate / Engagement type confirmation
+- Phase-Based Work (HEARTBEAT.md) ↔ 5-Phase Workflow
+- Практическое применение: аудит mdked.hlab.kz, AgroPilot, n8n, auth service
+
+### Отложено до RAM 8GB
+- Полный GBrain embed для security findings
+- Автоматизированный scanning (nuclei, Burp MCP)
+- public-skills-builder (Anthropic API key required)
+- cbh CLI (curl-only mode работает сейчас)
+
+### Файлы
+- Навык: `skills/claude-bughunter-integration/SKILL.md`
+- Quick Ref: `skills/claude-bughunter-integration/QUICKREF.md`
+- Vault: `vault/knowledge/skills/claude-bughunter-integration/`
