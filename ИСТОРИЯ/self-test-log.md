@@ -410,3 +410,15 @@
 ⚠️ 2 критических провала: NGINX (веб-окружение полностью down), GBrain (семантический поиск недоступен).
 📝 57 навыков в workspace. Git: 5 коммитов (последний 50887e0 — BugHunter integration).
 🔜 Апгрейд RAM 1.8→8GB + диск +500MB на днях.
+
+---
+**2026-05-26T02:15 (Almaty) — Кристаллизация нового состояния**
+- Модель: openrouter/owl-alpha
+- Gateway ✅ | Plugins ✅ (6) | PG ✅ | GBrain ❌ | NGINX ✅ (востановлен)
+- Disk 75% | RAM 487MB free | Load 0.06
+- tuned ❌ disabled | certbot ❌ | qemu-ga ❌ killed
+- memory-tdai ✅ | Workspace ✅
+- Порт 8080: 127.0.0.1 ✅ | TLS 1.2+ ✅ | server_tokens off ✅
+- BugHunter integration ✅ | 7-Question Gate ✅ | RT Discipline ✅
+- 57 навыков | Git 8+ коммитов
+- Точка восстановления: backup/restore_2026-05-26_02-15/

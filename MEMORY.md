@@ -602,3 +602,19 @@
 ### Навыки: 57 (включая новый claude-bughunter-integration)
 ### Git: 5 коммитов, последний 50887e0 (BugHunter integration)
 ### Апгрейд: RAM 1.8→8GB, диск +500MB — на днях по плану Александра
+
+## [2026-05-26_02:15] Кристаллизация — Финальное состояние после оптимизации
+
+### Точка восстановления
+- Путь: `backup/restore_2026-05-26_02-15/SUMMARY.md`
+
+### Конфигурация кристаллизована
+- RAM 1.8GB, swappiness 10, swap 810MB used
+- Load 0.06, disk 75%, uptime 55 days
+- NGINX hardened: TLS 1.2+, worker_connections 4096, server_tokens off
+- Порт 8080 → 127.0.0.1 (security fix)
+- tuned disabled, qemu-ga killed, journal vacuum 268→70MB
+- gbrain zombie (41:02 CPU time) permanently killed
+- BugHunter skill: 7-Q Gate + RT Discipline + A→B Chaining интегрированы
+- 57 навыков | Git 8+ коммитов | Все сервисы active*
+- *GBrain ❌ (до RAM 8GB) | certbot ❌ (SSL до 2026-08-17)
