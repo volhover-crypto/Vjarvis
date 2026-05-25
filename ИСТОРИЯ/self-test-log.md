@@ -338,3 +338,75 @@
 - **Workspace:** ✅ SOUL.md, MEMORY.md, AGENTS.md, HEARTBEAT.md — all present
 - **Заметки:** GBrain schema migration pending (v34→67), event trigger auto_rls_on_create_table не создался из-за permissions — не критично для работы. Disk 85% — мониторить.
 - **Контекст:** Обычный старт сессии, пользователь написал «Привет»
+
+---
+## 2026-05-23 15:03 (Asia/Almaty)
+- **Модель:** openrouter/owl-alpha
+- **Контекст:** Heartbeat poll после gateway restart
+- **Результаты:**
+  - ✅ Gateway: running (pid 1404260)
+  - ✅ Plugins: 6/94 enabled
+  - ✅ PG: accepting connections
+  - ✅ GBrain: search functional
+  - ✅ Disk: 75% (28G/40G, 9.5G avail)
+  - ✅ RAM: 599MB available
+  - ✅ memory-tdai: 4.3MB, all files present
+  - ✅ Workspace: all core files present
+- **Статус:** ✅ All 8 checks passed
+
+---
+## 2026-05-23 ~15:10 (Asia/Almaty)
+- **Контекст:** Размещение АгроПилот + auth шлюз
+- **Что сделано:**
+  - Размещён agropilot.html (559KB) на сервере
+  - Создана login.html с авторизацией через n8n webhook
+  - Сервер server.py на порту 80: / → login.html, /api/auth/login → n8n webhook
+  - После успешного auth → sessionStorage + редирект на agropilot.html
+  - В agropilot.html добавлена проверка токена (без токена → /login.html)
+  - Добавлена кнопка "Выйти" (очистка sessionStorage)
+- **URL:** http://176.12.74.69/
+
+---
+## 2026-05-25 10:02 — Heartbeat Weekly
+- **Модель:** openrouter/owl-alpha
+- **Gateway:** ✅ running
+- **Plugins:** ✅ loaded (2 warnings: memory-powermem, claude-mem stale)
+- **PostgreSQL:** ✅ accepting connections
+- **GBrain:** ⚠️ slow/crashed by RAM — нужно перезапустившийся контейнер переиндексировать
+- **Disk:** ✅ 76% (28G/40G)
+- **RAM:** 1.8G total — 1.3G used, 582MB free, 482MB avail | Swap 930M/2.9G
+- **memory-tdai:** ✅ exists
+- **Workspace:** ✅ all 4 files present
+- **Context:** Weekly heartbeat, n8n iframe fix just deployed
+
+---
+**2026-05-25T22:51 (Almaty) — запрос статуса от Александра**
+- Модель: openrouter/owl-alpha
+- 1. Gateway: ✅ running (pid 1404260, port 18789, loopback)
+- 2. Plugins: ✅ 6 enabled (duckduckgo, groq, openrouter, telegram, memory-tencentdb, deltachat) — все ожидаемые на месте
+- 3. PostgreSQL: ✅ accepting connections (localhost:5432)
+- 4. GBrain: ❌ TIMEOUT + SIGKILL — gbrain search "тест" убит по таймауту; gbrain-lite тоже не отвечает; PG напрямую работает (SELECT 1 ok). Требует диагностики.
+- 5. Disk: ✅ 76% (28G/40G, 9.3G avail)
+- 6. RAM: ✅ 504MB available (1.8GB total, 1.3GB used, 1GB swap used)
+- 7. memory-tdai: ✅ директория существует (conversations, records, scene_blocks, vectors.db)
+- 8. Workspace: ✅ SOUL.md, MEMORY.md, AGENTS.md, HEARTBEAT.md — все на месте
+
+⚠️ GBrain недоступен — семантический поиск не работает.
+
+---
+**2026-05-26T01:24 (Almaty) — кристаллизация состояния (запрос Александра)**
+- Модель: openrouter/owl-alpha
+- 1. Gateway: ✅ running (pid 1404260, port 18789)
+- 2. Plugins: ✅ 6 enabled (duckduckgo, groq, openrouter, telegram, memory-tencentdb, deltachat)
+- 3. PostgreSQL: ✅ accepting connections (localhost:5432)
+- 4. GBrain: ❌ SIGKILL при search — бинарник повреждён / RAM не хватает
+- 5. Disk: ✅ 76% (28G/40G, 9.3G avail)
+- 6. RAM: ✅ 600MB available (1.8GB total, 1.2GB used, 1.1GB swap used)
+- 7. memory-tdai: ✅ директория существует
+- 8. Workspace: ✅ все файлы на месте
+- **9. NGINX: ❌ FAILED** — nginx: command not found, упал ~12:57 25.05. Hub/Coach/auth/n8n proxy недоступны.
+- **10. certbot: ❌ FAILED** — давно, требует проверки
+
+⚠️ 2 критических провала: NGINX (веб-окружение полностью down), GBrain (семантический поиск недоступен).
+📝 57 навыков в workspace. Git: 5 коммитов (последний 50887e0 — BugHunter integration).
+🔜 Апгрейд RAM 1.8→8GB + диск +500MB на днях.

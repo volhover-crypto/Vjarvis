@@ -583,3 +583,22 @@
 - Навык: `skills/claude-bughunter-integration/SKILL.md`
 - Quick Ref: `skills/claude-bughunter-integration/QUICKREF.md`
 - Vault: `vault/knowledge/skills/claude-bughunter-integration/`
+
+---
+
+## [2026-05-26_01:24] КРИСТАЛЛИЗАЦИЯ — Полная фиксация состояния
+
+### Критические проблемы
+1. **NGINX FAILED** — упал ~12:57 25.05, `nginx: command not found`. Hub, Coach, auth, n8n proxy — всё недоступно. Требует восстановления.
+2. **GBrain FAILED** — SIGKILL при search. PG работает. Отложено до RAM 8GB.
+3. **certbot.service FAILED** — давно, требует проверки сертификата.
+
+### Ресурсы
+- RAM: 1.8GB (600MB free), Swap: 2.9GB (1.1GB used — zram 921MB + swapfile 2GB)
+- Disk: 76% (9.3G free)
+- Docker: 2.52GB images, 1.079GB volumes (99% reclaimable)
+- Vault: 164MB | Workspace: 459MB
+
+### Навыки: 57 (включая новый claude-bughunter-integration)
+### Git: 5 коммитов, последний 50887e0 (BugHunter integration)
+### Апгрейд: RAM 1.8→8GB, диск +500MB — на днях по плану Александра
